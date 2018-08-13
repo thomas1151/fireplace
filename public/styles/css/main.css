@@ -1,0 +1,107 @@
+@import 'normalise.css';
+@import 'flexboxgrid.css';
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,300");
+.col-xs-1-2 {
+  -ms-flex-preferred-size: 4.1666%;
+  flex-basis: 4.1666%;
+  max-width: 4.1666%;
+}
+.col-xs-1-4 {
+  -ms-flex-preferred-size: 2.0833%;
+  flex-basis: 2.0833%;
+  max-width: 2.0833%;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  width: 100%;
+  background: #f2f2f2;
+}
+.App {
+  width: 100%;
+}
+.row {
+  width: 100%;
+}
+.col-xs-0 {
+  display: none;
+}
+.App {
+  background: grey;
+}
+.logo-inner {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  color: white;
+}
+.searchBox {
+  border-radius: .2em;
+  overflow: hidden;
+}
+.searchBar {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.18);
+  padding: .4em .25em;
+  width: 100%;
+  display: flex;
+}
+.searchBar * {
+  display: flex;
+}
+.searchBar .icon-holder.for-input {
+  background: #f6f6f6;
+}
+.searchBar input {
+  border: 1px solid #fafafa;
+  padding: .5em;
+}
+.searchBar .icon {
+  color: #f6f6f6;
+}
+.searchBar button.for-input {
+  transition: .3s all;
+}
+.searchBar button.for-input:hover {
+  background: #4dc2ff;
+  border: 1px solid #4dc2ff;
+}
+.searchBar button.for-input:hover .icon,
+.searchBar button.for-input:active .icon {
+  color: #f6f6f6;
+}
+.searchBar button.for-input:active {
+  background: #0097e6;
+  border: 1px solid #0097e6;
+}
+.searchBar.isMobile .col-xs-* {
+  padding-right: 0;
+  padding-left: 0;
+}
+.searchBar.isMobile .fa-cogs {
+  padding: 0 0.5em;
+}
+.active-outer {
+  transition: .1s all;
+  justify-content: center;
+}
+.active-outer:hover .icon {
+  color: #515445;
+}
+.active-outer button {
+  background: transparent;
+  border: 0;
+}
+.active-outer button:focus,
+.active-outer button:focus:hover {
+  color: #36382e;
+}
+.icon-holder.for-input {
+  justify-content: center;
+  display: flex;
+  padding: 0 .5em;
+  border: 2px solid #fafafa;
+}
+.icon-holder.for-input .icon {
+  display: flex;
+  color: #0097e6;
+}
