@@ -30,7 +30,7 @@ class App extends Component {
 
   render() {
       const { width } = this.state;
-      const isMobile = width <= 500;
+      const isMobile = width <= 576;
 
     return (
       <div className="App">

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { SearchElement } from './SearchElement';
+import { SearchBarSettings } from './SearchBarSettings';
 
 export class SearchBar extends Component{
     constructor(props) {
@@ -15,8 +16,10 @@ export class SearchBar extends Component{
                     <SearchElement/>
                 </div>
                
-                <div className="col-xs-1">
-                    <div className="icon middle-xs"><i class="fas fa-cogs"></i></div>
+                <div className="active-buttons col-xs-1">
+                    <div className="active-outer ">
+                        <SearchBarSettings/>
+                    </div>
                 </div>
             </div>
             )
@@ -27,15 +30,19 @@ export class SearchBar extends Component{
                 <div className="active-outer  col-md-2">
                     <div className="logo-inner middle-xs">{this.props.logo}</div>
                 </div>
-                <div className="active-outer col-xs-10 col-md-8">
+                <div className="col-xs-10 col-md-8">
                     <SearchElement/>
                 </div>
-                <div className="active-outer  col-xs-1-4">
-                    <button className="icon middle-xs"><i class="fas fa-user"></i></button>
-                </div>
-                <div className="active-outer col-xs-1-4">
-                    <button className="icon middle-xs"><i class="fas fa-cogs"></i></button>
- 
+
+                <div className="active-buttons col">
+                    {/* <div className="active-outer  first-setting--searchBar">
+                        <button className="icon middle-xs"><i class="fas fa-user"></i></button>
+                    </div> */}
+                    <div className="active-outer ">
+                        <SearchBarSettings/>
+
+                        
+                    </div>
                 </div>
             </div>
 

@@ -37,7 +37,6 @@ body {
 }
 .searchBox {
   border-radius: .2em;
-  overflow: hidden;
 }
 .searchBar {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.18);
@@ -48,15 +47,17 @@ body {
 .searchBar * {
   display: flex;
 }
+.searchBar .first-setting--searchBar {
+  margin-left: auto;
+}
 .searchBar .icon-holder.for-input {
   background: #f6f6f6;
+  border-radius: 0 .25em .25em 0;
 }
 .searchBar input {
   border: 1px solid #fafafa;
-  padding: .5em;
-}
-.searchBar .icon {
-  color: #f6f6f6;
+  padding: .6em;
+  font-size: 120%;
 }
 .searchBar button.for-input {
   transition: .3s all;
@@ -84,6 +85,10 @@ body {
   transition: .1s all;
   justify-content: center;
 }
+.active-outer .icon {
+  color: #f6f6f6;
+  font-size: x-large;
+}
 .active-outer:hover .icon {
   color: #515445;
 }
@@ -104,4 +109,171 @@ body {
 .icon-holder.for-input .icon {
   display: flex;
   color: #0097e6;
+}
+.react-autosuggest__container {
+  position: relative;
+  width: 100%;
+}
+.react-autosuggest__input {
+  width: 100%;
+  padding: 10px 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: .25em 0 0 .25em;
+}
+.react-autosuggest__input--focused {
+  outline: none;
+}
+.react-autosuggest__input--open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+.react-autosuggest__suggestions-container--open {
+  display: block;
+  position: absolute;
+  top: 100%;
+  width: 99vw;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  z-index: 2;
+}
+.react-autosuggest__suggestions-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: block;
+}
+.react-autosuggest__suggestion {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  padding: .25em;
+}
+.react-autosuggest__suggestion a {
+  text-decoration: none;
+}
+.react-autosuggest__suggestion p,
+.react-autosuggest__suggestion h3,
+.react-autosuggest__suggestion i,
+.react-autosuggest__suggestion span {
+  color: #36382e;
+}
+.react-autosuggest__suggestion i {
+  color: #0097e6;
+}
+.react-autosuggest__suggestion .type {
+  padding: 0 1em;
+}
+.react-autosuggest__suggestion .suggestion-content-wrapper {
+  width: 100%;
+  display: inline-block;
+}
+.react-autosuggest__suggestion .suggestion-content-wrapper .title {
+  font-weight: 700;
+}
+.react-autosuggest__suggestion .suggestion-content-wrapper p {
+  text-align: left;
+  padding: 0;
+  margin: .5em 0;
+}
+.react-autosuggest__suggestion .suggestion-content-wrapper p span {
+  height: fit-content;
+  padding: 0 1em;
+  background: #0097e6;
+  text-transform: uppercase;
+  font-size: small;
+  color: white;
+  padding: .25em;
+  border-radius: .25em;
+  margin-left: auto;
+}
+.react-autosuggest__suggestion .suggestion-content-wrapper p span.unimportant {
+  background: #aaa;
+}
+.react-autosuggest__suggestion--highlighted {
+  background-color: #ddd;
+}
+.react-autosuggest__suggestion-match {
+  color: red;
+  font-weight: bold;
+}
+.menu-outer {
+  position: relative;
+}
+.menu-settings {
+  display: none;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+  width: 10em;
+  border-radius: .2em;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  text-align: right;
+  right: 0;
+  background: #ffffff;
+}
+.menu-settings.menu-open {
+  display: flex;
+}
+.menu-settings .menu-title {
+  font-size: 90%;
+}
+.menu-settings .menu-title p {
+  display: inline;
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+}
+.menu-settings ul {
+  padding: 0 0 .5em 0;
+  margin: 0em;
+  display: block;
+  width: fit-content;
+  width: 100%;
+}
+.menu-settings li {
+  padding: .5em 1em;
+  width: 100%;
+}
+.menu-settings li a {
+  width: 100%;
+}
+.menu-settings li i {
+  padding: 0 tem;
+  color: #0097e6;
+  width: 25%;
+  text-align: center;
+}
+.menu-settings li:hover {
+  background: #ede6e3;
+}
+@media (min-width: 768px) {
+  .searchBar {
+    padding: .5em 4em;
+  }
+  .searchBar input {
+    padding: .5em;
+    font-size: 100%;
+  }
+  .react-autosuggest__suggestions-container--open {
+    width: 100%;
+  }
 }
