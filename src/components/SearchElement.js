@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+} from 'react-router-dom';
 
+const typesToUrl = function(type){
+    switch(type){
+        case 'invoice' : return "invoices";
+        case 'person'  : return "people";
+        case 'location': return "locations";
+        case 'quotes'  : return "quotes";
+    }
+}
 // Imagine you have a list of languages that you'd like to autosuggest.
 const languages = [{
         title: 'REW2901318',
@@ -53,7 +66,7 @@ const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = function(suggestion){
 
     return(
-          <a href={suggestion.id}>
+          <Link to={typesToUrl(suggestion.type)+"/"+suggestion.id.toString()}>
             <div className="type icon middle-xs">
                 <i className={suggestion.icon}></i>
             </div>
@@ -61,7 +74,7 @@ const renderSuggestion = function(suggestion){
                 <p className="title">{suggestion.title} <span>{suggestion.type}</span></p>
                 <p> {suggestion.sub} {suggestion.other.length== 0 ? null:<span className="unimportant">{suggestion.other}</span>  } </p>
             </div>
-            </a>
+            </Link>
     )
 }
 

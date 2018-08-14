@@ -3,6 +3,13 @@ import logo from './logo.svg';
 import './App.css';
 import {SearchBar} from './components/SearchBar.js';
 import CONFIG from './AppConfig.json';
+import { ShortcutsBar } from './components/ShortcutsBar';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
+
 
 class App extends Component {
   constructor() {
@@ -33,10 +40,17 @@ class App extends Component {
       const isMobile = width <= 576;
 
     return (
-      <div className="App">
-        <SearchBar isMobile={isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
+      <Router>
+      <Route path='/' render={() => (
+        <div className="App">
+          <SearchBar isMobile={isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
+          <div className="app-content row">
 
-      </div>
+            <ShortcutsBar isMobile={isMobile}/>
+          </div>
+        </div>
+      )}/>
+      </Router>
     );
   }
 
