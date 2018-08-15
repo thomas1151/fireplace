@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { ActionDate } from './ActionDate';
 import { ActionPerson } from './ActionPerson';
 import { ActionLocation } from './ActionLocation';
+import { ToastContainer, toast } from 'react-toastify';
+import moment from 'moment';
+import 'react-toastify/dist/ReactToastify.css';
 
+            // <div>
+            //   <button onClick={this.notify}>Notify !</button>
+            //   <ToastContainer />
+            // </div>
 export class ActionBox extends Component{
     constructor(props) {
         super(props);
@@ -10,11 +17,11 @@ export class ActionBox extends Component{
                 newUserForm:false,
                 newLocationForm: false,
                 userForms: [],
-                values: [],
+                people: [],
                 description: '',
                 quantity: '',
                 price: '',
-                date: '',
+                date: moment(),
 
 
             };
@@ -28,8 +35,10 @@ export class ActionBox extends Component{
             this.addLocation = this.addLocation.bind(this);
             this.createLocationForm = this.createLocationForm.bind(this);
             this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
             this.handleSingleChange = this.handleSingleChange.bind(this);
     }
+    notify = (content) => toast(content);
 
     handleAddUser(){
         if(!this.state.newUserForm){
@@ -49,11 +58,11 @@ export class ActionBox extends Component{
     }
 
     createUserForm(){
-        return this.state.values.map((el, i) =>  {
+        return this.state.people.map((el, i) =>  {
             return(<div key={i} className="row">
                 <ActionPerson value={el} className="col-xs-6" id={i} src={'languages'} onChangeForParent={this.handlePersonChange.bind(this)} debug={true}/>
                 {/* <input type="text" value={el||''} onChange={this.handleChange.bind(this, i)} /> */}
-                {this.state.values.length < 1 ? <div><p>Add a new person</p></div> : null}
+                {this.state.people.length < 1 ? <div><p>Add a new person</p></div> : null}
                 <button className="button-remove col-xs" onClick={() => this.removeNewPerson(i)}><i className="fas fa-times"></i></button>
             </div> );         
             })
@@ -63,13 +72,13 @@ export class ActionBox extends Component{
         return(<ActionLocation onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.location}/>)
     }
     handlePersonChange(i, value) {
-        let values = [...this.state.values];
-        values[i] = value;
-        this.setState({ values });
+        let people = [...this.state.people];
+        people[i] = value;
+        this.setState({ people });
     }
     
     addPerson(){
-        this.setState(prevState => ({ values: [...prevState.values, '']}))
+        this.setState(prevState => ({ people: [...prevState.people, '']}))
     }
     addLocation(){
         this.setState({'location':Array(4)});
@@ -83,22 +92,28 @@ export class ActionBox extends Component{
         this.setState({description:value});
     }
     handleSingleChange(property,value){
-        console.log("Property, value");
-        console.log(property);
-        console.log(value);
         this.setState({ [property]:value})
     }
     removeNewPerson(i){
         console.log(i)
-        let values = [...this.state.values];
-        console.log(values);
-        values.splice(i,1);
-        console.log(values);        
-        this.setState({ values });
+        let people = [...this.state.people];
+        console.log(people);
+        people.splice(i,1);
+        console.log(people);        
+        this.setState({ people });
     }
 
+    constructFormJSON(){
+        let data = {}
+            data['people'] = this.state.people;
+            data['description'] = this.state.description;
+            data['quantity'] = this.state.quantity;
+            data['price'] = this.state.price;
+            data['date'] = this.state.date.format("YYYY-MM-DD HH:mm:ss");
+        return data;
+    }
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.values.join(', '));
+        console.log(this.constructFormJSON());
         event.preventDefault();
     }
 
@@ -190,7 +205,7 @@ export class ActionBox extends Component{
                                     <div className="total-price">
                                         £{ (this.state.price * this.state.quantity).toFixed(2)}
                                     </div>
-                                    <div className="button-content-wrap">
+                                    <div onClick={this.handleSubmit}className="button-content-wrap">
                                         <i className="fas fa-plus"></i><p>Create</p> 
                                     </div>   
                                 </button>                             

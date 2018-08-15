@@ -6,6 +6,7 @@ import CONFIG from './AppConfig.json';
 import { ActionBox } from './components/ActionBox';
 import { ShortcutsBar } from './components/ShortcutsBar';
 import { Home } from './views/Home';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -53,10 +54,9 @@ class App extends Component {
           {/* <Route path='/' render={RenderableHome}/> */}
           <Route path='/' render={routeProps => <Home isMobile={isMobile}/>} />
 
-          </div>
+        </div>
         </div>
       </div>
-
       </Router>
     );
   }
