@@ -3,12 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import {SearchBar} from './components/SearchBar.js';
 import CONFIG from './AppConfig.json';
+import { ActionBox } from './components/ActionBox';
 import { ShortcutsBar } from './components/ShortcutsBar';
+import { Home } from './views/Home';
 import {
   BrowserRouter as Router,
   Route,
   Link
-} from 'react-router-dom'
+} from 'react-router-dom';
+
 
 
 class App extends Component {
@@ -41,15 +44,19 @@ class App extends Component {
 
     return (
       <Router>
-      <Route path='/' render={() => (
-        <div className="App">
-          <SearchBar isMobile={isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
-          <div className="app-content row">
+      <div className="App">
+        <SearchBar isMobile={isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
+        <div className="app-content-wrapper">
+        <div className="app-content row">
 
-            <ShortcutsBar isMobile={isMobile}/>
+          <ShortcutsBar isMobile={isMobile}/>
+          {/* <Route path='/' render={RenderableHome}/> */}
+          <Route path='/' render={routeProps => <Home isMobile={isMobile}/>} />
+
           </div>
         </div>
-      )}/>
+      </div>
+
       </Router>
     );
   }

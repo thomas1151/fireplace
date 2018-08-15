@@ -15,24 +15,35 @@
   flex-basis: 4.1666%;
   max-width: 4.1666%;
 }
+
 .col-xs-1-4 {
   -ms-flex-preferred-size: 2.0833%;
   flex-basis: 2.0833%;
   max-width: 2.0833%;
 }
+.stuck-top{
+    position: fixed;
+    top:0;
+    z-index: 5;
 
+}
 
 *{
     box-sizing: border-box;
     // transition: .1s all;
 
 }
+html, body{
+    height: 100%;
+}
+
 body{
     width: 100%;
     background: #f2f2f2
 }
 .App{
     width: 100%;
+    overflow: hidden;
 }
 .row{
     width: 100%;
@@ -47,6 +58,7 @@ body{
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
     color: white;
+    padding: 0 1em;
 }
 .searchBox{
     border-radius: .2em;
@@ -68,14 +80,41 @@ body{
         border-radius: 0 .25em .25em 0;
     }
     input{
-        border: 1px solid rgba(250,250,250,1);
+        border-radius: 0;
+        background: transparent;
+        border: 0;
+        border-bottom: 2px solid rgba(243,243,243,.6);
         padding: .6em;
         font-size: 120%;
-        
+        color: #f6f6f6;
+        &::placeholder{
+            color: rgba(250,250,250,.5);
+        }
     }
-
+    .icon-holder.for-input{
+        border-radius: 0;
+        
+        background: transparent;
+        border: transparent;
+        border-bottom: 2px solid rgba(243,243,243,.6);
+        i{
+            color: rgba(243,243,243,.6);
+        }
+        &:hover{
+            background: rgba(100,100,100,.8);
+        }
+        &:hover,&:active{
+            i,.icon{
+                color: #f6f6f6;
+            }
+        }
+        &:active{
+            background: rgba(243,243,243,.6);
+        }   
+    }
     button.for-input{
         transition: .3s all;
+        
         &:hover{
             background: lighten(@complementary,20%);
             border: 1px solid lighten(@complementary,20%);
@@ -151,8 +190,37 @@ body{
 
 }
 
+.total-price{
+    display: inline-block;
+    padding: 0 1.5em;
+    font-weight: 700;
+    font-size: smaller;
+    color: rgb(150,150,150);
+}
 
-
+button[class^="button-"]{
+    border: 1px solid #eee;
+    border-radius: .25em;
+    transition: .3s all;
+    &:hover{
+        background: rgba(50,50,50,.3);
+        i{
+            color:white;
+        }
+    }
+    &:active{
+        background: rgba(50,50,50,.6);
+        i{
+            color:white;
+        }
+    }
+}
+button.button-remove{
+    i{
+        color: inherit;
+    }
+    color: #e84118;
+}
 .react-autosuggest__container {
     position: relative;
     width: 100%;
@@ -161,11 +229,11 @@ body{
 .react-autosuggest__input {
   width: 100%;
 //   height: 30px;
-  padding: 10px 20px;
+  padding: 1em 0 1em .5em;
   font-family: Helvetica, sans-serif;
   font-weight: 300;
   font-size: 16px;
-  border: 1px solid #aaa;
+  border: 1px solid #eee;
   border-radius: .25em 0 0 .25em;
 }
 
@@ -187,7 +255,7 @@ body{
   display: block;
   position: absolute;
   top: 100%;
-  width: 99vw;
+  width: 95vw;
   border: 1px solid #aaa;
   background-color: #fff;
   font-family: Helvetica, sans-serif;
@@ -280,6 +348,7 @@ body{
 
     width: 10em;
     border-radius: .2em;
+    z-index: 5;
     .menu-title{
         font-size: 90%;
         p{
@@ -327,34 +396,37 @@ body{
         text-align: left;
         font-weight: 700;
     }
-    .section-title{
-            font-size: 90%;
-            p{
-                display: block;
-                width: 100%;
-                text-align: left;
-                text-transform: uppercase;
-                font-weight: 700;
-                color: #999;
-            }
-        }
+
+
 }
+.section-title{
+        font-size: 90%;
+        p{
+            display: block;
+            width: 100%;
+            text-align: left;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #999;
+            padding: 0 .5em;
+        }
+    }
 .main-shortcuts{
     width: 100%;
     background: #f5f5f5;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #eee;
     .mobile-shortcut{
         a{
             color: #282828;
             text-decoration: none;
             padding: .5em 0;
         }
-        border-right: 1px solid rgba(200, 200, 200, 0.4);
+        // border-right: 1px solid rgba(200, 200, 200, 0.4);
         padding: .5em;
         
     }
     i{
-        font-size: 150%;
+        font-size: 160%;
         width: 100%;
         padding: .2em 0;
         color: @complementary;
@@ -400,7 +472,166 @@ body{
     }
 
 }
+.desktop-only{
+    display: none !important;
+}
+.actionBox{
+    background: #f6f6f6;
+    margin: 1em;
+    border-radius: 1em;
+    border: 1px solid #ddd;
+    
+    .profile-icon{
+        padding: .5em 0;
+        text-align: center;
+        display: inline-block;
+        font-size: 130%;
+        i{
+            color: rgba(100,100,100,.4);
+        }
+        p {
+            display: inline-block;
+            font-size: small;
+            color: rgba(100,100,100,.4);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    }
+    .new-action{
+        textarea{
+            border: 1px solid rgb(231, 231, 231);
+            border-radius: .5em;
+            width: 100%;
+            padding: 1em;
+            margin: .5em 0 0 0;
+            font-size: 100%;
+            height: 3.5em;
+        }
+        .new-action-tools{
+            display: flex;
+            justify-content: center;
+        }
+        .add{
+            transition: .3s all;     
 
+            height: 100%;
+            padding: 1em;
+            color: #282828;
+            border-left: 1px solid #eee;
+            &.button:hover{
+                border-left: 1px solid lighten(@complementary,20%);
+            } 
+        }
+        .for-save{
+            margin-left: auto;  
+        }
+        .for-input{
+            &:hover{
+                i{
+                    color: darken(@complementary,10%);
+                }
+            }
+        }
+
+    }
+    .datePickerWrapper{
+        width: 6em;
+        border-radius: .5em;
+        border: 1px solid #eee;
+        height: auto;
+        padding: 1em 0 1em .5em;
+    }
+    .add-date + div{
+        display: inline-block;
+    }
+    button.add,.for-save{
+        background: none;
+        border:0;  
+ 
+    }
+    i{
+        padding: .5em;
+        font-size: large;
+        color: @complementary;
+    }
+    .row .inputs{
+        .at{
+            padding: 1em;
+        }
+    }
+    .currency-input,.days-input{
+        display: flex;
+        background: #fff;
+        border-radius: .5em;
+        flex: 0;
+
+        border: 1px solid rgb(231, 231, 231);
+        input{
+            border-radius: .5em;
+            width: 80%;
+        }
+
+    }
+    .currency-input{
+        input[type="number"]{
+            width: 9em;
+        }
+    }
+
+    .label{
+        display: flex;
+       padding: .5em;
+    }
+    input[type="number"]{
+        height: auto;
+        border: 0;
+        padding: 1em 0 1em .5em;
+        width: 6em;
+    }
+    input[type="date"]{
+        background: #fff;
+        padding: 1em 0 1em .5em;
+
+        border: 1px solid #e7e7e7;
+        border-radius: .25em;
+    }
+}
+.newUserForm{
+    display: block;
+    width: 100%;
+}
+.for-save{
+    &:focus{
+        border: 0;
+        outline: 0;
+    }
+    .button-content-wrap{
+        transition: .3s all;
+        display: inline-block;
+        background: lightgreen;
+        border-radius: .5em;
+        color: #f6f6f6;
+        i{
+            color: white;
+        }
+        p{
+            display: inline-block;
+            padding: 0 .75em 0 0;
+        }
+        &:hover{
+            background: darken(lightgreen, 10%);
+        }
+        &:active{
+            background: darken(lightgreen,20%);
+        }
+    }
+}
+.app-content-wrapper{
+            display: inline-block;
+
+        width: 100%;
+
+}
 // Extra small devices (portrait phones, less than 576px)
 // No media query since this is the default in Bootstrap
 
@@ -412,32 +643,91 @@ body{
         border-bottom: transparent;
         padding: 0 0 1.5em;
     }
+    // .actionBox .profile-icon{
+    //     padding: 1em 0;
+    //     margin: 2em;
+
+    //     height: fit-content;
+    //     padding: .5em 0;
+    //     display: flex;
+    //     background: @complementary;
+    //     border-radius: 2em;
+    //     color: #f6f6f6;
+    // }
 }
 
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) { 
+    .col-md-1-2 {
+    -ms-flex-preferred-size: 4.1666%;
+    flex-basis: 4.1666%;
+    max-width: 4.1666%;
+    }
+
+    .desktop-only{
+        display: inherit !important;
+    }
+    .app-content-wrapper{
+        position: relative;
+    }
+    .app-content{
+        margin: 0;
+        padding: 0 5em;
+        main{
+            max-width: 70%;
+        }
+        
+    }
         .searchBar{
             input{
-            
+                border: 1px solid rgba(250,250,250,1);
+                padding: .6em;
+                font-size: 120%;
+                background: #f6f6f6;
+                color: #282828;
+                border-radius: .25em 0 0 .25em;
             padding: .5em;
             font-size: 100%;
             
+            }
+            .icon-holder.for-input{
+                border-radius: 0 .25em .25em 0;
+                
+                background: @light;
+                border: 1px solid rgba(250,250,250,1);
+                i{
+                    color: @complementary;
+                }
             }
             padding: .5em 4em;
         }
     .react-autosuggest__suggestions-container--open {
     width: 100%;
     }
-    .shortcutsBar{
-        margin: 0 5em;
 
-    }
 
 }
 
 
 // Large devices (desktops, 992px and up)
-@media (min-width: 992px) { }
+@media (min-width: 992px) { 
+    .col-lg-1-2 {
+    -ms-flex-preferred-size: 4.1666%;
+    flex-basis: 4.1666%;
+    max-width: 4.1666%;
+    }
+
+        .actionBox .profile-icon{
+        // padding: 1em 0;
+
+        // height: fit-content;
+        // padding: .5em 0;
+        // display: flex;
+        // background: @complementary;
+        // border-radius: 2em;
+        // color: #f6f6f6;
+    }
+}
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { }

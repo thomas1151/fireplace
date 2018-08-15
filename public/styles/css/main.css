@@ -11,8 +11,17 @@
   flex-basis: 2.0833%;
   max-width: 2.0833%;
 }
+.stuck-top {
+  position: fixed;
+  top: 0;
+  z-index: 5;
+}
 * {
   box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
 }
 body {
   width: 100%;
@@ -20,6 +29,7 @@ body {
 }
 .App {
   width: 100%;
+  overflow: hidden;
 }
 .row {
   width: 100%;
@@ -31,6 +41,7 @@ body {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
   color: white;
+  padding: 0 1em;
 }
 .searchBox {
   border-radius: .2em;
@@ -52,9 +63,37 @@ body {
   border-radius: 0 .25em .25em 0;
 }
 .searchBar input {
-  border: 1px solid #fafafa;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid rgba(243, 243, 243, 0.6);
   padding: .6em;
   font-size: 120%;
+  color: #f6f6f6;
+}
+.searchBar input::placeholder {
+  color: rgba(250, 250, 250, 0.5);
+}
+.searchBar .icon-holder.for-input {
+  border-radius: 0;
+  background: transparent;
+  border: transparent;
+  border-bottom: 2px solid rgba(243, 243, 243, 0.6);
+}
+.searchBar .icon-holder.for-input i {
+  color: rgba(243, 243, 243, 0.6);
+}
+.searchBar .icon-holder.for-input:hover {
+  background: rgba(100, 100, 100, 0.8);
+}
+.searchBar .icon-holder.for-input:hover i,
+.searchBar .icon-holder.for-input:active i,
+.searchBar .icon-holder.for-input:hover .icon,
+.searchBar .icon-holder.for-input:active .icon {
+  color: #f6f6f6;
+}
+.searchBar .icon-holder.for-input:active {
+  background: rgba(243, 243, 243, 0.6);
 }
 .searchBar button.for-input {
   transition: .3s all;
@@ -122,17 +161,47 @@ body {
   display: flex;
   color: #0097e6;
 }
+.total-price {
+  display: inline-block;
+  padding: 0 1.5em;
+  font-weight: 700;
+  font-size: smaller;
+  color: #969696;
+}
+button[class^="button-"] {
+  border: 1px solid #eee;
+  border-radius: .25em;
+  transition: .3s all;
+}
+button[class^="button-"]:hover {
+  background: rgba(50, 50, 50, 0.3);
+}
+button[class^="button-"]:hover i {
+  color: white;
+}
+button[class^="button-"]:active {
+  background: rgba(50, 50, 50, 0.6);
+}
+button[class^="button-"]:active i {
+  color: white;
+}
+button.button-remove {
+  color: #e84118;
+}
+button.button-remove i {
+  color: inherit;
+}
 .react-autosuggest__container {
   position: relative;
   width: 100%;
 }
 .react-autosuggest__input {
   width: 100%;
-  padding: 10px 20px;
+  padding: 1em 0 1em .5em;
   font-family: Helvetica, sans-serif;
   font-weight: 300;
   font-size: 16px;
-  border: 1px solid #aaa;
+  border: 1px solid #eee;
   border-radius: .25em 0 0 .25em;
 }
 .react-autosuggest__input--focused {
@@ -149,7 +218,7 @@ body {
   display: block;
   position: absolute;
   top: 100%;
-  width: 99vw;
+  width: 95vw;
   border: 1px solid #aaa;
   background-color: #fff;
   font-family: Helvetica, sans-serif;
@@ -235,6 +304,7 @@ body {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
   width: 10em;
   border-radius: .2em;
+  z-index: 5;
   flex-direction: column;
   position: absolute;
   top: 100%;
@@ -281,24 +351,24 @@ body {
   text-align: left;
   font-weight: 700;
 }
-.shortcutsBar .section-title {
+.section-title {
   font-size: 90%;
 }
-.shortcutsBar .section-title p {
+.section-title p {
   display: block;
   width: 100%;
   text-align: left;
   text-transform: uppercase;
   font-weight: 700;
   color: #999;
+  padding: 0 .5em;
 }
 .main-shortcuts {
   width: 100%;
   background: #f5f5f5;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #eee;
 }
 .main-shortcuts .mobile-shortcut {
-  border-right: 1px solid rgba(200, 200, 200, 0.4);
   padding: .5em;
 }
 .main-shortcuts .mobile-shortcut a {
@@ -307,7 +377,7 @@ body {
   padding: .5em 0;
 }
 .main-shortcuts i {
-  font-size: 150%;
+  font-size: 160%;
   width: 100%;
   padding: .2em 0;
   color: #0097e6;
@@ -347,6 +417,147 @@ body {
 .shortcutList li:hover {
   background: #ede6e3;
 }
+.desktop-only {
+  display: none !important;
+}
+.actionBox {
+  background: #f6f6f6;
+  margin: 1em;
+  border-radius: 1em;
+  border: 1px solid #ddd;
+}
+.actionBox .profile-icon {
+  padding: .5em 0;
+  text-align: center;
+  display: inline-block;
+  font-size: 130%;
+}
+.actionBox .profile-icon i {
+  color: rgba(100, 100, 100, 0.4);
+}
+.actionBox .profile-icon p {
+  display: inline-block;
+  font-size: small;
+  color: rgba(100, 100, 100, 0.4);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.actionBox .new-action textarea {
+  border: 1px solid #e7e7e7;
+  border-radius: .5em;
+  width: 100%;
+  padding: 1em;
+  margin: .5em 0 0 0;
+  font-size: 100%;
+  height: 3.5em;
+}
+.actionBox .new-action .new-action-tools {
+  display: flex;
+  justify-content: center;
+}
+.actionBox .new-action .add {
+  transition: .3s all;
+  height: 100%;
+  padding: 1em;
+  color: #282828;
+  border-left: 1px solid #eee;
+}
+.actionBox .new-action .add.button:hover {
+  border-left: 1px solid #4dc2ff;
+}
+.actionBox .new-action .for-save {
+  margin-left: auto;
+}
+.actionBox .new-action .for-input:hover i {
+  color: #0076b3;
+}
+.actionBox .datePickerWrapper {
+  width: 6em;
+  border-radius: .5em;
+  border: 1px solid #eee;
+  height: auto;
+  padding: 1em 0 1em .5em;
+}
+.actionBox .add-date + div {
+  display: inline-block;
+}
+.actionBox button.add,
+.actionBox .for-save {
+  background: none;
+  border: 0;
+}
+.actionBox i {
+  padding: .5em;
+  font-size: large;
+  color: #0097e6;
+}
+.actionBox .row .inputs .at {
+  padding: 1em;
+}
+.actionBox .currency-input,
+.actionBox .days-input {
+  display: flex;
+  background: #fff;
+  border-radius: .5em;
+  flex: 0;
+  border: 1px solid #e7e7e7;
+}
+.actionBox .currency-input input,
+.actionBox .days-input input {
+  border-radius: .5em;
+  width: 80%;
+}
+.actionBox .currency-input input[type="number"] {
+  width: 9em;
+}
+.actionBox .label {
+  display: flex;
+  padding: .5em;
+}
+.actionBox input[type="number"] {
+  height: auto;
+  border: 0;
+  padding: 1em 0 1em .5em;
+  width: 6em;
+}
+.actionBox input[type="date"] {
+  background: #fff;
+  padding: 1em 0 1em .5em;
+  border: 1px solid #e7e7e7;
+  border-radius: .25em;
+}
+.newUserForm {
+  display: block;
+  width: 100%;
+}
+.for-save:focus {
+  border: 0;
+  outline: 0;
+}
+.for-save .button-content-wrap {
+  transition: .3s all;
+  display: inline-block;
+  background: lightgreen;
+  border-radius: .5em;
+  color: #f6f6f6;
+}
+.for-save .button-content-wrap i {
+  color: white;
+}
+.for-save .button-content-wrap p {
+  display: inline-block;
+  padding: 0 .75em 0 0;
+}
+.for-save .button-content-wrap:hover {
+  background: #64e764;
+}
+.for-save .button-content-wrap:active {
+  background: #38e038;
+}
+.app-content-wrapper {
+  display: inline-block;
+  width: 100%;
+}
 @media (min-width: 576px) {
   .main-shortcuts {
     border-top: 1px solid rgba(200, 200, 200, 0.4);
@@ -356,17 +567,53 @@ body {
   }
 }
 @media (min-width: 768px) {
+  .col-md-1-2 {
+    -ms-flex-preferred-size: 4.1666%;
+    flex-basis: 4.1666%;
+    max-width: 4.1666%;
+  }
+  .desktop-only {
+    display: inherit !important;
+  }
+  .app-content-wrapper {
+    position: relative;
+  }
+  .app-content {
+    margin: 0;
+    padding: 0 5em;
+  }
+  .app-content main {
+    max-width: 70%;
+  }
   .searchBar {
     padding: .5em 4em;
   }
   .searchBar input {
+    border: 1px solid #fafafa;
+    padding: .6em;
+    font-size: 120%;
+    background: #f6f6f6;
+    color: #282828;
+    border-radius: .25em 0 0 .25em;
     padding: .5em;
     font-size: 100%;
+  }
+  .searchBar .icon-holder.for-input {
+    border-radius: 0 .25em .25em 0;
+    background: #ede6e3;
+    border: 1px solid #fafafa;
+  }
+  .searchBar .icon-holder.for-input i {
+    color: #0097e6;
   }
   .react-autosuggest__suggestions-container--open {
     width: 100%;
   }
-  .shortcutsBar {
-    margin: 0 5em;
+}
+@media (min-width: 992px) {
+  .col-lg-1-2 {
+    -ms-flex-preferred-size: 4.1666%;
+    flex-basis: 4.1666%;
+    max-width: 4.1666%;
   }
 }

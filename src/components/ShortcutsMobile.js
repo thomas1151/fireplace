@@ -31,7 +31,7 @@ const shortcuts_main = [
     {
         title: '',
         url: "people",
-        icon: 'fas fa-user',
+        icon: 'fas fa-users',
     },
     {
         title: '',
@@ -45,26 +45,45 @@ export class ShortcutsMobile extends Component{
             super(props);
             if(this.props.debug){
                 this.state = {
-                    items: eval("shortcuts_"+this.props.src)
+                    items: eval("shortcuts_"+this.props.src),
+                    atTop:false
                 }
             }
     }
+    isTop(el) {
+        return el.getBoundingClientRect().bottom <= 0;
+    }
+
+    componentDidMount() {
+        document.addEventListener('scroll', this.trackScrolling);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('scroll', this.trackScrolling);
+    }
+
+    trackScrolling = () => {
+        const wrappedElement = document.getElementById('search-bar');
+        if (this.isTop(wrappedElement)) {
+            this.setState({'atTop':true})
+            // document.removeEventListener('scroll', this.trackScrolling);
+        }else{
+            this.setState({'atTop':false})
+        }
+    };
+
     render(){
         let bg =this.props.backgroundColor;
-        if(this.props.isMobile){
-            return(
-                <div className="shortcutsBar isMobile row">
-                
-                </div>
-            )
+        let classesToAdd = "";
+        if(this.state.atTop){
+            classesToAdd += "stuck-top"
         }
-
         const listItems = this.state.items.map((item) =>
-            <div className="col-xs mobile-shortcut for-input"><Link to={item.url}><i className={item.icon}></i>{item.title}</Link></div>
+            <div className="col-xs mobile-shortcut for-input "><Link to={item.url}><i className={item.icon}></i>{item.title}</Link></div>
         );
 
         return(
-            <div className="main-shortcuts">
+            <div className={"main-shortcuts "+classesToAdd} id="shortcuts-bar" >
                 <div className="row">
                     {listItems}
                 </div>

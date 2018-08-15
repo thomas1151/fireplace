@@ -10,7 +10,7 @@ export class SearchBar extends Component{
         let bg =this.props.backgroundColor;
         if(this.props.isMobile){
             return(
-                <div className="searchBar isMobile row" style={{background:bg}}>
+                <div id="search-bar" className="searchBar isMobile row" style={{background:bg}}>
                 
                 <div className="col-xs-11">
                     <SearchElement/>
@@ -26,9 +26,9 @@ export class SearchBar extends Component{
         }
         return(
 
-            <div className="searchBar" style={{background:bg}}>
+            <div id="search-bar" className="searchBar" style={{background:bg}}>
                 <div className="active-outer  col-md-2">
-                    <div className="logo-inner middle-xs">{this.props.logo}</div>
+                    <div className="logo-inner middle-xs"><i className="fas fa-fire"></i></div>
                 </div>
                 <div className="col-xs-10 col-md-8">
                     <SearchElement/>

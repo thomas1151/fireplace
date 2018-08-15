@@ -61,7 +61,7 @@ const getSuggestions = value => {
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
+const getSuggestionValue = suggestion => suggestion.title;
 
 const renderSuggestion = function(suggestion){
 
@@ -97,7 +97,7 @@ export class SearchElement extends Component{
 
     onChange = (event, { newValue }) => {
         this.setState({
-        value: newValue
+            value: newValue
         });
     };
 
@@ -142,7 +142,7 @@ export class SearchElement extends Component{
                     />
                 </div>
                 <button className="icon-holder for-input col-xs-1">
-                    <div className="middle-xs center-xs icon"><i class="fas fa-search"></i></div>
+                    <div className="middle-xs center-xs icon"><i className="fas fa-search"></i></div>
                 </button>
             </div>    
         )

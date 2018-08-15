@@ -46,7 +46,7 @@ export class SearchBarSettings extends Component{
     render(){
         return(
         <div className="menu-outer" ref={this.setWrapperRef}>
-            <button onClick={this.handleToggle} className="icon middle-xs"><i class="fas fa-user"></i></button>
+            <button onClick={this.handleToggle} className="icon middle-xs"><i className="fas fa-user"></i></button>
             <div className={"menu-settings "+(this.state.isToggleOn ? 'menu-open' : '')}>
                 <div className="menu-title">
                     <p>Thomas Barratt</p>

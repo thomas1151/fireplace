@@ -11,6 +11,9 @@ export class ShortcutsBar extends Component{
     render(){
         let bg =this.props.backgroundColor;
         if(this.props.isMobile){
+
+            
+            
             return(
                 <div className="shortcutsBar isMobile row">
                     <ShortcutsMobile title="Shortcuts" src={'main'} debug={true}/>
