@@ -78,7 +78,7 @@ export class RangeDateInput extends React.Component {
           }}
           onDayChange={this.handleFromChange}
         />
-        <span className="InputFromTo-to col-xs">
+        <span className="InputFromTo-to col-xs middle-xs">
         {' '}
         —{' '}
         </span>

@@ -41,7 +41,7 @@ class App extends Component {
 
   render() {
       const { width } = this.state;
-      const isMobile = width <= 576;
+      const isMobile = width <= 768;
 
     return (
       <Router>

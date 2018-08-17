@@ -181,7 +181,7 @@ export class ActionPerson extends Component{
     }
 
     render(){
-        const { value, suggestions } = this.state;
+        let { value, suggestions } = this.state;
 
         // Autosuggest will pass through all these props to the input.
         let placeholder = "Search";
@@ -189,7 +189,9 @@ export class ActionPerson extends Component{
         if(this.props.placeholder){
             placeholder = this.props.placeholder
         }
-        
+        if(this.props.assigned){
+            value = this.props.assigned;
+        }
         const inputProps = {
         placeholder: placeholder,
         value,

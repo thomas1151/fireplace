@@ -168,7 +168,8 @@ body {
   color: #0097e6;
 }
 .total-price {
-  display: inline-block;
+  height: 100%;
+  align-self: center;
   padding: 0 1.5em;
   font-weight: 700;
   font-size: smaller;
@@ -484,6 +485,13 @@ button.button-remove i {
 }
 .actionBox .new-action .for-save {
   margin-left: auto;
+  display: flex;
+  border-top: 1px solid #eee;
+  padding: 1em .5em;
+}
+.actionBox .new-action .for-save .button-content-wrap {
+  width: 100%;
+  margin: 0 2em;
 }
 .actionBox .new-action .for-input:hover i {
   color: #0076b3;
@@ -518,7 +526,7 @@ button.button-remove i {
   padding: 1em;
 }
 .actionBox .address button {
-  max-width: 100%;
+  max-width: 100% ;
 }
 .actionBox .currency-input,
 .actionBox .days-input {
@@ -637,6 +645,14 @@ button.button-remove i {
   transform: rotate(-45deg);
   bottom: 50%;
 }
+.InputFromTo-to {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+.InputFromTo > div {
+  padding: 0;
+}
 .InputFromTo .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
   background-color: #f0f8ff !important;
   color: #4a90e2;
@@ -723,6 +739,14 @@ button.button-remove i {
   }
   .react-autosuggest__suggestions-container--open {
     width: 100%;
+  }
+  .actionBox .new-action .for-save .button-content-wrap {
+    border: 0;
+    width: auto;
+    margin: 0;
+  }
+  .total-price {
+    margin-left: auto;
   }
 }
 @media (min-width: 992px) {

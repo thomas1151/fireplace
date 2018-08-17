@@ -102,8 +102,10 @@ export class ActionBox extends Component{
 
     createUserForm(){
         return this.state.people.map((el, i) =>  {
+            console.log(el);
+            console.log(i)
             return(<div key={i} className="row">
-                <ActionPerson value={el} className="col-xs-6" id={i} src={'languages'} onChangeForParent={this.handlePersonChange.bind(this)} debug={true}/>
+                <ActionPerson assigned={el} className="col-xs-6" id={i} src={'languages'} onChangeForParent={this.handlePersonChange.bind(this)} debug={true}/>
                 {/* <input type="text" value={el||''} onChange={this.handleChange.bind(this, i)} /> */}
                 {this.state.people.length < 1 ? <div><p>Add a new person</p></div> : null}
                 <button className="button-remove col-xs" onClick={() => this.removeNewPerson(i)}><i className="fas fa-times"></i></button>
@@ -135,15 +137,35 @@ export class ActionBox extends Component{
         this.setState(prevState => ({ people: [...prevState.people, '']}))
     }
     addLocation(){
-        this.setState({'location':Array(4)});
+        this.setState({'location':{
+            ['line1']:undefined,
+            ['line2']: undefined,
+            ['line3']: undefined,
+            ['line4']: undefined,
+            ['postcode']: undefined,
+
+        }});
     }
-    handleLocationChange(i,value){
-        let locations = [...this.state.location]
-        locations[i] = value;
-        this.setState({location:locations})
+    handleLocationChange(values,i){
+        let locations = this.state.location
+        if(i === undefined){
+            console.log(values)
+            console.log(locations)
+            locations.line1 = values[0]
+            locations.line2 = values[1]
+            locations.line3 = values[2]
+            locations.line4 = values[3]
+            locations.postcode = values[4]
+            console.log(locations)
+            this.setState({location:locations})
+        }else{
+            locations[[i]] = values;
+            this.setState({location:locations})
+        }
+
     }
     handleRemoveLocation(){
-        this.setState({newLocationForm:false})
+        this.setState({newLocationForm:false,location:undefined})
         
     }
 
@@ -155,6 +177,8 @@ export class ActionBox extends Component{
     }
     removeNewPerson(i){
         let people = [...this.state.people];
+        console.log(people)
+        console.log(people[i])
         people.splice(i,1);
         this.setState({ people });
         if(people.length < 1){
@@ -179,6 +203,7 @@ export class ActionBox extends Component{
             data['price'] = this.state.price;
             data['start_date'] = this.state.start_date
             data['end_date'] = this.state.end_date
+            data['location'] = this.state.location
 
         return data;
     }

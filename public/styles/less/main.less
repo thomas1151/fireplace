@@ -197,11 +197,14 @@ body{
 }
 
 .total-price{
-    display: inline-block;
+    height: 100%;
+    align-self: center;
+    
     padding: 0 1.5em;
     font-weight: 700;
     font-size: smaller;
     color: rgb(150,150,150);
+
 }
 
 button[class^="button-"]{
@@ -546,6 +549,13 @@ button.button-remove{
         }
         .for-save{
             margin-left: auto;  
+            display: flex;
+            border-top: 1px solid #eee;
+            padding: 1em .5em;
+            .button-content-wrap{
+                width: 100%;
+                margin: 0 2em;
+            }
         }
         .for-input{
             &:hover{
@@ -592,7 +602,7 @@ button.button-remove{
     }
     .address{
         button{
-            max-width: 100%;
+            max-width: 100% ;
         }
     }
     .currency-input,.days-input{
@@ -724,28 +734,35 @@ button.button-remove{
     bottom: 50%;
 }
 
-
-  .InputFromTo .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-    background-color: #f0f8ff !important;
-    color: #4a90e2;
-  }
-  .InputFromTo .DayPicker-Day {
-    border-radius: 0 !important;
-  }
-  .InputFromTo .DayPicker-Day--start {
-    border-top-left-radius: 50% !important;
-    border-bottom-left-radius: 50% !important;
-  }
-  .InputFromTo .DayPicker-Day--end {
-    border-top-right-radius: 50% !important;
-    border-bottom-right-radius: 50% !important;
-  }
-  .InputFromTo .DayPickerInput-Overlay {
-    width: 20em;
-  }
-  .InputFromTo-to .DayPickerInput-Overlay {
-    margin-left: -198px;
-  }
+.InputFromTo-to{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+.InputFromTo > div{
+    padding: 0;
+}
+.InputFromTo .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+background-color: #f0f8ff !important;
+color: #4a90e2;
+}
+.InputFromTo .DayPicker-Day {
+border-radius: 0 !important;
+}
+.InputFromTo .DayPicker-Day--start {
+border-top-left-radius: 50% !important;
+border-bottom-left-radius: 50% !important;
+}
+.InputFromTo .DayPicker-Day--end {
+border-top-right-radius: 50% !important;
+border-bottom-right-radius: 50% !important;
+}
+.InputFromTo .DayPickerInput-Overlay {
+width: 20em;
+}
+.InputFromTo-to .DayPickerInput-Overlay {
+margin-left: -198px;
+}
     /**
     * Create the hover event of the tick
     */
@@ -812,6 +829,7 @@ button.button-remove{
         }
         
     }
+
         .searchBar{
             input{
                 border: 1px solid rgba(250,250,250,1);
@@ -838,7 +856,14 @@ button.button-remove{
     .react-autosuggest__suggestions-container--open {
     width: 100%;
     }
-
+    .actionBox .new-action .for-save .button-content-wrap{
+        border: 0;
+        width: auto;
+        margin: 0;
+    }
+    .total-price{
+        margin-left: auto;
+    }
 
 }
 
@@ -861,6 +886,8 @@ button.button-remove{
         // border-radius: 2em;
         // color: #f6f6f6;
     }
+
+
 }
 
 // Extra large devices (large desktops, 1200px and up)

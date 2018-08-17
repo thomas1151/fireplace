@@ -9,10 +9,29 @@ export class ActionLocation extends Component {
     constructor(props) {
         super(props);
         this.handleLocationAutofill = this.handleLocationAutofill.bind(this);
+        this.onChangeForParent = this.onChangeForParent.bind(this);
+        this.state ={
+            line1:undefined,
+            line2:undefined,
+            line3:undefined,
+            line4:undefined,
+            postcode:undefined,
+        }
     }
     handleLocationAutofill(s){
-        console.log("Has received the suggestion");
-        console.log(s);
+        let a = []
+        s.suggestion.data.map((d, i) => { 
+            a[[d[0]]] = d[1];
+        })
+        this.setState({...a});
+        this.props.onChangeForParent(Object.values(a))
+    }
+    onChangeForParent(i, value) {
+        const { l1,l2,l3,l4,postcode } = this.state;
+        this.setState({[i]:value})
+
+        this.props.onChangeForParent(value, i);
+
     }
 
     render() {
@@ -27,23 +46,23 @@ export class ActionLocation extends Component {
         return (
             <div className="address row">
                 <div className="col-xs-6 address-1 input-wrap ">
-                    <ActionPerson value={0}  id={0} src={'address'} debug={true} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.props.onChangeForParent} placeholder="Line 1"/>
+                    <ActionPerson value={'line1'}  id={'line1'} src={'address'} debug={true} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.onChangeForParent} placeholder="Line 1"/>
                 </div>
 
                 <div className="col-xs-6 address-2 input-wrap">
-                    <ActionPerson value={1}  id={1} src={'address'} debug={true} onChangeForParent={this.props.onChangeForParent} placeholder="Line 2"/>
+                    <ActionPerson assigned={this.state.line2}   value={'line2'}   id={'line2'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 2"/>
                 </div>
                 
                 <div className="col-xs-6 address-3 input-wrap">
-                    <ActionPerson value={2}  id={2} src={'address'} debug={true} onChangeForParent={this.props.onChangeForParent} placeholder="Line 3"/>
+                    <ActionPerson assigned={this.state.line3}  value={'line3'}   id={'line3'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 3"/>
                 </div>
                 
                 <div className="col-xs-6 address-4 input-wrap">
-                    <ActionPerson value={3}  id={3} src={'address'} debug={true} onChangeForParent={this.props.onChangeForParent} placeholder="Line 4"/>
+                    <ActionPerson assigned={this.state.line4}  value={'line4'}   id={'line4'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 4"/>
                 </div>
                 
                 <div className="col-xs-6 address-postcode input-wrap">
-                    <ActionPerson value={4}  id={4} src={'address'} debug={true} onChangeForParent={this.props.onChangeForParent} placeholder="Postcode"/>
+                    <ActionPerson assigned={this.state.postcode}  value={'postcode'}id={'postcode'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Postcode"/>
                 </div>
                 {this.props.children}
             </div>
