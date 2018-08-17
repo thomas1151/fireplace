@@ -51,10 +51,12 @@ export class ShortcutsMobile extends Component{
             }
     }
     isTop(el) {
+        console.log(el.getBoundingClientRect);
         return el.getBoundingClientRect().bottom <= 0;
     }
 
     componentDidMount() {
+        console.log("Scroll mounted");
         document.addEventListener('scroll', this.trackScrolling);
     }
 

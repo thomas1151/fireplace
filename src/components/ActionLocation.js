@@ -8,9 +8,12 @@ import {ActionPerson} from './ActionPerson';
 export class ActionLocation extends Component {
     constructor(props) {
         super(props);
-
+        this.handleLocationAutofill = this.handleLocationAutofill.bind(this);
     }
-
+    handleLocationAutofill(s){
+        console.log("Has received the suggestion");
+        console.log(s);
+    }
 
     render() {
 
@@ -24,7 +27,7 @@ export class ActionLocation extends Component {
         return (
             <div className="address row">
                 <div className="col-xs-6 address-1 input-wrap ">
-                    <ActionPerson value={0}  id={0} src={'address'} debug={true} onChangeForParent={this.props.onChangeForParent} placeholder="Line 1"/>
+                    <ActionPerson value={0}  id={0} src={'address'} debug={true} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.props.onChangeForParent} placeholder="Line 1"/>
                 </div>
 
                 <div className="col-xs-6 address-2 input-wrap">
@@ -42,7 +45,7 @@ export class ActionLocation extends Component {
                 <div className="col-xs-6 address-postcode input-wrap">
                     <ActionPerson value={4}  id={4} src={'address'} debug={true} onChangeForParent={this.props.onChangeForParent} placeholder="Postcode"/>
                 </div>
-                
+                {this.props.children}
             </div>
         )
     }

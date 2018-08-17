@@ -25,11 +25,17 @@ body {
 }
 body {
   width: 100%;
+  height: 100%;
   background: #f2f2f2;
+}
+#root {
+  width: 100%;
+  height: 100%;
 }
 .App {
   width: 100%;
-  overflow: hidden;
+  height: 100%;
+  overflow-x: hidden;
 }
 .row {
   width: 100%;
@@ -217,7 +223,7 @@ button.button-remove i {
 .react-autosuggest__suggestions-container--open {
   display: block;
   position: absolute;
-  top: 100%;
+  top: 90%;
   width: 95vw;
   border: 1px solid #aaa;
   background-color: #fff;
@@ -426,6 +432,16 @@ button.button-remove i {
   border-radius: 1em;
   border: 1px solid #ddd;
 }
+.actionBox .description-box .react-autosuggest__suggestions-container--open {
+  border: 1px solid #eee;
+}
+.actionBox .description-box .suggestion-content-wrapper .title {
+  display: flex;
+}
+.actionBox .description-box .suggestion-content-wrapper p {
+  font-weight: 300;
+  font-style: italic;
+}
 .actionBox .profile-icon {
   padding: .5em 0;
   text-align: center;
@@ -449,7 +465,8 @@ button.button-remove i {
   padding: 1em;
   margin: .5em 0 0 0;
   font-size: 100%;
-  height: 3.5em;
+  height: 4em;
+  max-width: 100%;
 }
 .actionBox .new-action .new-action-tools {
   display: flex;
@@ -478,6 +495,12 @@ button.button-remove i {
   height: auto;
   padding: 1em 0 1em .5em;
 }
+.actionBox .datePicker-wrapper {
+  display: flex;
+}
+.actionBox .DayPickerInput {
+  width: 13em;
+}
 .actionBox .add-date + div {
   display: inline-block;
 }
@@ -493,6 +516,9 @@ button.button-remove i {
 }
 .actionBox .row .inputs .at {
   padding: 1em;
+}
+.actionBox .address button {
+  max-width: 100%;
 }
 .actionBox .currency-input,
 .actionBox .days-input {
@@ -520,11 +546,12 @@ button.button-remove i {
   padding: 1em 0 1em .5em;
   width: 6em;
 }
-.actionBox input[type="date"] {
+.actionBox input {
   background: #fff;
   padding: 1em 0 1em .5em;
   border: 1px solid #e7e7e7;
   border-radius: .25em;
+  width: 100%;
 }
 .newUserForm {
   display: block;
@@ -558,6 +585,91 @@ button.button-remove i {
   display: inline-block;
   width: 100%;
 }
+.date-wrapper {
+  display: flex;
+  padding: 0;
+}
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.react-datepicker-wrapper .react-datepicker__input-container {
+  width: 100%;
+}
+.react-datepicker-wrapper .react-datepicker__input-container .datePickerWrapper {
+  width: 100%;
+}
+.left-curve-border {
+  border-radius: .25em 0 0 .25em;
+}
+.right-curve-border {
+  border-radius: 0 .25em .25em 0;
+}
+.custom-checkbox {
+  width: 4em;
+  position: relative;
+}
+.custom-checkbox input {
+  width: 100%;
+  height: 100%;
+}
+.custom-checkbox label {
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #eee;
+  border: 1px solid #ddd;
+}
+.custom-checkbox label:after {
+  transition: .1s all;
+  opacity: 0.2;
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 5px;
+  background: transparent;
+  left: 7px;
+  border: 3px solid #282828;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+  bottom: 50%;
+}
+.InputFromTo .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #f0f8ff !important;
+  color: #4a90e2;
+}
+.InputFromTo .DayPicker-Day {
+  border-radius: 0 !important;
+}
+.InputFromTo .DayPicker-Day--start {
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.InputFromTo .DayPicker-Day--end {
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+.InputFromTo .DayPickerInput-Overlay {
+  width: 20em;
+}
+.InputFromTo-to .DayPickerInput-Overlay {
+  margin-left: -198px;
+}
+/**
+    * Create the hover event of the tick
+    */
+.custom-checkbox label:hover::after {
+  opacity: 0.5;
+}
+/**
+    * Create the checkbox state for the tick
+    */
+.custom-checkbox label.checked:after {
+  opacity: 1;
+}
 @media (min-width: 576px) {
   .main-shortcuts {
     border-top: 1px solid rgba(200, 200, 200, 0.4);
@@ -567,6 +679,9 @@ button.button-remove i {
   }
 }
 @media (min-width: 768px) {
+  .actionBox button[class^="button-"] {
+    max-width: 5em;
+  }
   .col-md-1-2 {
     -ms-flex-preferred-size: 4.1666%;
     flex-basis: 4.1666%;

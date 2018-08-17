@@ -5,6 +5,8 @@ import { ActionLocation } from './ActionLocation';
 import { ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import 'react-toastify/dist/ReactToastify.css';
+import { SingleDateInput } from './SingleDateInput';
+import { RangeDateInput } from './RangeDateInput';
 
             // <div>
             //   <button onClick={this.notify}>Notify !</button>
@@ -16,13 +18,15 @@ export class ActionBox extends Component{
             this.state ={
                 newUserForm:false,
                 newLocationForm: false,
+                newSingleDateForm: false,
+                newRangeDateForm:false,
                 userForms: [],
                 people: [],
                 description: '',
                 quantity: '',
                 price: '',
-                date: moment(),
-
+                start_date: new Date(),
+                end_date: undefined,
 
             };
             this.handleAddUser = this.handleAddUser.bind(this);
@@ -37,6 +41,15 @@ export class ActionBox extends Component{
             this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
             this.handleSingleChange = this.handleSingleChange.bind(this);
+            this.handleSingleDate = this.handleSingleDate.bind(this);
+            this.handleRangeDate = this.handleRangeDate.bind(this);
+            this.handleAddRangeDate = this.handleAddRangeDate.bind(this);
+            this.handleAddSingleDate = this.handleAddSingleDate.bind(this);
+            this.createRangeForm = this.createRangeForm.bind(this);
+            this.createSingleForm = this.createSingleForm.bind(this);
+            this.handleStartDateChange = this.handleStartDateChange.bind(this);
+            this.handleRangeDateChange = this.handleRangeDateChange.bind(this);
+            this.handleRemoveLocation = this.handleRemoveLocation.bind(this);
     }
     notify = (content) => toast(content);
 
@@ -56,6 +69,36 @@ export class ActionBox extends Component{
         this.addLocation();
 
     }
+    handleSingleDate() {
+
+    }
+    handleRangeDate() {
+
+    } 
+    handleAddSingleDate(){
+        this.setState({newRangeDateForm: false,newSingleDateForm: true,start_date:new Date(),end_date:undefined});
+    }
+    handleAddRangeDate(){
+        this.setState({end_date:new Date()})
+        this.setState({newRangeDateForm: true,newSingleDateForm: false});
+        // this.addRangeDate();
+    }
+    createRangeForm(){
+        return(
+            <div className="date-wrapper col-xs-12 col-md-6">
+            <RangeDateInput isMobile={this.props.isMobile} onChangeForParent={this.handleRangeDateChange} start_date={this.state.start_date} end_date={this.state.end_date}/>
+            <button className="button-remove col-xs-2" onClick={() => this.handleRemoveDate('end')}><i className="fas fa-times"></i></button>
+            </div>
+        )
+    }
+    createSingleForm(){
+        return(
+            <div className="date-wrapper col-xs-12 col-md-6">
+            <SingleDateInput isMobile={this.props.isMobile} onChangeForParent={this.handleStartDateChange} start_date={this.state.start_date}/>
+            <button className="button-remove col-xs"  onClick={() => this.handleRemoveDate('start')}><i className="fas fa-times"></i></button>
+            </div>
+        )
+    }
 
     createUserForm(){
         return this.state.people.map((el, i) =>  {
@@ -69,14 +112,25 @@ export class ActionBox extends Component{
     }
 
     createLocationForm(){
-        return(<ActionLocation onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.location}/>)
+        return(<ActionLocation onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.location}>
+                    <button className="button-remove col-xs" onClick={this.handleRemoveLocation}><i className="fas fa-times"></i></button>
+                </ActionLocation>    
+            )
+    }
+    createDateForm(){
+        
     }
     handlePersonChange(i, value) {
         let people = [...this.state.people];
         people[i] = value;
         this.setState({ people });
     }
-    
+    handleStartDateChange(value){
+        this.setState({start_date:value})
+    }
+    handleRangeDateChange(type,value){
+        this.setState({[type+'_date']:value})
+    }
     addPerson(){
         this.setState(prevState => ({ people: [...prevState.people, '']}))
     }
@@ -88,6 +142,11 @@ export class ActionBox extends Component{
         locations[i] = value;
         this.setState({location:locations})
     }
+    handleRemoveLocation(){
+        this.setState({newLocationForm:false})
+        
+    }
+
     handleDescriptionChange(i,value){
         this.setState({description:value});
     }
@@ -95,21 +154,32 @@ export class ActionBox extends Component{
         this.setState({ [property]:value})
     }
     removeNewPerson(i){
-        console.log(i)
         let people = [...this.state.people];
-        console.log(people);
         people.splice(i,1);
-        console.log(people);        
         this.setState({ people });
+        if(people.length < 1){
+            this.setState({newUserForm:false});
+        }
     }
-
+    handleRemoveDate(date_type){
+        let form = ""
+        // newState[(date_type)+'_date'] =undefined
+        if(date_type=='start'){
+            form = "newSingleDateForm"
+        }else{
+            form = "newRangeDateForm";
+        }
+        this.setState({start_date:undefined,end_date:undefined,[form]:false})
+    }
     constructFormJSON(){
         let data = {}
             data['people'] = this.state.people;
             data['description'] = this.state.description;
             data['quantity'] = this.state.quantity;
             data['price'] = this.state.price;
-            data['date'] = this.state.date.format("YYYY-MM-DD HH:mm:ss");
+            data['start_date'] = this.state.start_date
+            data['end_date'] = this.state.end_date
+
         return data;
     }
     handleSubmit(event) {
@@ -143,11 +213,10 @@ export class ActionBox extends Component{
                         </div>
                         <div className="new-action col-xs">
 
-                            <ActionPerson renderComponent={'textarea'} value={1}  id={1} src={'autocomplete'} debug={true} onChangeForParent={this.handleDescriptionChange} placeholder="Raising crowns over stonewalls and fencelines"/>
+                            <ActionPerson className="description-box" renderComponent={'textarea'} value={1}  id={1} src={'autocomplete'} debug={true} onChangeForParent={this.handleDescriptionChange} placeholder="Raising crowns over stonewalls and fencelines"/>
 
                             {/* </textarea> */}
                             <div className="row inputs">
-                                <ActionDate isMobile={this.props.isMobile} onChangeForParent={this.handleSingleChange}/>
                                 <div className="days-input col-xs">
                                     <input type="number" placeholder="2"  onChange={(e)=> this.handleSingleChange('quantity', e.target.value)}/>
                                     <div className="label middle-xs">
@@ -163,6 +232,7 @@ export class ActionBox extends Component{
                                     </div>
                                     <input type="number" placeholder="150.00" onChange={(e)=> this.handleSingleChange('price', e.target.value)}/>
                                 </div>
+                                {/* <ActionDate isMobile={this.props.isMobile} onChangeForParent={this.handleSingleChange}/> */}
 
                                     {/* <input onClick={this.addClick} className="new new-person" type="button"/> */}
                                     {/* {this.state.userForms} */}
@@ -184,6 +254,33 @@ export class ActionBox extends Component{
                                                <p>Location</p>
                                             </div>
                                             {this.createLocationForm()} 
+
+                                        </div>
+                                        :
+
+                                        null
+                                    }
+                                    {this.state.newSingleDateForm ?
+                                        <div className="newUserForm">
+                                            <div className="section-title">
+                                               <p>Date</p>
+                                            </div>
+                                            {this.createSingleForm()} 
+
+                                        </div>
+                                        :
+
+                                        null
+                                    }
+                                
+
+                                    {this.state.newRangeDateForm ?
+                                        <div className="newUserForm">
+                                            <div className="section-title">
+                                               <p>Date Range</p>
+                                            </div>
+                                            {this.createRangeForm()} 
+
                                         </div>
                                         :
 
@@ -192,16 +289,23 @@ export class ActionBox extends Component{
                                 
 
                             </div>
-                                <div className="new-action-tools">
+                                <div className="new-action-tools row">
 
                                 <button onClick={this.handleAddUser} className="add add-user for-input">
                                     <i className="fas fa-user">+</i>     
                                 </button>
                                 
                                 <button className="add add-location for-input" onClick={this.handleAddLocation}>
-                                    <i className="fas fa-map-marker"></i>
+                                    <i className="fas fa-map-marker-alt"></i>
                                 </button>
-                                <button className="for-save">
+
+                                <button className="add add-date-start for-input" onClick={this.handleAddSingleDate}>
+                                    <i className="fas fa-calendar"></i>
+                                </button>
+                                <button className="add add-date-end for-input" onClick={this.handleAddRangeDate}>
+                                    <i className="fas fa-calendar-alt"></i>
+                                </button>
+                                <button className="for-save col-xs-12 col-md">
                                     <div className="total-price">
                                         £{ (this.state.price * this.state.quantity).toFixed(2)}
                                     </div>
