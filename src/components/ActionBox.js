@@ -330,7 +330,7 @@ export class ActionBox extends Component{
                                 <button className="add add-date-end for-input" onClick={this.handleAddRangeDate}>
                                     <i className="fas fa-calendar-alt"></i>
                                 </button>
-                                <button className="for-save col-xs-12 col-md">
+                                <button className="for-save col-xs-12 col-sm">
                                     <div className="total-price">
                                         £{ (this.state.price * this.state.quantity).toFixed(2)}
                                     </div>
