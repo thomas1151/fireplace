@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import Autosuggest from 'react-autosuggest';
 import {
     BrowserRouter as Router,
@@ -140,7 +141,6 @@ export class ActionPerson extends Component{
     // }
     selectSrc(){
         if (this.props.debug) {
-            console.log(this.props.src);
             var a = eval(("src_" + this.props.src))
         }else{
         }
@@ -153,6 +153,10 @@ export class ActionPerson extends Component{
         });
         this.props.onChangeForParent(this.props.id,newValue);
     };
+    scrollToDomRef = () => {
+        const domNode = ReactDOM.findDOMNode(this.domRef.current)
+        domNode.scrollIntoView()
+    }
 
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
@@ -163,9 +167,7 @@ export class ActionPerson extends Component{
     };
 
     onSuggestionSelected(e,s){
-        console.log("suggestion has been selected")
         if(this.props.onSelectedForParent){
-            console.log("Has the function")
             this.props.onSelectedForParent(s);
         }
     }
@@ -209,7 +211,7 @@ export class ActionPerson extends Component{
                                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                                 onSuggestionSelected={this.onSuggestionSelected}
-
+                                ref={ re => { this.domRef = re }}
                                 getSuggestionValue={getSuggestionValue}
                                 renderSuggestion={renderSuggestion}
                                 inputProps={inputProps}
@@ -225,6 +227,7 @@ export class ActionPerson extends Component{
                         <div className="col-xs-12">
                             <Autosuggest
                                 suggestions={suggestions}
+                                ref={ re => { this.domRef = re }}
                                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                                 onSuggestionSelected={this.onSuggestionSelected}

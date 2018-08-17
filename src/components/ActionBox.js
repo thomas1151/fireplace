@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActionDate } from './ActionDate';
+// import { ActionDate } from './ActionDate';
 import { ActionPerson } from './ActionPerson';
 import { ActionLocation } from './ActionLocation';
 import { ToastContainer, toast } from 'react-toastify';
@@ -102,8 +102,7 @@ export class ActionBox extends Component{
 
     createUserForm(){
         return this.state.people.map((el, i) =>  {
-            console.log(el);
-            console.log(i)
+
             return(<div key={i} className="row">
                 <ActionPerson assigned={el} className="col-xs-6" id={i} src={'languages'} onChangeForParent={this.handlePersonChange.bind(this)} debug={true}/>
                 {/* <input type="text" value={el||''} onChange={this.handleChange.bind(this, i)} /> */}
@@ -149,14 +148,12 @@ export class ActionBox extends Component{
     handleLocationChange(values,i){
         let locations = this.state.location
         if(i === undefined){
-            console.log(values)
-            console.log(locations)
+
             locations.line1 = values[0]
             locations.line2 = values[1]
             locations.line3 = values[2]
             locations.line4 = values[3]
             locations.postcode = values[4]
-            console.log(locations)
             this.setState({location:locations})
         }else{
             locations[[i]] = values;
@@ -177,8 +174,7 @@ export class ActionBox extends Component{
     }
     removeNewPerson(i){
         let people = [...this.state.people];
-        console.log(people)
-        console.log(people[i])
+
         people.splice(i,1);
         this.setState({ people });
         if(people.length < 1){
@@ -248,7 +244,7 @@ export class ActionBox extends Component{
                                         days
                                     </div>
                                 </div>
-                                <div class="at">
+                                <div className="at">
                                     at
                                 </div>
                                 <div className="currency-input col-xs">

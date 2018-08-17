@@ -43,6 +43,7 @@ const shortcuts_main = [
 export class ShortcutsMobile extends Component{
     constructor(props) {
             super(props);
+            this.trackScrolling = this.trackScrolling.bind(this);
             if(this.props.debug){
                 this.state = {
                     items: eval("shortcuts_"+this.props.src),
@@ -56,8 +57,7 @@ export class ShortcutsMobile extends Component{
     }
 
     componentDidMount() {
-        console.log("Scroll mounted");
-        document.addEventListener('scroll', this.trackScrolling);
+        document.addEventListener('touchmove', this.trackScrolling);
     }
 
     componentWillUnmount() {

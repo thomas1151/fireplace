@@ -84,8 +84,8 @@ export class MainShortcuts extends Component{
             )
         }
 
-        const listItems = this.state.items.map((item) =>
-            <li><Link to={item.url}><i className={item.icon}></i>{item.title}</Link></li>
+        const listItems = this.state.items.map((item,i) =>
+            <li key={i}><Link to={item.url}><i className={item.icon}></i>{item.title}</Link></li>
         );
 
         return(

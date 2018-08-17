@@ -19,7 +19,6 @@ export class Home extends Component{
         return(
             <main className="col-xs">
             <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
-
             </main>
 
         )

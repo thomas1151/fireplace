@@ -410,6 +410,7 @@ button.button-remove{
 
 }
 .section-title{
+        user-select: none;
         font-size: 90%;
         p{
             display: block;
@@ -783,12 +784,7 @@ margin-left: -198px;
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) { 
-    .main-shortcuts{
-        border-top: 1px solid rgba(200, 200, 200, 0.4);
-        background: transparent;
-        border-bottom: transparent;
-        padding: 0 0 1.5em;
-    }
+
     // .actionBox .profile-icon{
     //     padding: 1em 0;
     //     margin: 2em;
@@ -870,6 +866,12 @@ margin-left: -198px;
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) { 
+    .main-shortcuts{
+        border-top: 1px solid rgba(200, 200, 200, 0.4);
+        background: transparent;
+        border-bottom: transparent;
+        padding: 0 0 1.5em;
+    }
     .col-lg-1-2 {
     -ms-flex-preferred-size: 4.1666%;
     flex-basis: 4.1666%;

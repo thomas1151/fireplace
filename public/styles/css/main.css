@@ -359,6 +359,7 @@ button.button-remove i {
   font-weight: 700;
 }
 .section-title {
+  user-select: none;
   font-size: 90%;
 }
 .section-title p {
@@ -687,12 +688,6 @@ button.button-remove i {
   opacity: 1;
 }
 @media (min-width: 576px) {
-  .main-shortcuts {
-    border-top: 1px solid rgba(200, 200, 200, 0.4);
-    background: transparent;
-    border-bottom: transparent;
-    padding: 0 0 1.5em;
-  }
 }
 @media (min-width: 768px) {
   .actionBox button[class^="button-"] {
@@ -750,6 +745,12 @@ button.button-remove i {
   }
 }
 @media (min-width: 992px) {
+  .main-shortcuts {
+    border-top: 1px solid rgba(200, 200, 200, 0.4);
+    background: transparent;
+    border-bottom: transparent;
+    padding: 0 0 1.5em;
+  }
   .col-lg-1-2 {
     -ms-flex-preferred-size: 4.1666%;
     flex-basis: 4.1666%;

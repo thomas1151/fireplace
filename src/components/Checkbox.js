@@ -15,7 +15,7 @@ export class Checkbox extends Component{
         });
     }
     render(){
-            let inputProps = {...this.props.inputProps};
+            // let inputProps = {...this.props.inputProps};
             return(<div class="custom-checkbox">
                 {/* <input type="checkbox" onChange={(e) => this.toggle(e)} {...inputProps} id="custom-checkbox" /> */}
                 <label for="custom-checkbox " className={this.props.className+" "+(this.state.checked ? 'checked' : null) } onClick={(e) => this.toggle(e)}></label>

@@ -53,10 +53,10 @@ export class RangeDateInput extends React.Component {
   render() {
     const { from, to } = this.state;
     const modifiers = { start: from, end: to };
-    let inputProps  = {}
-    if(this.props.isMobile){
-          inputProps={ readOnly: true }
-    }
+    let inputProps={ readOnly: true }
+    // let inputProps  = {}
+    // if(this.props.isMobile){
+    // }
     return (
       <div className="InputFromTo col-xs-10 row">
         <DayPickerInput
