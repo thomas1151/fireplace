@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CONFIG from '../AppConfig.json';
 import {SearchBar} from '../components/SearchBar.js';
+import { Feed } from '../components/Feed';
 import { ActionBox } from '../components/ActionBox';
 import { ShortcutsBar } from '../components/ShortcutsBar';
 import {
@@ -19,6 +20,7 @@ export class Home extends Component{
         return(
             <main className="col-xs">
             <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
+            <Feed/>
             </main>
 
         )

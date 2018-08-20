@@ -4,11 +4,11 @@
 // @import "colours.less";
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,300");
 
-@main: #e84118;
+@main: #FF3900;
 @light: #ede6e3;
 @dark: #36382e;
 @complementary: #0097e6;
-
+@ocomp: #FF981D;
 
 .col-xs-1-2 {
   -ms-flex-preferred-size: 4.1666%;
@@ -27,7 +27,9 @@
     z-index: 5;
 
 }
-
+.stuck-bottom.height-70{
+    height: 70%;
+}
 *{
     box-sizing: border-box;
     // transition: .1s all;
@@ -40,7 +42,7 @@ html, body{
 body{
     width: 100%;
     height: 100%;
-    background: #f2f2f2
+    background: #d6d6d6
 }
 #root{
     width: 100%;
@@ -137,11 +139,22 @@ body{
     }
 }
 .for-input{
-        transition: .3s all;
+    
+    transition: .3s all;
+        p{
+            color: #aaa;
+            display: inline;
+            font-weight: 700;
+
+        }
         &:hover{
             background: lighten(@complementary,20%);
         }
         &:hover,&:active{
+            p{
+                color: #282828;
+            }
+
             i,.icon{
                 color: #f6f6f6;
             }
@@ -197,7 +210,6 @@ body{
 }
 
 .total-price{
-    height: 100%;
     align-self: center;
     
     padding: 0 1.5em;
@@ -224,8 +236,69 @@ button[class^="button-"]{
         }
     }
 }
+button{
+    cursor: pointer;
+}
+button,button i{
+    transition: .1s all;
 
+}
+button.success{
+    background: lightgreen;
+    color: #f6f6f6;
+    i{
+        color: white;
+    }
+    &:hover{
+        background: darken(lightgreen, 10%);
+    }
+    &:active{
+        background: darken(lightgreen,20%);
+    }
+}
+button.pip{
+    border: 0;
+    background: #ccc;
+    border-radius: 2em;
+    color: #777 !important;
+    margin-left: auto;
+
+}
+
+button.light{
+    background: transparent;
+    color: #888;
+    font-weight: 700;
+    font-size: smaller;
+    i{
+        color: #888;
+    }
+    &:hover{
+        background: transparent;
+        color: #2a2a2a;
+        i{
+            color: #2a2a2a;            
+        }
+    }
+}
 button.button-remove{
+    
+    &.light{
+        font-size: smaller;
+        background: transparent;
+        color: #aaa;
+        border: 1px solid #e84118;
+        i{
+            color: #aaa;
+        }
+        &:hover{
+            background: transparent;
+            color: #282828;
+            i{
+                color: #282828;            
+            }
+        }
+    }
     i{
         color: inherit;
     }
@@ -474,8 +547,9 @@ button.button-remove{
         i{
             padding: 0em;
             color: @complementary;
-            width: 25%;
+            width: 20%;
             text-align: center;
+            font-size: medium;
         }
         &:hover{
             background: @light;
@@ -488,9 +562,9 @@ button.button-remove{
 }
 .actionBox{
     background: #f6f6f6;
-    margin: 1em;
-    border-radius: 1em;
-    border: 1px solid #ddd;
+    margin: 0;
+    border: 1px solid #eee;
+
     .description-box{
         .react-autosuggest__suggestions-container--open{
             border: 1px solid #eee;
@@ -534,6 +608,7 @@ button.button-remove{
             max-width: 100%;
         }
         .new-action-tools{
+            padding: .5em 0 0 0;
             display: flex;
             justify-content: center;
         }
@@ -552,13 +627,16 @@ button.button-remove{
             margin-left: auto;  
             display: flex;
             border-top: 1px solid #eee;
-            padding: 1em .5em;
+            padding: .5em .5em;
             .button-content-wrap{
                 width: 100%;
                 margin: 0 2em;
+                max-width: 10em;        
             }
         }
         .for-input{
+            font-size: 70%;
+            padding: 1em .25em;
             &:hover{
                 i{
                     color: darken(@complementary,10%);
@@ -592,9 +670,9 @@ button.button-remove{
  
     }
     i{
-        padding: .5em;
+        padding: .25em; 
         font-size: large;
-        color: @complementary;
+        color: #0097e6;
     }
     .row .inputs{
         .at{
@@ -656,22 +734,13 @@ button.button-remove{
     .button-content-wrap{
         transition: .3s all;
         display: inline-block;
-        background: lightgreen;
         border-radius: .5em;
-        color: #f6f6f6;
-        i{
-            color: white;
-        }
+        
         p{
             display: inline-block;
             padding: 0 .75em 0 0;
         }
-        &:hover{
-            background: darken(lightgreen, 10%);
-        }
-        &:active{
-            background: darken(lightgreen,20%);
-        }
+
     }
 }
 .app-content-wrapper{
@@ -779,6 +848,231 @@ margin-left: -198px;
 }
 
 
+
+
+
+
+
+/*==============================
+
+            Action Feed
+
+===============================*/
+
+
+
+.action-feed{
+    background: #ccc;
+    // border: 1px solid #eee;
+    margin: 0 0 15em 0;
+
+}
+
+.feed-element{
+    transition: .2s all;
+    &.selected{
+        // border: 0;
+        border-left: .3em solid @ocomp;
+        
+    }
+    &.withJob{
+        // border: 0;
+        border-left: .3em solid lightgreen;
+        .price{
+            color: lightgreen;
+        }
+    }
+    background: #fcfcfc;
+    text-align: left;
+    padding: 0 1em;
+    div[class^="col-"]{
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .row .section{
+        // padding: 1em 0 0 0;
+    }
+    border: 1px solid #eee;
+    border-left: .3em solid #eee;
+    margin: .3em 0;
+    .title-row{
+        padding: 1em 0 0 0;
+    }
+    .id-badge{
+        color: #777;
+        border-radius: 1.5em;
+        text-align: center;
+        font-size: 80%;
+    }
+    .title{
+        .title-content{
+            align-self: center;
+        }
+        align-content: center;
+        display: flex;
+        // width: %;
+        font-weight: 700;
+        text-align: left;
+        align-self: center;
+        font-size: 102%;
+    }
+    
+    .price{
+        // border: 1px solid @complementary;
+        color: @complementary;
+        border-radius: 1em;
+        justify-content: center;
+        align-self: center;
+        display: flex;
+        font-weight: 700;
+
+    }
+    .section.body{
+        padding: 0 0 .75em 0;
+    }
+    .content{
+        padding: 0 0 .5em 0;
+        // padding: .5em 0;
+    }
+
+    .subtitle{
+        // padding: .25em 0 0 0;
+        font-size: 90%;
+        color: #777
+    }
+    .price-section{
+        padding: 0;
+        display: flex;
+        .middle-xs{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            flex: 1;
+        }
+        .price{
+            // display: flex;
+            width: 100%;
+            text-align: center;
+            font-size: 130%;
+        }
+        .price-breakdown{
+            display: flex;
+            .price-for-one,.quantity{
+                display: inline;
+                padding: .25em;
+            }
+        }
+    }
+    .people{
+        padding: .1em 0;
+
+        align-items: center;
+        // padding: 0;
+        display: flex;
+        i{
+            padding: 0 .25em 0 0;
+            color: #999;
+            font-size: 120%;
+        }
+
+        .person{
+            display: flex;
+            font-size: smaller;
+            color: #777;
+            &:last-of-type:after{
+                content: "",
+            }
+            &:after{
+                content: ",";
+                padding: 0 .25em 0 0;
+            }
+        }
+        
+    }
+    .actions{
+        margin: .5em 0 0 0;
+        .action{
+            border: 0;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            padding: 1em;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 120%;
+            background: transparent;
+            &:hover{
+                background: #f6f6f6;
+                color: @complementary;
+                p{
+                    color: @complementary;
+                }
+            }
+            i{
+                padding: 0 .5em; 
+            }
+            p{
+                color: #999;
+                font-size: 70%;
+                display: inline;
+            }
+        }
+    }
+}
+
+
+/*==============================
+
+        ActionSelection
+
+===============================*/
+.actionSelection{
+    transition: .3s all;
+    position: fixed;
+    box-shadow: 0 0 4px rgba(0,0,0,.04), 0 4px 8px rgba(0,0,0,.18);
+
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fcfcfc;
+    border: 1px solid #eee;
+    .for-save{
+        display: flex;
+        i{
+            padding: 1em;
+        }
+        button:first-of-type{
+            margin-left: auto;
+        }
+        .button-content-wrap{
+            margin: 0 1em;
+        }
+
+    }
+    .elements{
+        padding: .5em;
+        .element{
+            padding: 0;
+            .wrap{
+                font-size: smaller;
+                display: flex;
+                background: #eee;
+                border-radius: 1em;
+                padding: .5em 1em;
+                color: #333;
+                margin: .25em;
+                text-align: left;
+            }
+        }
+    }
+    .job-ref{
+        padding: 1em;
+    }
+}
+
+
+
 // Extra small devices (portrait phones, less than 576px)
 // No media query since this is the default in Bootstrap
 
@@ -799,8 +1093,26 @@ margin-left: -198px;
 }
 
 // Medium devices (tablets, 768px and up)
-@media (min-width: 768px) { 
+@media (min-width: 768px) {
+    .actionSelection{
+        .for-save{
+            button:first-of-type{
+                margin-left: 0;
+            }
+        }
+    }
+    .main-shortcuts{
+        border-top: 1px solid rgba(200, 200, 200, 0.4);
+        background: transparent;
+        border-bottom: transparent;
+        padding: 0 0 1.5em;
+    }
+    body{
+        background: #f2f2f2;
+
+    }
     .actionBox{
+        margin: 1em 0 0 0;
         button[class^="button-"]{
             max-width: 5em;
         }
@@ -866,12 +1178,8 @@ margin-left: -198px;
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) { 
-    .main-shortcuts{
-        border-top: 1px solid rgba(200, 200, 200, 0.4);
-        background: transparent;
-        border-bottom: transparent;
-        padding: 0 0 1.5em;
-    }
+    
+
     .col-lg-1-2 {
     -ms-flex-preferred-size: 4.1666%;
     flex-basis: 4.1666%;

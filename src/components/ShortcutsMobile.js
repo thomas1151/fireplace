@@ -57,11 +57,11 @@ export class ShortcutsMobile extends Component{
     }
 
     componentDidMount() {
-        document.addEventListener('touchmove', this.trackScrolling);
+        window.addEventListener('scroll', this.trackScrolling);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('scroll', this.trackScrolling);
+        window.removeEventListener('scroll', this.trackScrolling);
     }
 
     trackScrolling = () => {

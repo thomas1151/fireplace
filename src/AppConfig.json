@@ -2,7 +2,10 @@
     "application-name": "Fireplace 2.0",
     "application-style": {
         "theme": "#e84118",
-        "main": "#f11818",
+        "orange": "#FF8B00",
+        "main": "#00537F",
+        "purple": "#216ba5",
+        "oldmain": "#f11818",
         "light": "#ede6e3",
         "dark": "#36382e",
         "complementary": "#0097e6"

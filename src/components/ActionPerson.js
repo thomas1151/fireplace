@@ -35,6 +35,32 @@ const src_languages = [
     },
 ];
 
+const src_jobs = [{
+        data: [
+            ["name", "REW180916"],
+            ["organisation", "Ray Estate"],
+        ],
+        id: 2,
+        other: '',
+    }, {
+        data: [
+            ["name", "TBW190918"],
+            ["organisation", "Thomas Barratt Design & Development"],
+        ],
+        id: 3,
+        other: '',
+    },
+    {
+        data: [
+            ["name", "DTW180918"],
+            ["organisation", "Trump Hotels"],
+        ],
+        id: 3,
+        other: '',
+    },
+];
+
+
 
 const src_address = [{
     data:[
@@ -199,7 +225,14 @@ export class ActionPerson extends Component{
         value,
         onChange: this.onChange
         };
+        function storeInputReference(autosuggest) {
+            function storeInputReference(autosuggest) {
+                if (autosuggest !== null) {
+                    autosuggest.input.focus();
+                }
+            }
 
+        }
 
         const { selectedOption } = this.state;
         if (this.props.renderComponent) {
@@ -211,12 +244,12 @@ export class ActionPerson extends Component{
                                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                                 onSuggestionSelected={this.onSuggestionSelected}
-                                ref={ re => { this.domRef = re }}
                                 getSuggestionValue={getSuggestionValue}
                                 renderSuggestion={renderSuggestion}
                                 inputProps={inputProps}
                                 id={this.props.id.toString()}
                                 renderInputComponent={this.renderInputComponent}
+                                ref={storeInputReference}
                                 // ref={(input) => { this.nameInput = input; }} 
                             />
                         </div>
@@ -227,7 +260,7 @@ export class ActionPerson extends Component{
                         <div className="col-xs-12">
                             <Autosuggest
                                 suggestions={suggestions}
-                                ref={ re => { this.domRef = re }}
+                                ref={storeInputReference}
                                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                                 onSuggestionSelected={this.onSuggestionSelected}

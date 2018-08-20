@@ -21,7 +21,7 @@ export class ShortcutsBar extends Component{
             )
         }
         return(
-                <div className="shortcutsBar col-md-2">
+                <div className="shortcutsBar col-md-3 col-lg-2">
                     <div className="user-title">
                         <p>Thomas Barratt</p>
                     </div>

@@ -16,6 +16,9 @@
   top: 0;
   z-index: 5;
 }
+.stuck-bottom.height-70 {
+  height: 70%;
+}
 * {
   box-sizing: border-box;
 }
@@ -26,7 +29,7 @@ body {
 body {
   width: 100%;
   height: 100%;
-  background: #f2f2f2;
+  background: #d6d6d6;
 }
 #root {
   width: 100%;
@@ -119,8 +122,17 @@ body {
 .for-input {
   transition: .3s all;
 }
+.for-input p {
+  color: #aaa;
+  display: inline;
+  font-weight: 700;
+}
 .for-input:hover {
   background: #4dc2ff;
+}
+.for-input:hover p,
+.for-input:active p {
+  color: #282828;
 }
 .for-input:hover i,
 .for-input:active i,
@@ -168,7 +180,6 @@ body {
   color: #0097e6;
 }
 .total-price {
-  height: 100%;
   align-self: center;
   padding: 0 1.5em;
   font-weight: 700;
@@ -192,8 +203,67 @@ button[class^="button-"]:active {
 button[class^="button-"]:active i {
   color: white;
 }
+button {
+  cursor: pointer;
+}
+button,
+button i {
+  transition: .1s all;
+}
+button.success {
+  background: lightgreen;
+  color: #f6f6f6;
+}
+button.success i {
+  color: white;
+}
+button.success:hover {
+  background: #64e764;
+}
+button.success:active {
+  background: #38e038;
+}
+button.pip {
+  border: 0;
+  background: #ccc;
+  border-radius: 2em;
+  color: #777 !important;
+  margin-left: auto;
+}
+button.light {
+  background: transparent;
+  color: #888;
+  font-weight: 700;
+  font-size: smaller;
+}
+button.light i {
+  color: #888;
+}
+button.light:hover {
+  background: transparent;
+  color: #2a2a2a;
+}
+button.light:hover i {
+  color: #2a2a2a;
+}
 button.button-remove {
   color: #e84118;
+}
+button.button-remove.light {
+  font-size: smaller;
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #e84118;
+}
+button.button-remove.light i {
+  color: #aaa;
+}
+button.button-remove.light:hover {
+  background: transparent;
+  color: #282828;
+}
+button.button-remove.light:hover i {
+  color: #282828;
 }
 button.button-remove i {
   color: inherit;
@@ -419,8 +489,9 @@ button.button-remove i {
 .shortcutList li i {
   padding: 0em;
   color: #0097e6;
-  width: 25%;
+  width: 20%;
   text-align: center;
+  font-size: medium;
 }
 .shortcutList li:hover {
   background: #ede6e3;
@@ -430,9 +501,8 @@ button.button-remove i {
 }
 .actionBox {
   background: #f6f6f6;
-  margin: 1em;
-  border-radius: 1em;
-  border: 1px solid #ddd;
+  margin: 0;
+  border: 1px solid #eee;
 }
 .actionBox .description-box .react-autosuggest__suggestions-container--open {
   border: 1px solid #eee;
@@ -471,6 +541,7 @@ button.button-remove i {
   max-width: 100%;
 }
 .actionBox .new-action .new-action-tools {
+  padding: .5em 0 0 0;
   display: flex;
   justify-content: center;
 }
@@ -488,11 +559,16 @@ button.button-remove i {
   margin-left: auto;
   display: flex;
   border-top: 1px solid #eee;
-  padding: 1em .5em;
+  padding: .5em .5em;
 }
 .actionBox .new-action .for-save .button-content-wrap {
   width: 100%;
   margin: 0 2em;
+  max-width: 10em;
+}
+.actionBox .new-action .for-input {
+  font-size: 70%;
+  padding: 1em .25em;
 }
 .actionBox .new-action .for-input:hover i {
   color: #0076b3;
@@ -519,7 +595,7 @@ button.button-remove i {
   border: 0;
 }
 .actionBox i {
-  padding: .5em;
+  padding: .25em;
   font-size: large;
   color: #0097e6;
 }
@@ -573,22 +649,11 @@ button.button-remove i {
 .for-save .button-content-wrap {
   transition: .3s all;
   display: inline-block;
-  background: lightgreen;
   border-radius: .5em;
-  color: #f6f6f6;
-}
-.for-save .button-content-wrap i {
-  color: white;
 }
 .for-save .button-content-wrap p {
   display: inline-block;
   padding: 0 .75em 0 0;
-}
-.for-save .button-content-wrap:hover {
-  background: #64e764;
-}
-.for-save .button-content-wrap:active {
-  background: #38e038;
 }
 .app-content-wrapper {
   display: inline-block;
@@ -687,9 +752,214 @@ button.button-remove i {
 .custom-checkbox label.checked:after {
   opacity: 1;
 }
+/*==============================
+
+            Action Feed
+
+===============================*/
+.action-feed {
+  background: #ccc;
+  margin: 0 0 15em 0;
+}
+.feed-element {
+  transition: .2s all;
+  background: #fcfcfc;
+  text-align: left;
+  padding: 0 1em;
+  border: 1px solid #eee;
+  border-left: .3em solid #eee;
+  margin: .3em 0;
+}
+.feed-element.selected {
+  border-left: 0.3em solid #FF981D;
+}
+.feed-element.withJob {
+  border-left: .3em solid lightgreen;
+}
+.feed-element.withJob .price {
+  color: lightgreen;
+}
+.feed-element div[class^="col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+.feed-element .title-row {
+  padding: 1em 0 0 0;
+}
+.feed-element .id-badge {
+  color: #777;
+  border-radius: 1.5em;
+  text-align: center;
+  font-size: 80%;
+}
+.feed-element .title {
+  align-content: center;
+  display: flex;
+  font-weight: 700;
+  text-align: left;
+  align-self: center;
+  font-size: 102%;
+}
+.feed-element .title .title-content {
+  align-self: center;
+}
+.feed-element .price {
+  color: #0097e6;
+  border-radius: 1em;
+  justify-content: center;
+  align-self: center;
+  display: flex;
+  font-weight: 700;
+}
+.feed-element .section.body {
+  padding: 0 0 .75em 0;
+}
+.feed-element .content {
+  padding: 0 0 .5em 0;
+}
+.feed-element .subtitle {
+  font-size: 90%;
+  color: #777;
+}
+.feed-element .price-section {
+  padding: 0;
+  display: flex;
+}
+.feed-element .price-section .middle-xs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+}
+.feed-element .price-section .price {
+  width: 100%;
+  text-align: center;
+  font-size: 130%;
+}
+.feed-element .price-section .price-breakdown {
+  display: flex;
+}
+.feed-element .price-section .price-breakdown .price-for-one,
+.feed-element .price-section .price-breakdown .quantity {
+  display: inline;
+  padding: .25em;
+}
+.feed-element .people {
+  padding: .1em 0;
+  align-items: center;
+  display: flex;
+}
+.feed-element .people i {
+  padding: 0 .25em 0 0;
+  color: #999;
+  font-size: 120%;
+}
+.feed-element .people .person {
+  display: flex;
+  font-size: smaller;
+  color: #777;
+}
+.feed-element .people .person:last-of-type:after {
+  content: "";
+}
+.feed-element .people .person:after {
+  content: ",";
+  padding: 0 .25em 0 0;
+}
+.feed-element .actions {
+  margin: .5em 0 0 0;
+}
+.feed-element .actions .action {
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  padding: 1em;
+  border-top: 1px solid #eee;
+  color: #999;
+  font-size: 120%;
+  background: transparent;
+}
+.feed-element .actions .action:hover {
+  background: #f6f6f6;
+  color: #0097e6;
+}
+.feed-element .actions .action:hover p {
+  color: #0097e6;
+}
+.feed-element .actions .action i {
+  padding: 0 .5em;
+}
+.feed-element .actions .action p {
+  color: #999;
+  font-size: 70%;
+  display: inline;
+}
+/*==============================
+
+        ActionSelection
+
+===============================*/
+.actionSelection {
+  transition: .3s all;
+  position: fixed;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.18);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fcfcfc;
+  border: 1px solid #eee;
+}
+.actionSelection .for-save {
+  display: flex;
+}
+.actionSelection .for-save i {
+  padding: 1em;
+}
+.actionSelection .for-save button:first-of-type {
+  margin-left: auto;
+}
+.actionSelection .for-save .button-content-wrap {
+  margin: 0 1em;
+}
+.actionSelection .elements {
+  padding: .5em;
+}
+.actionSelection .elements .element {
+  padding: 0;
+}
+.actionSelection .elements .element .wrap {
+  font-size: smaller;
+  display: flex;
+  background: #eee;
+  border-radius: 1em;
+  padding: .5em 1em;
+  color: #333;
+  margin: .25em;
+  text-align: left;
+}
+.actionSelection .job-ref {
+  padding: 1em;
+}
 @media (min-width: 576px) {
 }
 @media (min-width: 768px) {
+  .actionSelection .for-save button:first-of-type {
+    margin-left: 0;
+  }
+  .main-shortcuts {
+    border-top: 1px solid rgba(200, 200, 200, 0.4);
+    background: transparent;
+    border-bottom: transparent;
+    padding: 0 0 1.5em;
+  }
+  body {
+    background: #f2f2f2;
+  }
+  .actionBox {
+    margin: 1em 0 0 0;
+  }
   .actionBox button[class^="button-"] {
     max-width: 5em;
   }
@@ -745,12 +1015,6 @@ button.button-remove i {
   }
 }
 @media (min-width: 992px) {
-  .main-shortcuts {
-    border-top: 1px solid rgba(200, 200, 200, 0.4);
-    background: transparent;
-    border-bottom: transparent;
-    padding: 0 0 1.5em;
-  }
   .col-lg-1-2 {
     -ms-flex-preferred-size: 4.1666%;
     flex-basis: 4.1666%;

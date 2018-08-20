@@ -20,6 +20,7 @@ export class ActionBox extends Component{
                 newLocationForm: false,
                 newSingleDateForm: false,
                 newRangeDateForm:false,
+                formActive: false,
                 userForms: [],
                 people: [],
                 description: '',
@@ -46,10 +47,12 @@ export class ActionBox extends Component{
             this.handleAddRangeDate = this.handleAddRangeDate.bind(this);
             this.handleAddSingleDate = this.handleAddSingleDate.bind(this);
             this.createRangeForm = this.createRangeForm.bind(this);
+            this.createForm = this.createForm.bind(this);
             this.createSingleForm = this.createSingleForm.bind(this);
             this.handleStartDateChange = this.handleStartDateChange.bind(this);
             this.handleRangeDateChange = this.handleRangeDateChange.bind(this);
             this.handleRemoveLocation = this.handleRemoveLocation.bind(this);
+            this.handleRemove = this.handleRemove.bind(this);
     }
     notify = (content) => toast(content);
 
@@ -118,125 +121,9 @@ export class ActionBox extends Component{
                 </ActionLocation>    
             )
     }
-    createDateForm(){
-        
-    }
-    handlePersonChange(i, value) {
-        let people = [...this.state.people];
-        people[i] = value;
-        this.setState({ people });
-    }
-    handleStartDateChange(value){
-        this.setState({start_date:value})
-    }
-    handleRangeDateChange(type,value){
-        this.setState({[type+'_date']:value})
-    }
-    addPerson(){
-        this.setState(prevState => ({ people: [...prevState.people, '']}))
-    }
-    addLocation(){
-        this.setState({'location':{
-            ['line1']:undefined,
-            ['line2']: undefined,
-            ['line3']: undefined,
-            ['line4']: undefined,
-            ['postcode']: undefined,
 
-        }});
-    }
-    handleLocationChange(values,i){
-        let locations = this.state.location
-        if(i === undefined){
-
-            locations.line1 = values[0]
-            locations.line2 = values[1]
-            locations.line3 = values[2]
-            locations.line4 = values[3]
-            locations.postcode = values[4]
-            this.setState({location:locations})
-        }else{
-            locations[[i]] = values;
-            this.setState({location:locations})
-        }
-
-    }
-    handleRemoveLocation(){
-        this.setState({newLocationForm:false,location:undefined})
-        
-    }
-
-    handleDescriptionChange(i,value){
-        this.setState({description:value});
-    }
-    handleSingleChange(property,value){
-        this.setState({ [property]:value})
-    }
-    removeNewPerson(i){
-        let people = [...this.state.people];
-
-        people.splice(i,1);
-        this.setState({ people });
-        if(people.length < 1){
-            this.setState({newUserForm:false});
-        }
-    }
-    handleRemoveDate(date_type){
-        let form = ""
-        // newState[(date_type)+'_date'] =undefined
-        if(date_type=='start'){
-            form = "newSingleDateForm"
-        }else{
-            form = "newRangeDateForm";
-        }
-        this.setState({start_date:undefined,end_date:undefined,[form]:false})
-    }
-    constructFormJSON(){
-        let data = {}
-            data['people'] = this.state.people;
-            data['description'] = this.state.description;
-            data['quantity'] = this.state.quantity;
-            data['price'] = this.state.price;
-            data['start_date'] = this.state.start_date
-            data['end_date'] = this.state.end_date
-            data['location'] = this.state.location
-
-        return data;
-    }
-    handleSubmit(event) {
-        console.log(this.constructFormJSON());
-        event.preventDefault();
-    }
-
-//   render() {
-//     return (
-//       <form onSubmit={this.handleSubmit}>
-//           {this.createUI()}        
-//           <input type='button' value='add more' />
-//           <input type="submit" value="Submit" />
-//       </form>
-//     );
-//   }
-    render(){
-        let bg =this.props.backgroundColor;
-        if(this.props.isMobile){
-            // return(
-            //     <div className="actionBox isMobile row">
-            //     </div>
-            // )
-        }
-        // console.log("renrender triggered");
-        return(
-                <div className="actionBox col-md-12">
-                    <div className="row">
-                        <div className="col-xs-12 profile-icon middle-xs">
-                            <i className="fas fa-fire"></i> <p>New Action</p>
-                        </div>
-                        <div className="new-action col-xs">
-
-                            <ActionPerson className="description-box" renderComponent={'textarea'} value={1}  id={1} src={'autocomplete'} debug={true} onChangeForParent={this.handleDescriptionChange} placeholder="Raising crowns over stonewalls and fencelines"/>
-
-                            {/* </textarea> */}
+    createForm()  {
+        return( <div className="remainingForm">
                             <div className="row inputs">
                                 <div className="days-input col-xs">
                                     <input type="number" placeholder="2"  onChange={(e)=> this.handleSingleChange('quantity', e.target.value)}/>
@@ -312,30 +199,165 @@ export class ActionBox extends Component{
                             </div>
                                 <div className="new-action-tools row">
 
-                                <button onClick={this.handleAddUser} className="add add-user for-input">
-                                    <i className="fas fa-user">+</i>     
+                                <button onClick={this.handleAddUser} className="add add-user for-input col-xs">
+                                    <i className="fas fa-user">+</i><p>Add User</p>
                                 </button>
                                 
-                                <button className="add add-location for-input" onClick={this.handleAddLocation}>
-                                    <i className="fas fa-map-marker-alt"></i>
+                                <button className="add add-location for-input col-xs" onClick={this.handleAddLocation}>
+                                    <i className="fas fa-map-marker-alt"></i><p>Add Location</p>
                                 </button>
 
-                                <button className="add add-date-start for-input" onClick={this.handleAddSingleDate}>
-                                    <i className="fas fa-calendar"></i>
+                                <button className="add add-date-start for-input col-xs" onClick={this.handleAddSingleDate}>
+                                    <i className="fas fa-calendar"></i><p>Add Start</p>
                                 </button>
-                                <button className="add add-date-end for-input" onClick={this.handleAddRangeDate}>
-                                    <i className="fas fa-calendar-alt"></i>
+                                <button className="add add-date-end for-input col-xs" onClick={this.handleAddRangeDate}>
+                                    <i className="fas fa-calendar-alt"></i><p>Add End</p>
                                 </button>
-                                <button className="for-save col-xs-12 col-sm">
+                                <div className="for-save col-xs-12">
                                     <div className="total-price">
                                         £{ (this.state.price * this.state.quantity).toFixed(2)}
                                     </div>
-                                    <div onClick={this.handleSubmit}className="button-content-wrap">
+                                    <button onClick={this.handleRemove} className="button-content-wrap light">
+                                        <i className="fas fa-times"></i><p>Remove</p> 
+                                    </button>   
+                                    <button onClick={this.handleSubmit} className="button-content-wrap success">
                                         <i className="fas fa-plus"></i><p>Create</p> 
-                                    </div>   
-                                </button>                             
-
+                                    </button>   
+                                </div>                             
                             </div>
+                            </div>);
+    }
+    createDateForm(){
+        
+    }
+    handlePersonChange(i, value) {
+        let people = [...this.state.people];
+        people[i] = value;
+        this.setState({ people });
+    }
+    handleStartDateChange(value){
+        this.setState({start_date:value})
+    }
+    handleRangeDateChange(type,value){
+        this.setState({[type+'_date']:value})
+    }
+    addPerson(){
+        this.setState(prevState => ({ people: [...prevState.people, '']}))
+    }
+    addLocation(){
+        this.setState({'location':{
+            ['line1']:undefined,
+            ['line2']: undefined,
+            ['line3']: undefined,
+            ['line4']: undefined,
+            ['postcode']: undefined,
+
+        }});
+    }
+    handleLocationChange(values,i){
+        let locations = this.state.location
+        if(i === undefined){
+
+            locations.line1 = values[0]
+            locations.line2 = values[1]
+            locations.line3 = values[2]
+            locations.line4 = values[3]
+            locations.postcode = values[4]
+            this.setState({location:locations})
+        }else{
+            locations[[i]] = values;
+            this.setState({location:locations})
+        }
+
+    }
+    handleRemoveLocation(){
+        this.setState({newLocationForm:false,location:undefined})
+        
+    }
+
+    handleDescriptionChange(i,value){
+        this.setState({description:value,formActive:true});
+    }
+    handleSingleChange(property,value){
+        this.setState({ [property]:value})
+    }
+    removeNewPerson(i){
+        let people = [...this.state.people];
+
+        people.splice(i,1);
+        this.setState({ people });
+        if(people.length < 1){
+            this.setState({newUserForm:false});
+        }
+    }
+    handleRemoveDate(date_type){
+        let form = ""
+        // newState[(date_type)+'_date'] =undefined
+        if(date_type=='start'){
+            form = "newSingleDateForm"
+        }else{
+            form = "newRangeDateForm";
+        }
+        this.setState({start_date:undefined,end_date:undefined,[form]:false})
+    }
+    constructFormJSON(){
+        let data = {}
+            data['people'] = this.state.people;
+            data['description'] = this.state.description;
+            data['quantity'] = this.state.quantity;
+            data['price'] = this.state.price;
+            data['start_date'] = this.state.start_date
+            data['end_date'] = this.state.end_date
+            data['location'] = this.state.location
+
+        return data;
+    }
+    handleRemove(){
+        this.notify("New Action cancelled");
+        this.setState({formActive:false});
+    }
+    handleSubmit(event) {
+        console.log(this.constructFormJSON());
+        event.preventDefault();
+    }
+
+//   render() {
+//     return (
+//       <form onSubmit={this.handleSubmit}>
+//           {this.createUI()}        
+//           <input type='button' value='add more' />
+//           <input type="submit" value="Submit" />
+//       </form>
+//     );
+//   }
+    render(){
+        let bg =this.props.backgroundColor;
+        if(this.props.isMobile){
+            // return(
+            //     <div className="actionBox isMobile row">
+            //     </div>
+            // )
+        }
+        // console.log("renrender triggered");
+        return(
+                <div className="actionBox col-md-12">
+                    <div className="row">
+                        {/* <div className="col-xs-12 profile-icon middle-xs">
+                            <i className="fas fa-fire"></i> <p>New Action</p>
+                        </div> */}
+                        <div className="new-action col-xs">
+
+                            <ActionPerson className="description-box" renderComponent={'textarea'} value={1}  id={1} src={'autocomplete'} debug={true} onChangeForParent={this.handleDescriptionChange} placeholder="Raising crowns over stonewalls and fencelines"/>
+                            {this.state.formActive ?
+                                
+                                this.createForm() 
+
+                                :
+
+                                null
+                            }
+                            {/* </textarea> */}
+                           
                         </div>
                     </div>
                 </div>
