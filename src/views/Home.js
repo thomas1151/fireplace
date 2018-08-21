@@ -20,7 +20,7 @@ export class Home extends Component{
         return(
             <main className="col-xs">
             <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
-            <Feed/>
+            <Feed isMobile={this.props.isMobile}/>
             </main>
 
         )

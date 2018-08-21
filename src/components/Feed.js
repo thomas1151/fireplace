@@ -10,6 +10,8 @@ const feed = [
         "location": {
             "line1": "43 Crookes Rd",
             "line2": "Sheffield",
+            "line3": "",
+            "line4": "",
             "postcode": "S10 5BA"
         },
         "quantity": "2",
@@ -20,21 +22,25 @@ const feed = [
         },
         "created": "Sun Dec 17 2018 03:24:00 GMT",
         "people": [
-            {
-                "id": "1",
-                "name": "Thomas Barratt"
-            },
+        {
+            "id": "1",
+            "name": "Thomas Barratt",
+            "organisation": "Thomas Barratt Design & Development",
+        },
             {
                 "id": "2",
-                "name": "Donald Trump"
+                "name": "Donald Trump",
+                "organisation": "Trump Hotels",
             },
             {
                 "id": "3",
-                "name": "James Reynolds"
+                "name": "James Reynolds",
+                "organisation": "Savilles",                
             }
         ],
 
     },
+      
         {
             "id":"A251295",
             "description": "Making thirsty pretzels",
@@ -42,6 +48,8 @@ const feed = [
             "location": {
                 "line1": "Gill's",
                 "line2": "Sheffield",
+                "line3": "",
+                "line4": "",
                 "postcode": "A14 5BC"
             },
             "quantity": "5",
@@ -74,6 +82,8 @@ const feed = [
                   "line1": "6 South View",
                   "line2": "Kirk Merrington",
                   "line2": "Spennymoor",
+                  "line3": "",
+                  "line4": "",
                   "postcode": "DL167JB"
               },
               "quantity": "4",
@@ -85,11 +95,42 @@ const feed = [
               "created": "Sun Aug 18 2018 03:24:00 GMT",
               "people": [{
                       "id": "1",
-                      "name": "Thomas Barratt"
+                      "name": "Thomas Barratt",
+                      "organisation": "Thomas Barratt Design & Development",
                   },
               ],
 
           }, 
+            {
+                "id": "A200818",
+                "description": "Aloe Vera Management Systems",
+                "dateStarted": "Mon Aug 20 2018 03:24:00 GMT",
+                "location": {
+                    "line1": "547D Crookesmoor Road",
+                    "line2": "Sheffield",
+                    "line3": "",
+                    "line4": "",
+                    "postcode": "S10 1BJ"
+                },
+                "quantity": "2",
+                "price": "75.00",
+                "creator": {
+                    "id": "1",
+                    "name": "Thomas Barratt"
+                },
+                "created": "Sun Dec 17 2018 03:24:00 GMT",
+                "people": [{
+                        "id": "1",
+                        "name": "Thomas Barratt",
+                        "organisation": "Thomas Barratt Design & Development",
+                    },
+                    {
+                        "id": "5",
+                        "name": "Jane Hayman"
+                    },
+                ],
+
+            },
 ]
 
 export class Feed extends Component{
@@ -97,7 +138,11 @@ export class Feed extends Component{
             super(props);
             this.state ={
                 items: feed,
-                selected: []
+                selected: [],
+                date: undefined,
+                invoiceAddr: {},
+                jobAddr: {},
+
             }
 
             this.handleNewProperty = this.handleNewProperty.bind(this);            
@@ -112,12 +157,9 @@ export class Feed extends Component{
         let a = this.state.items.filter(function(val,idx){
             return val.selected
         })
-        console.log(a);
         return a;
     }
     handleNewProperty(index,property="selected",value=true){
-        console.log(index);
-        console.log(this.state.items);
 
         this.setState(prevState => { // prevState?
             prevState.items[index][property] = value
@@ -133,7 +175,6 @@ export class Feed extends Component{
     handleChangeAllOfProperty(property="selected",value=false,prereqs=[],prereqVals=[]){
         this.setState(prevState => { // prevState?
             prevState.items.forEach((element, index) => {
-                console.log(element);
                 let t = prereqs.length == 0;
                 prereqs.some( (prereq,j) =>{
                     if(element[prereq] == prereqVals[j]){
@@ -149,7 +190,7 @@ export class Feed extends Component{
         });
     }
     handleProcessSelected(){
-        console.log(this.getSelected());
+        this.getSelected();
     }
     render(){
             // let inputProps = {...this.props.inputProps};
@@ -159,7 +200,7 @@ export class Feed extends Component{
                     }) }
                     {
                         this.getSelected().length > 0 ? 
-                    <ActionSelection onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={this.getSelected()}/>
+                    <ActionSelection isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={this.getSelected()}/>
                         :
                         null
                     }

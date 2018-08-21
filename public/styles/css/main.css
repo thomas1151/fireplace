@@ -1,6 +1,14 @@
 @import 'normalise.css';
 @import 'flexboxgrid.css';
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,300");
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,300|Roboto:300,400,700");
+.App {
+  font-family: 'Roboto', sans-serif;
+}
+.modal-back {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.74);
+}
 .col-xs-1-2 {
   -ms-flex-preferred-size: 4.1666%;
   flex-basis: 4.1666%;
@@ -16,8 +24,15 @@
   top: 0;
   z-index: 5;
 }
+.stuck-bottom {
+  position: fixed;
+  overflow: auto;
+}
 .stuck-bottom.height-70 {
-  height: 70%;
+  min-height: 70%;
+}
+.stuck-bottom.height-100 {
+  max-height: 100%;
 }
 * {
   box-sizing: border-box;
@@ -45,6 +60,9 @@ body {
 }
 .col-xs-0 {
   display: none;
+}
+.or {
+  display: inline;
 }
 .logo-inner {
   font-family: 'Poppins', sans-serif;
@@ -187,7 +205,7 @@ body {
   color: #969696;
 }
 button[class^="button-"] {
-  border: 1px solid #eee;
+  border: 1px solid rgba(200, 200, 200, 0.9);
   border-radius: .25em;
   transition: .3s all;
 }
@@ -225,7 +243,7 @@ button.success:active {
 }
 button.pip {
   border: 0;
-  background: #ccc;
+  background: rgba(250, 250, 250, 0.8);
   border-radius: 2em;
   color: #777 !important;
   margin-left: auto;
@@ -234,7 +252,6 @@ button.light {
   background: transparent;
   color: #888;
   font-weight: 700;
-  font-size: smaller;
 }
 button.light i {
   color: #888;
@@ -563,8 +580,10 @@ button.button-remove i {
 }
 .actionBox .new-action .for-save .button-content-wrap {
   width: 100%;
-  margin: 0 2em;
+  margin: 0 1em;
   max-width: 10em;
+  font-size: 90%;
+  font-weight: 700;
 }
 .actionBox .new-action .for-input {
   font-size: 70%;
@@ -904,24 +923,36 @@ button.button-remove i {
 .actionSelection {
   transition: .3s all;
   position: fixed;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.34), 0 4px 8px rgba(0, 0, 0, 0.8);
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #fcfcfc;
+  background: #f2f2f2;
   border: 1px solid #eee;
+  border-top: 5px solid #00537F;
 }
 .actionSelection .for-save {
+  padding: 1em 0;
   display: flex;
 }
-.actionSelection .for-save i {
-  padding: 1em;
+.actionSelection .for-save .button-content-wrap {
+  margin: .5em 1em;
 }
 .actionSelection .for-save button:first-of-type {
-  margin-left: auto;
+  margin-left: 0 0 .25em 0;
 }
-.actionSelection .for-save .button-content-wrap {
+.actionSelection .button-content-wrap {
+  font-weight: 700;
   margin: 0 1em;
+  height: 100%;
+}
+.actionSelection .button-content-wrap p {
+  font-size: inherit;
+  display: inline-block;
+  padding: 0 .75em 0 0;
+}
+.actionSelection .button-content-wrap i {
+  padding: 1em;
 }
 .actionSelection .elements {
   padding: .5em;
@@ -932,21 +963,88 @@ button.button-remove i {
 .actionSelection .elements .element .wrap {
   font-size: smaller;
   display: flex;
-  background: #eee;
+  background: #0097e6;
   border-radius: 1em;
   padding: .5em 1em;
-  color: #333;
+  color: #eee;
   margin: .25em;
   text-align: left;
 }
+.actionSelection .elements .element .wrap button.pip {
+  margin: 0 0 0 1em;
+}
+.actionSelection .elements .element .wrap span {
+  font-weight: 700;
+  margin-right: .25em;
+}
 .actionSelection .job-ref {
   padding: 1em;
+}
+.actionSelection input::placeholder {
+  font-weight: 400;
+}
+.actionSelection input {
+  background: #fff;
+  padding: 1em 0 1em .5em;
+  border: 1px solid #e7e7e7;
+  border-radius: .25em;
+  width: 100%;
+  font-weight: 600;
+  color: #333;
+}
+.actionSelection .jobForm {
+  padding: 1em 0;
+}
+.actionSelection .total-price {
+  font-size: 90%;
+  color: #0097e6;
+}
+.actionSelection .new-job-button {
+  text-align: left;
+  padding: 1em 0;
+}
+.actionSelection input.react-autosuggest__input::placeholder {
+  font-style: italic;
+  color: #777;
+}
+.dropdownWithContext-container {
+  padding: 0;
+  display: flex;
+  width: 100%;
+}
+.dropdownWithContext-container .info {
+  padding: 1em 1em .5em 1em;
+  flex: 1;
+}
+.dropdownWithContext-container .title {
+  font-weight: 700;
+}
+.dropdownWithContext-container .dropdownWithContext-wrapper {
+  display: flex;
+  flex-direction: column;
+  border-radius: .5em;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  text-align: left;
+  margin: .25em;
+  width: inherit;
+}
+.dropdownWithContext-container .dropdownWithContext-wrapper .dropdownWithContext {
+  border: 1px solid #eee;
+  padding: .5em 0;
+  width: 100%;
+  background: #eee;
 }
 @media (min-width: 576px) {
 }
 @media (min-width: 768px) {
   .actionSelection .for-save button:first-of-type {
-    margin-left: 0;
+    margin-left: 2em;
+  }
+  .actionSelection .type,
+  .actionSelection .date-wrapper {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   .main-shortcuts {
     border-top: 1px solid rgba(200, 200, 200, 0.4);

@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleDateInput } from './SingleDateInput';
 import { RangeDateInput } from './RangeDateInput';
+import { RemovableSuggestable } from './RemovableSuggestable';
 
             // <div>
             //   <button onClick={this.notify}>Notify !</button>
@@ -59,6 +60,7 @@ export class ActionBox extends Component{
     handleAddUser(){
         if(!this.state.newUserForm){
             this.setState({newUserForm:true});
+            console.log("seeting newuser");
         }
         this.addPerson();
 
@@ -105,18 +107,33 @@ export class ActionBox extends Component{
 
     createUserForm(){
         return this.state.people.map((el, i) =>  {
-
-            return(<div key={i} className="row">
-                <ActionPerson assigned={el} className="col-xs-6" id={i} src={'languages'} onChangeForParent={this.handlePersonChange.bind(this)} debug={true}/>
-                {/* <input type="text" value={el||''} onChange={this.handleChange.bind(this, i)} /> */}
-                {this.state.people.length < 1 ? <div><p>Add a new person</p></div> : null}
-                <button className="button-remove col-xs" onClick={() => this.removeNewPerson(i)}><i className="fas fa-times"></i></button>
-            </div> );         
-            })
+            return(
+                <RemovableSuggestable
+                    key={i} 
+                    assigned={el} 
+                    id={i} 
+                    src={'languages'} 
+                    onChangeForParent={this.handlePersonChange.bind(this)} 
+                    debug={true} 
+                    existingPeopleLength={this.state.people.length} 
+                    onRemove={this.removeNewPerson}
+                    inputProps={{button:'button-remove col-xs',suggestable:'col-xs-6'}}
+                    />
+            )
+        })
     }
+    //         return(<div key={i} className="row">
+    //             <ActionPerson assigned={el} className="col-xs-6" id={i} src={'languages'} onChangeForParent={this.handlePersonChange.bind(this)} debug={true}/>
+    //             {/* <input type="text" value={el||''} onChange={this.handleChange.bind(this, i)} /> */}
+    //             {this.state.people.length < 1 ? <div><p>Add a new person</p></div> : null}
+    //             <button className="button-remove col-xs" onClick={() => this.removeNewPerson(i)}><i className="fas fa-times"></i></button>
+    //         </div> );         
+    //         })
+    // }
 
+    
     createLocationForm(){
-        return(<ActionLocation onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.location}>
+        return(<ActionLocation onChangeForParent={this.handleLocationChange.bind(this)}>
                     <button className="button-remove col-xs" onClick={this.handleRemoveLocation}><i className="fas fa-times"></i></button>
                 </ActionLocation>    
             )

@@ -43,26 +43,38 @@ export class ActionLocation extends Component {
         if (this.props.isMobile) {
 
         }
+        let assignedVals = []
+        if(this.props.values){
+            assignedVals = this.props.values
+        }else{
+            assignedVals = {
+                line1: this.state.line1    ,
+                line2:this.state.line2    ,
+                line3:this.state.line3    ,
+                line4:this.state.line4    ,
+                postcode:this.state.postcode ,
+            }
+        }
         return (
             <div className="address row">
                 <div className="col-xs-6 address-1 input-wrap ">
-                    <ActionPerson value={'line1'}  id={'line1'} src={'address'} debug={true} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.onChangeForParent} placeholder="Line 1"/>
+                    <ActionPerson assigned={assignedVals.line1} value={'line1'}  id={'line1'} src={'address'} debug={true} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.onChangeForParent} placeholder="Line 1"/>
                 </div>
 
                 <div className="col-xs-6 address-2 input-wrap">
-                    <ActionPerson assigned={this.state.line2}   value={'line2'}   id={'line2'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 2"/>
+                    <ActionPerson assigned={assignedVals.line2}   value={'line2'}   id={'line2'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 2"/>
                 </div>
                 
                 <div className="col-xs-6 address-3 input-wrap">
-                    <ActionPerson assigned={this.state.line3}  value={'line3'}   id={'line3'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 3"/>
+                    <ActionPerson assigned={assignedVals.line3}  value={'line3'}   id={'line3'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 3"/>
                 </div>
                 
                 <div className="col-xs-6 address-4 input-wrap">
-                    <ActionPerson assigned={this.state.line4}  value={'line4'}   id={'line4'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 4"/>
+                    <ActionPerson assigned={assignedVals.line4}  value={'line4'}   id={'line4'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Line 4"/>
                 </div>
                 
                 <div className="col-xs-6 address-postcode input-wrap">
-                    <ActionPerson assigned={this.state.postcode}  value={'postcode'}id={'postcode'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Postcode"/>
+                    <ActionPerson assigned={assignedVals.postcode}  value={'postcode'}id={'postcode'}  src={'address'} debug={true} onChangeForParent={this.onChangeForParent} placeholder="Postcode"/>
                 </div>
                 {this.props.children}
             </div>
