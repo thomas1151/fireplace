@@ -155,8 +155,9 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
         })
     }
     onOrgChange(vals){
+        console.log(vals);
         let prevJob = this.state.job;
-        prevJob[['organisation']] = vals.org;
+        prevJob[['organisation']] = vals.organisation;
         prevJob[['invoice_address']] = vals.invoice_address;
         this.setState({
             job: prevJob

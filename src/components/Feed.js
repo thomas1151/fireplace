@@ -194,13 +194,16 @@ export class Feed extends Component{
     }
     render(){
             // let inputProps = {...this.props.inputProps};
-            return(<div class="action-feed">
+            let selected = this.getSelected();
+            return(<div class={"action-feed "+(selected.length >0 ? 'menu-padding' : null)}>
                     {this.state.items.map( (f,i) =>{
-                        return(<FeedElement ikey={i} data={f} key={i} onRemove={this.handleRemoveProperty} onAdd={this.handleNewProperty}/>)
+                        let dateStarted = new Date(f.dateStarted);
+                        let created = new Date(f.created);
+                        return(<FeedElement usefulData={"£"+(f.price * f.quantity)+".00"} ikey={i} subtitle={f.creator.name+" on "+created.toLocaleDateString()} title={f.location.line1+" on "+dateStarted.toLocaleDateString()} data={f} key={i} onRemove={this.handleRemoveProperty} onAdd={this.handleNewProperty}/>)
                     }) }
                     {
-                        this.getSelected().length > 0 ? 
-                    <ActionSelection isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={this.getSelected()}/>
+                        selected.length > 0 ? 
+                    <ActionSelection isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected}/>
                         :
                         null
                     }

@@ -1,12 +1,15 @@
 
 import React, { Component } from 'react';
+import { Redirect, Link } from 'react-router-dom';
+
 
 export class FeedElement extends Component{
     constructor(props) {
-            super(props);
-            this.state ={
-            }
-            this.handleButton = this.handleButton.bind(this);
+        super(props);
+        this.handleButton = this.handleButton.bind(this);
+    }
+    state ={
+        redirect: false
     }
     // handleAddButton(d){
     //     this.setState({selected:true});
@@ -20,12 +23,13 @@ export class FeedElement extends Component{
     // }
     handleButton(type){
         switch(type){
-            case 'add' : this.props.onAdd(this.props.ikey); break;
             case 'more': console.log("more"); break;
+            case 'add' : this.props.onAdd(this.props.ikey); break;
             case 'edit': console.log("edit"); break;
             case 'remove': this.props.onRemove(this.props.ikey); break;
         }
     }
+
 
     addButton(){
         return(
@@ -44,23 +48,36 @@ export class FeedElement extends Component{
         </button>)   
     }
 
-    moreButton(){
+    editButton(){
         return(
-            <button className="col-xs-4 action" onClick={() =>this.handleButton('more')}>
-                <i className="fas fa-angle-down"></i>
-                <p>More</p>
-            </button>
+            <button className="col-xs-4 action" onClick={() =>this.handleButton('edit')}>
+                        <i className="fas fa-edit"></i>
+                        <p>Edit</p>
+                    </button>
         )
 
     }
 
-    editButton(){
-        return(
-            <button className="col-xs-4 action" onClick={() =>this.handleButton('edit')}>
-                <i className="fas fa-edit"></i>
-                <p>Edit</p>
-            </button>
-        )
+    moreButton(){
+
+        
+        if(this.props.onMoreUrl){
+            return(
+                <Link to={this.props.onMoreUrl} className="col-xs-4 action">
+                    <button onClick={() =>this.handleButton('more')}>
+                        <i className="fas fa-angle-down"></i>
+                        <p>More</p>
+                    </button> 
+                </Link>
+            )
+        }else{
+            return(
+                <button className="col-xs-4 action" onClick={() =>this.handleButton('more')}>
+                    <i className="fas fa-angle-down"></i>
+                    <p>More</p>
+                </button> 
+            )
+        }
     }
 
     addActions(){
@@ -78,20 +95,21 @@ export class FeedElement extends Component{
 
     render(){
             const d = this.props.data;
-            let dateStarted = new Date(d.dateStarted);
-            let created = new Date(d.created); 
             // let inputProps = {...this.props.inputProps};
             return(<div className={"feed-element "+(d.selected ? 'selected' : '')+(d.job ? 'withJob' : '')}>
                     <div className="row">
+                        {
+                            this.state.redirect ? <Redirect to={this.props.onMoreUrl} /> : null
+                        }
                         <div className="col-xs-12 content">
                             <div className="row title-row">
                                     <div className="col-xs">
-                                        <div className="title">{d.location.line1} on {dateStarted.toLocaleDateString()}</div>
-                                        <div className="subtitle">{d.creator.name} on {created.toLocaleDateString()}</div>
+                                        <div className="title">{this.props.title}</div>
+                                        <div className="subtitle">{this.props.subtitle}</div>
                                     </div>
                                 <div className="col-xs-3">
                                     <div className="id-badge">#{d.id}</div>
-                                    <div className="price">£{d.price * d.quantity}.00</div>
+                                    <div className="price">{this.props.usefulData}</div>
                                 </div>
                             </div>
 
@@ -120,7 +138,7 @@ export class FeedElement extends Component{
                             </div>
                         </div> */}
 
-                        <div className="col-xs-12 section people">
+                        <div className="col-xs-12 section people row">
                             <i className="fa fa-user-circle"></i>
                             
                             {d.people.map( (p,i) => {
@@ -131,7 +149,7 @@ export class FeedElement extends Component{
                         </div>
                         
                         {d.job ? 
-                        <div className="col-xs-12 section people">
+                        <div className="col-xs-12 section people row">
                             <i className="fas fa-info-circle"></i><div className="person">Part of job: {d.job.name}</div>
      
                         </div>

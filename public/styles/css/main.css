@@ -3,6 +3,8 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,300|Roboto:300,400,700");
 .App {
   font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 .modal-back {
   height: 100%;
@@ -502,6 +504,9 @@ button.button-remove i {
   color: #36382e;
   text-decoration: none;
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .shortcutList li i {
   padding: 0em;
@@ -675,8 +680,18 @@ button.button-remove i {
   padding: 0 .75em 0 0;
 }
 .app-content-wrapper {
-  display: inline-block;
+  display: flex;
+  flex: 1;
   width: 100%;
+}
+.app-content-wrapper .app-format {
+  flex-direction: column;
+  flex: 1;
+}
+.app-content-wrapper .app-format .action-feed,
+.app-content-wrapper .app-format .invoice-inspection {
+  height: 100%;
+  margin: 0;
 }
 .date-wrapper {
   display: flex;
@@ -778,7 +793,9 @@ button.button-remove i {
 ===============================*/
 .action-feed {
   background: #ccc;
-  margin: 0 0 15em 0;
+}
+.action-feed.menu-padding {
+  margin-bottom: 15em;
 }
 .feed-element {
   transition: .2s all;
@@ -889,16 +906,19 @@ button.button-remove i {
 .feed-element .actions {
   margin: .5em 0 0 0;
 }
-.feed-element .actions .action {
+.feed-element .actions button {
+  padding: 1em;
   border: 0;
   cursor: pointer;
   user-select: none;
   text-align: center;
-  padding: 1em;
   border-top: 1px solid #eee;
   color: #999;
   font-size: 120%;
   background: transparent;
+}
+.feed-element .actions a.action {
+  text-align: center;
 }
 .feed-element .actions .action:hover {
   background: #f6f6f6;
@@ -1035,9 +1055,88 @@ button.button-remove i {
   width: 100%;
   background: #eee;
 }
+/*====================================
+
+            Invoices        
+
+=====================================*/
+.invoice-inspection {
+  background: #ccc;
+}
+.page-settings {
+  flex: 0;
+}
+.page-settings ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: #eee;
+  display: inline-flex;
+  width: 100%;
+  font-size: smaller;
+  font-weight: 700;
+}
+.page-settings ul li {
+  border-left: 1px solid rgba(75, 75, 75, 0.3);
+  display: inherit;
+}
+.page-settings ul li:last-of-type {
+  border-right: 1px solid rgba(75, 75, 75, 0.3);
+}
+.page-settings ul li a {
+  color: #444;
+  text-decoration: none;
+  padding: 1em;
+}
+.page-settings ul li a:hover {
+  color: #0097e6;
+  background: light(#ede6e3, 20%);
+  transition: .1s all;
+}
+.page-settings ul li a.current {
+  border-bottom: 0.25em solid #0097e6;
+  color: #333;
+}
+.app-wrapper {
+  flex: 1;
+  display: flex;
+}
+.app-wrapper .action-feed.invoice-feed,
+.app-wrapper .invoice-inspection {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.document {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.18);
+  background: white;
+}
+.document .logo-wrapper {
+  text-align: left;
+  padding: 1em;
+}
+.document .address-wrapper {
+  text-align: left;
+  padding: 1em 0;
+}
+.document .header-content-wrapper {
+  display: flex;
+}
+.document.a4 {
+  max-width: 100%;
+  width: 21cm;
+  height: 29.7cm;
+  size: a4;
+  margin: 1em auto;
+}
 @media (min-width: 576px) {
+  .invoice-feed .feed-element .actions button {
+    padding: 0.5em 1em;
+  }
 }
 @media (min-width: 768px) {
+  .action-feed {
+    max-width: 65em;
+  }
   .actionSelection .for-save button:first-of-type {
     margin-left: 2em;
   }
@@ -1074,10 +1173,6 @@ button.button-remove i {
   }
   .app-content {
     margin: 0;
-    padding: 0 5em;
-  }
-  .app-content main {
-    max-width: 70%;
   }
   .searchBar {
     padding: .5em 4em;

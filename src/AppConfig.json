@@ -9,5 +9,19 @@
         "light": "#ede6e3",
         "dark": "#36382e",
         "complementary": "#0097e6"
+    },
+    "organisation":{
+        "name": "Thomas Barratt Design & Development",
+        "address":[{
+            "line1": "43 Crookes Rd",
+            "line2": "Sheffield",
+            "postcode": "S10 5BA"
+        }],
+        "financial":{
+            "account_name": "Thomas Barratt",
+            "account_number": "12956689",
+            "sort_code": "04-00-04"
+        },
+        "logo":"images/icons/icon-128x128.png"
     }
 }

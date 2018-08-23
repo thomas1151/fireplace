@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{data.idRef}} | North Eastern Tree Company</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.2.3/paper.css">
+
+
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 1cm;
+        }
+
+        body {
+            padding: 1em;
+            font-family: "Times New Roman", Times, serif;
+            background: white;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 10px 30px; //border:1px solid #eee;
+            //box-shadow:0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 24px;
+            /*font-family:'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;*/
+            color: #222;
+        }
+
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+        }
+
+        .invoice-box table td {
+            padding: 5px;
+            vertical-align: bottom;
+        }
+
+        .invoice-box table tr td:last-child {
+            text-align: right;
+        }
+
+        .invoice-box table tr.top table td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.top table td.title {
+            font-size: 45px;
+            line-height: 45px;
+            color: #333;
+        }
+
+        .invoice-box table tr.information table td {
+            padding-bottom: 40px;
+        }
+
+        .invoice-box table tr.heading td {
+            //background:#eee;
+            border-bottom: 2px solid #888;
+            font-weight: bold;
+        }
+
+        .invoice-box table tr.details td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.item td {
+            border-bottom: 1px solid #bbb;
+
+        }
+
+        .invoice-box table tr.item.last td {
+            border-bottom: none;
+        }
+
+        .invoice-box table tr.total td:last-child {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .invoice-box table tr.top table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+            .invoice-box table tr.information table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+
+        .details {
+
+            width: 70%;
+            display: inline-block;
+
+            box-sizing: border-box;
+        }
+
+        .details h1,
+        .details h2,
+        .details h3 {
+            font-weight: normal;
+        }
+
+        .details h1 {
+            font-size: 250%;
+        }
+
+        .details h2 {
+            font-style: italic;
+            line-height: 120%;
+            color: #777;
+        }
+
+        .details h3 {
+            font-size: 150%;
+            line-height: 120%;
+            font-style: italic;
+        }
+
+        .reference {
+            text-align: center;
+            font-size: 120%;
+        }
+
+        .reminder {
+
+            color: red;
+        }
+
+        .address-table {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .address {
+            //padding: 0 0em;
+            font-size: 120%;
+
+        }
+
+        .address:nth-of-type(2) p {
+            text-align: right;
+        }
+
+        .address p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .address-titles td {
+            border: 1px solid #ddd;
+            padding: 0em;
+            margin: 0;
+        }
+
+        .address-titles h3 {
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .addresses td {
+            border-right: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .addresses {
+            /*margin: 0 !important;
+      padding: 0 !important;*/
+        }
+
+        .reference {
+            border: 1px solid #ddd;
+            margin: .05em 0;
+
+        }
+
+        .reference td {
+            padding: 0;
+            margin: 0;
+        }
+
+        .logo {
+            text-align: center;
+            width: 24%;
+            right: 2em;
+            top: 0em;
+            position: absolute;
+            z-index: 99;
+
+        }
+
+        .paid {
+            background: rgba(101, 157, 50, 0.8);
+            color: white;
+        }
+
+        .logo img {
+            width: 100%;
+
+            box-sizing: border-box;
+        }
+
+        .header {
+            position: relative;
+        }
+
+        table {}
+
+        .watermark {
+            opacity: 0.05;
+            position: absolute;
+            top: 25%;
+            z-index: -99;
+            width: 800px;
+            text-align: center;
+
+        }
+
+        .watermark img {
+            width: 35em;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .total {
+            font-size: 105%;
+        }
+
+        .notes h4 {
+            font-weight: normal;
+            font-size: 115%;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 70%;
+            left: 20%;
+            font-weight: bold;
+            color: rgba(101, 157, 50, 0.9);
+            font-size: 250%;
+            border: 2px rgba(101, 157, 50, 0.9) solid;
+            padding: 1em 3em;
+            /* Safari */
+            -webkit-transform: rotate(-45deg);
+
+            /* Firefox */
+            -moz-transform: rotate(-45deg);
+
+            /* IE */
+            -ms-transform: rotate(-45deg);
+
+            /* Opera */
+            -o-transform: rotate(-45deg);
+
+            /* Internet Explorer */
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+
+        }
+
+        .sort {
+            padding: 0;
+            margin: 0;
+            font-style: italic;
+            font-size: 130%;
+            color: #444;
+        }
+
+        .item .quantity {
+            text-align: right;
+        }
+
+        .red-stamp {
+            color: red;
+            border: 2px red solid;
+
+        }
+
+        table h4 {
+            padding: .9em 0 0 0;
+            margin: 0;
+            font-size: 120%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="invoice-box">
+        <div class="watermark">
+            <img src="{% static '/crm/icons/logo.png' %}" />
+
+            <!-- <img src="{{static_location}}/crm/icons/logo.png"/> -->
+
+        </div>
+        <div class="header">
+            <div class="details">
+                <h1>North Eastern Tree Company</h1>
+                <h2>1 Hudson Street, Ferryhill, DL178LZ</br>
+                    Mob: 07950 638275 | Tel: 01740 656782</h2>
+
+            </div>
+            <div class="logo">
+                <img src="{% static '/crm/icons/logo.png' %}" />
+
+                <!-- <img src="{{static_location}}/crm/icons/logo.png"/> -->
+            </div>
+        </div>
+        <div class="production">
+            <p class="sort">
+                Sort Code: 30-96-15
+                <br/> Acc. No: 01944118
+                <br/> Acc. Na: Campbell Sinclair T/A North Eastern Tree Company
+            </p>
+            <div class="details">
+                <H3>
+                    Our Ref(s): {% for ref in data.refs.our_ref %}{% if forloop.counter0 != 0 %}, {%endif%}{{ref.ref}}{% endfor %}
+                    </br>
+                    Your Ref(s): {% for ref in data.refs.their_ref %}{% if forloop.counter0 != 0 %}, {%endif%}{{ref.ref}}{% endfor %}
+
+                    </br>
+                    Date: {{data.date|date:"d/m/y"}}</br>
+                    {% if data.order_number != '0'%} Order Number:
+                    <b>{{data.order_number}}</b>
+                    {% endif %}</h3>
+            </div>
+        </div>
+        <Div class="reference {% if data.status.id == 4 %}reminder{%endif%} {% if invoice.paid != None %}paid{%endif%}">
+            <h3>
+                <strong>{{data.status.name}}</strong>: {{data.idRef}}</h3>
+        </Div>
+        <table class="address-table" cellpadding="0" cellspacing="0">
+            <tr class="address-titles">
+                <td>
+                    <h3>Invoice Address</h3>
+                </td>
+                <td>
+                    <h3>Job Address</h3>
+                </td>
+            </tr>
+            <tr class="addresses">
+
+                <td class="address">
+                    <!-- {% for ref in data.refs.our_ref  %}{% if forloop.counter0 != 0 %}/{%endif%}{{ref.ref}}{% endfor %}<br> -->
+                    {{data.invoiceAddr.line1 |safe}}
+                    <br> {{data.invoiceAddr.line2 |safe}}
+                    <br> {{data.invoiceAddr.line3 |safe}}
+                    <br> {{data.invoiceAddr.postcode |safe}}
+                </td>
+                <td class="address">
+                    {{data.jobAddr.line1 |safe}}
+                    <br> {{data.jobAddr.line2 |safe}}
+                    <br> {{data.jobAddr.line3 |safe}}
+                    <br> {{data.jobAddr.postcode |safe}}
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table cellpadding=".1" cellspacing="0">
+
+            <tr class="heading">
+                <td>
+                    Date
+                </td>
+
+                <td>
+                    Description of works
+                </td>
+
+                <td>
+                    Price
+                </td>
+
+                <td class="amount">
+                    Qty
+                </td>
+
+
+
+                <td>
+                    Total
+                </td>
+            </tr>
+            {% for action in actions %} {% if action.quantity == 0%}
+            <tr class="item">
+                <td>
+                    -
+                </td>
+
+                <td>
+                    {{action.work|safe}}
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    -
+                </td>
+            </tr>
+            {% else %}
+            <tr class="item">
+                <td>
+                    {{action.ukDate}}
+                </td>
+
+                <td>
+                    {{action.work|safe}}
+                </td>
+                <td class="price">
+                    {% if action.total == 0 %} - {%else %} £{{action.price}} {%endif %}
+                </td>
+                <td class="quantity">
+                    {{action.quantity}}
+                </td>
+                <td>
+                    {% if action.total == 0 %} - {%else %} £{{action.total_as_formatted_string}} {%endif %}
+                </td>
+            </tr>
+            {% endif %} {% endfor %}
+
+
+            <tr class="total">
+                <td colspan="4" class="notes">
+                    <b>Notes</b>:
+                    <h4>
+                        {{data.notes | safe}}
+                    </h4>
+                </td>
+
+                <td class="total">
+                    {% if data.status_id != 1 %}
+
+                    <h3>
+                        Total: £{{data.totalPrice}}
+                    </h3>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    {% if data.paid != None %}
+
+    <div class="stamp">
+        PAID {{data.paid|date:"d/m/y" }}
+    </div>
+
+    {%endif%} {% if data.status.id == 5 %}
+
+    <div class="stamp red-stamp">
+        VOID
+    </div>
+
+    {%endif%}
+
+</body>
+
+</html>

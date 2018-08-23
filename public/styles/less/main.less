@@ -12,6 +12,8 @@
 
 .App{
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 .modal-back{
     height: 100%;
@@ -555,7 +557,9 @@ button.button-remove{
             color: #36382e;
             text-decoration: none;
             display: block;
-
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }        
             width: 100%;
         display: block;
@@ -764,8 +768,16 @@ button.button-remove{
     }
 }
 .app-content-wrapper{
-            display: inline-block;
-
+        .app-format{
+            flex-direction: column;
+            .action-feed,.invoice-inspection{
+                height: 100%;
+                margin: 0;
+            }
+            flex: 1;
+        }
+        display: flex;
+        flex:1;
         width: 100%;
 }
 
@@ -884,9 +896,12 @@ margin-left: -198px;
 .action-feed{
     background: #ccc;
     // border: 1px solid #eee;
-    margin: 0 0 15em 0;
-
+    // margin: 0 0 15em 0;
+    &.menu-padding{
+        margin-bottom: 15em;
+    }
 }
+
 
 .feed-element{
     transition: .2s all;
@@ -1012,16 +1027,22 @@ margin-left: -198px;
     }
     .actions{
         margin: .5em 0 0 0;
-        .action{
-            border: 0;
-            cursor: pointer;
-            user-select: none;
+        button{
+                padding: 1em;
+    
+                border: 0;
+                cursor: pointer;
+                user-select: none;
+                text-align: center;
+                border-top: 1px solid #eee;
+                color: #999;
+                font-size: 120%;
+                background: transparent;
+        }
+        a.action{
             text-align: center;
-            padding: 1em;
-            border-top: 1px solid #eee;
-            color: #999;
-            font-size: 120%;
-            background: transparent;
+        }
+        .action{
             &:hover{
                 background: #f6f6f6;
                 color: @complementary;
@@ -1166,14 +1187,92 @@ margin-left: -198px;
     }
 }
 
+/*====================================
 
+            Invoices        
+
+=====================================*/
+.invoice-inspection{
+    background: #ccc;
+}
+.page-settings{
+    flex: 0;
+    ul{
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        background: #eee;
+        display: inline-flex;
+        width: 100%;
+        font-size: smaller;
+        font-weight: 700;
+
+        li{
+            border-left: 1px solid rgba(75,75,75,.3);
+            display: inherit;
+            &:last-of-type{
+                border-right: 1px solid rgba(75,75,75,.3);
+            }
+            a{
+                &:hover{
+                    color: @complementary;
+                    background: light(@light,20%);
+                    transition: .1s all;
+                }
+                &.current{
+                    border-bottom: .25em solid @complementary;
+                    color: #333;
+                }
+                color: #444;
+                text-decoration: none;
+                padding: 1em;
+            }
+        }
+    }
+
+}
+.app-wrapper{
+    .action-feed.invoice-feed, .invoice-inspection{
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+
+    flex: 1;
+    display: flex;
+}
+.document{
+    box-shadow: 0 0 4px rgba(0,0,0,.04), 0 4px 8px rgba(0,0,0,.18);
+    background: white;
+    .logo-wrapper{
+        text-align: left;
+        padding: 1em;
+    }
+    .address-wrapper{
+        text-align: left;
+        padding: 1em 0;
+    }
+    .header-content-wrapper{
+        display: flex;
+    }
+    &.a4{
+        max-width: 100%;
+        width: 21cm;
+        height: 29.7cm; 
+
+        size: a4;
+        margin: 1em auto;
+    }
+}
 
 // Extra small devices (portrait phones, less than 576px)
 // No media query since this is the default in Bootstrap
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) { 
-
+    .invoice-feed .feed-element .actions button{
+        padding: 0.5em 1em;
+    }  
     // .actionBox .profile-icon{
     //     padding: 1em 0;
     //     margin: 2em;
@@ -1182,13 +1281,17 @@ margin-left: -198px;
     //     padding: .5em 0;
     //     display: flex;
     //     background: @complementary;
-    //     border-radius: 2em;
+    //     border-radius: 2em;x
     //     color: #f6f6f6;
     // }
 }
 
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) {
+    .action-feed{
+        max-width: 65em;
+        // margin: 0 auto;
+    }
     .actionSelection{
         .for-save{
             button:first-of-type{
@@ -1230,9 +1333,9 @@ margin-left: -198px;
     }
     .app-content{
         margin: 0;
-        padding: 0 5em;
+        // padding: 0 5em;
         main{
-            max-width: 70%;
+            // max-width: 70%;
         }
         
     }
@@ -1273,6 +1376,7 @@ margin-left: -198px;
     }
 
 }
+
 
 
 // Large devices (desktops, 992px and up)

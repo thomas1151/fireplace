@@ -5,6 +5,7 @@ import {SearchBar} from './components/SearchBar.js';
 import CONFIG from './AppConfig.json';
 import { ActionBox } from './components/ActionBox';
 import { ShortcutsBar } from './components/ShortcutsBar';
+import { Invoices } from './views/Invoices';
 import { Home } from './views/Home';
 
 import {
@@ -50,9 +51,9 @@ class App extends Component {
         <div className="app-content-wrapper">
         <div className="app-content row">
 
-          <ShortcutsBar isMobile={isMobile}/>
           {/* <Route path='/' render={RenderableHome}/> */}
-          <Route path='/' render={routeProps => <Home isMobile={isMobile}/>} />
+          <Route path='/invoices' render={routeProps => <Invoices {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
+          <Route exact path='/' render={routeProps => <Home {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
 
         </div>
         </div>

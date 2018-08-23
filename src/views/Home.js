@@ -18,11 +18,13 @@ export class Home extends Component{
     render(){
         let bg =this.props.backgroundColor;
         return(
-            <main className="col-xs">
-            <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
-            <Feed isMobile={this.props.isMobile}/>
-            </main>
-
+            <React.Fragment>
+                <ShortcutsBar isMobile={this.props.isMobile}/>
+                <main className="col-xs">
+                    <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
+                    <Feed isMobile={this.props.isMobile}/>
+                </main>
+            </React.Fragment>
         )
     }
 }
