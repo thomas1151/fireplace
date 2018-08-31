@@ -1,6 +1,7 @@
 @import 'normalise.css';
 @import 'flexboxgrid.css';
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,300|Roboto:300,400,700");
+@import url('https://fonts.googleapis.com/css?family=Poppins:400|600');
 .App {
   font-family: 'Roboto', sans-serif;
   display: flex;
@@ -1003,7 +1004,8 @@ button.button-remove i {
 .actionSelection input::placeholder {
   font-weight: 400;
 }
-.actionSelection input {
+.actionSelection input,
+.actionSelection textarea {
   background: #fff;
   padding: 1em 0 1em .5em;
   border: 1px solid #e7e7e7;
@@ -1127,6 +1129,207 @@ button.button-remove i {
   height: 29.7cm;
   size: a4;
   margin: 1em auto;
+}
+/* ==========================
+
+        Invoice Page
+
+============================= */
+.header {
+  background: #f6f6f6;
+  letter-spacing: -0.015em;
+}
+.header .header-content-wrapper {
+  display: inline-block;
+}
+.header .address-wrapper {
+  display: inline-block;
+  width: 100%;
+}
+.header .address-wrapper h2 {
+  padding: .25em 0 0 0;
+  text-align: left;
+  font-size: 185%;
+  margin: 0;
+}
+.header .address-wrapper .details {
+  margin: 1em 0;
+}
+.header .address-wrapper .job-label {
+  display: none;
+}
+.header .address-wrapper .job-detail {
+  display: flex;
+  align-self: center;
+}
+.header .address-wrapper .job-detail h3 {
+  width: 100%;
+}
+.header .address-wrapper .job-detail h3 {
+  text-align: right;
+  margin: .25em 0;
+  letter-spacing: .05em;
+}
+.header .address-wrapper .job-type .job-label {
+  display: none;
+}
+.header .address-wrapper .job-type h3 {
+  color: #0097e6;
+  font-size: 120%;
+  text-transform: uppercase;
+}
+.header .address-wrapper .job-id .job-label,
+.header .address-wrapper .job-date .job-label {
+  display: none;
+}
+.header .address-wrapper .job-id h3,
+.header .address-wrapper .job-date h3 {
+  font-weight: 400;
+  color: #36382e;
+  letter-spacing: .05em;
+  font-size: 125%;
+}
+.header .address-wrapper .job-id h3 {
+  font-size: 150%;
+}
+.header .address-wrapper .job-type h3,
+.header .address-wrapper .job-id h3 {
+  text-align: right;
+}
+.header .address-wrapper .job-date h3,
+.header .address-wrapper .job-amount h3 {
+  text-align: left;
+}
+.header .address-wrapper .left-details {
+  width: 100%;
+  display: flex;
+}
+.header .address-wrapper .job-amount {
+  color: #0097e6;
+  font-size: 125%;
+}
+.header h2 {
+  text-align: center;
+}
+.header .logo-wrapper {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 1em 0 0 0;
+}
+.header .logo-wrapper img {
+  filter: invert(1);
+}
+.document {
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+}
+.document .header {
+  padding: .5em;
+}
+.document .invoice-address,
+.document .job-address {
+  padding: 0;
+}
+.document .body table {
+  text-align: left;
+  max-width: 100%;
+  overflow: hidden;
+  display: block;
+  font-size: 90%;
+  display: table;
+  width: 100%;
+}
+.document .body table td,
+.document .body table th {
+  padding: .75em;
+}
+.document .body table th {
+  border-bottom: 1px solid #0097e6;
+}
+.document .body table td {
+  border-bottom: 1px solid #ddd;
+}
+.document .body .job-table-footer-section td {
+  border: 0;
+  padding: .5em .75em .5em .75em;
+}
+.document .job-details-wrap {
+  padding: 1em;
+}
+.document .job-details-wrap .line {
+  line-height: 1.5em;
+}
+.document .job-section-title {
+  font-weight: 700;
+  text-align: left;
+  color: #ccc;
+  text-transform: uppercase;
+  margin-bottom: .5em;
+}
+.document .job-address-section {
+  text-align: left;
+}
+.document .invoice-address {
+  text-align: left;
+}
+.document .job-address {
+  text-align: right;
+}
+.document .job-address .job-section-title {
+  text-align: right;
+}
+.document .left-align {
+  text-align: left;
+}
+.document .right-align {
+  text-align: right;
+}
+.document .footer {
+  position: absolute;
+  bottom: 0;
+  background: #f6f6f6;
+  width: 100%;
+  color: #555;
+  padding: 1.5em;
+}
+.document .footer .footer-section {
+  width: 50%;
+  display: inline-block;
+}
+.document .social_line,
+.document .location_line {
+  line-height: 1.3em;
+}
+.document .job-section-title {
+  margin: .75em 0 .25em 0;
+}
+@media (min-width: 768px) {
+  .document .job-details-wrap {
+    padding: 1em 4em;
+  }
+  .document .body table {
+    padding: 1em 4em;
+    overflow: none;
+  }
+  .header .logo-wrapper {
+    width: auto;
+  }
+  .header .header-content-wrapper {
+    display: flex;
+    padding: 1.5em;
+  }
+  .header .logo-wrapper {
+    padding: 2em 1em 0 0;
+  }
+  .address-wrapper {
+    padding: 2em 0;
+    display: block;
+    width: 100%;
+  }
+}
+.document .address {
+  border: 1px solid #ccc;
 }
 @media (min-width: 576px) {
   .invoice-feed .feed-element .actions button {

@@ -221,6 +221,13 @@ export class JobForm extends Component{
                         </div>
                         <p className="col-xs-3">This is a</p> <ActionPerson className="col-xs" id={'type'} src={'type'} onChangeForParent={this.handleChange} debug={true}/>
                     </div>
+                    <div className="type col-xs-12 col-sm-6 row">
+                        <div className="section-title col-xs-12">
+                            <p>Notes</p>
+                        </div>
+                        <textarea className="col-xs" onChange={ (e) => this.handleChange('notes',e.target.value)} placeholder="Prompt payment would be appreciated">
+                        </textarea>
+                    </div>
                     <div className="type col-xs-12">
                         <div className="section-title col-xs-12">
                             <p>People</p>

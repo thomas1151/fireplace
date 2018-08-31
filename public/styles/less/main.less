@@ -1130,7 +1130,7 @@ margin-left: -198px;
     input::placeholder{
         font-weight: 400;
     }
-    input{
+    input,textarea{
         background: #fff;
         padding: 1em 0 1em .5em;
         border: 1px solid #e7e7e7;
@@ -1265,6 +1265,235 @@ margin-left: -198px;
     }
 }
 
+
+
+/* ==========================
+
+        Invoice Page
+
+============================= */
+@import url('https://fonts.googleapis.com/css?family=Poppins:400|600');
+.header{
+    background: #f6f6f6;
+
+    letter-spacing: -.015em;
+    // text-transform: uppercase;
+    .header-content-wrapper{
+        display: inline-block;
+    }
+    .address-wrapper{
+
+        display: inline-block;
+
+        width: 100%;
+        h2{
+            padding: .25em 0 0 0;
+            text-align: left;
+            font-size: 185%;
+            margin: 0;
+        }
+        .details{
+            margin: 1em 0;
+        }
+        .job-label{
+            display: none;
+        }
+        .job-detail{
+            // border-top: 1px solid rgb(148, 49, 49);
+            display: flex;
+            align-self: center;
+            h3{
+                width: 100%;
+            }
+        }
+        .job-detail h3{
+            text-align: right;
+            // padding: 0 2em;
+            margin: .25em 0;
+            letter-spacing: .05em;
+        }
+        .job-type{
+            .job-label{
+                display: none;
+            }
+            h3{
+                color: @complementary;
+                font-size: 120%;
+                text-transform: uppercase;
+
+            }
+        }
+        .job-id,.job-date {
+            .job-label{
+                display: none;
+            }
+            h3{
+                font-weight: 400;
+                color: #36382e;
+                letter-spacing: .05em;
+                font-size: 125%;
+            }
+        }
+        .job-id h3{
+            font-size: 150%;
+        }
+        .job-type h3,.job-id h3{
+            text-align: right;
+        }
+        .job-date h3, .job-amount h3{
+            text-align: left;
+        }
+        .left-details{
+            width: 100%;
+            display: flex;
+        }
+        .job-amount{
+            color: @complementary;
+            font-size: 125%;
+        }
+    }
+    h2{
+        text-align: center;
+    }
+    .logo-wrapper{
+
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        padding: 1em 0 0 0;
+        img{
+            filter: invert(1);
+        }
+    }
+}
+.document{
+    // font-family: 'Times New Roman', serif;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    .header{
+        padding: .5em;
+    }
+    .invoice-address,.job-address{
+        padding: 0;
+    }
+    .body{
+        table{
+            text-align: left;
+            max-width: 100%;
+            overflow: hidden;
+            display: block;
+            font-size: 90%;
+            display: table;
+            width: 100%;
+            td,th{
+                padding: .75em;
+            }
+            th{
+                border-bottom: 1px solid @complementary;
+            }
+            td{
+                border-bottom: 1px solid #ddd;
+            }
+        }
+        .job-table-footer-section{
+            td{
+                border: 0;
+                padding: .5em .75em .5em .75em;
+            }
+         }
+    }
+    .job-details-wrap{
+
+        padding: 1em;
+        .line{
+            line-height: 1.5em;
+        }
+    }
+    .job-section-title{
+        font-weight: 700;
+        text-align: left;
+        color: #ccc;
+        text-transform: uppercase;
+        margin-bottom: .5em;
+    }
+    .job-address-section{
+        text-align: left;
+    }
+    .invoice-address{
+        text-align: left;
+    }
+    .job-address{
+        .job-section-title{
+            text-align: right;
+        }
+        text-align: right;
+    }
+    .left-align{
+        text-align: left;
+    }
+    .right-align{
+        text-align: right;
+    }
+    .footer{
+        position: absolute;
+        bottom: 0;
+        background: #f6f6f6;
+        width: 100%;
+        color: #555;
+        padding: 1.5em;
+        .footer-section{
+            width: 50%;
+            display: inline-block;
+
+        }
+    }
+    .social_line,.location_line{
+        line-height: 1.3em;
+    } 
+    .job-section-title{
+        margin: .75em 0 .25em 0;
+    }
+}
+
+
+@media (min-width: 768px) { 
+    .document .job-details-wrap{
+        padding: 1em 4em;
+    }
+    .document{
+        .body{
+            table{
+                padding: 1em 4em;
+                overflow: none;
+            }
+        }
+    }
+    .header .logo-wrapper{
+        width: auto;
+    }
+    .header .header-content-wrapper{
+        display: flex;
+        padding: 1.5em;
+    }
+    .header .logo-wrapper{
+        padding: 2em 1em 0 0;
+        
+    }
+    .address-wrapper{
+        padding: 2em 0;
+        display: block;
+        width: 100%;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+
+}
+
+.document .address{
+    border: 1px solid #ccc;
+}
 // Extra small devices (portrait phones, less than 576px)
 // No media query since this is the default in Bootstrap
 
