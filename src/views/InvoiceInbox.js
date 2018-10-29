@@ -58,31 +58,31 @@ export class InvoiceInbox extends Component{
                 <div className="app-wrapper row">
                     <div className="invoice-feed action-feed col-xs">
                         {this.props.items.map( (f,i) =>{
-                            let date = new Date(f.date).toLocaleDateString();
-                            let created = new Date(f.created).toLocaleDateString();
+                            let date = new Date(Date.parse(f.date)).toLocaleDateString();
+                            let created = new Date(Date.parse(f.date)).toLocaleDateString();
+                            {/* let totalPrice = f.actions.map(item => item.total).reduce((prev, next) => prev + next);  */}
+
+                            let totalPrice = f.actions.reduce((a, b) => +a + +(b.price*b.quantity), 0);
+
                             return(<FeedElement 
-                                        usefulData={"£"+f.price.toFixed(2)} 
-                                        subtitle={f.creator.name+" on "+created} 
-                                        title={f.id} 
-                                        ikey={i} 
+                                        usefulData={"£"+totalPrice.toFixed(2)} 
+                                        subtitle={ (f.creator ? f.creator.fname+' '+f.creator.lname : 'Unknown')+" on "+created} 
+                                        title={f.idRef} 
+                                        ikey={f.idRef} 
                                         data={f} 
-                                        key={i} 
+                                        key={f.idRef} 
+                                        badge={"#"+f.idRef}
                                         onRemove={this.handleRemoveProperty} 
                                         onAdd={this.handleNewProperty}
-                                        onMoreUrl={"/invoices/"+f.id}
+                                        onMoreUrl={"/invoices/"+f.idRef}
+                                        people={f.people && f.people}
+                                        displayPeopleAs={ ['fname','lname']}
                                     />)
                         }) }
 
                     </div>
-                {!this.props.isMobile ? 
-                        
-                    <div className="invoice-inspection col-xs-8">
-                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css"/>
-                        <Route path="/invoices/:id" render={routeProps => <ViewJob 
-                                                            {...routeProps} config={this.props.config} data={this.state.items} getItemByProp={this.props.getItemByProp} isMobile={this.props.isMobile}/>} />
-                    </div>
-                    :
-                    null}
+                    {this.props.children}
+
                 </div>
             {/* <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
             <Feed isMobile={this.props.isMobile}/> */}

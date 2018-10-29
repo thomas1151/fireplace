@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {FeedElement} from './FeedElement';
 import { ActionSelection } from './ActionSelection';
+import axios from 'axios';
 const feed = [
     {
         "id": "A171295",
@@ -121,7 +122,8 @@ const feed = [
                 "created": "Sun Dec 17 2018 03:24:00 GMT",
                 "people": [{
                         "id": "1",
-                        "name": "Thomas Barratt",
+                        "fname": "Thomas",
+                        "lname": "Barratt",
                         "organisation": "Thomas Barratt Design & Development",
                     },
                     {
@@ -142,7 +144,7 @@ export class Feed extends Component{
                 date: undefined,
                 invoiceAddr: {},
                 jobAddr: {},
-
+                isLoaded: false,
             }
 
             this.handleNewProperty = this.handleNewProperty.bind(this);            
@@ -152,6 +154,31 @@ export class Feed extends Component{
 
 
 
+    }
+    componentDidMount() {
+        let self = this;
+        axios.get(this.props.src.url + 'actions/')
+            .then(function (response) {
+                let data = response.data;
+                // handle success
+                self.setState({
+                    isLoaded: true,
+                    items: data,
+                    response
+                });
+                console.log(response);
+            })
+            .catch(function (error) {
+                // handle error
+                self.setState({
+                    isLoaded: true,
+                    error
+                });
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
     }
     getSelected(){
         let a = this.state.items.filter(function(val,idx){
@@ -195,11 +222,25 @@ export class Feed extends Component{
     render(){
             // let inputProps = {...this.props.inputProps};
             let selected = this.getSelected();
+            if(this.state.isLoaded){
             return(<div class={"action-feed "+(selected.length >0 ? 'menu-padding' : null)}>
                     {this.state.items.map( (f,i) =>{
-                        let dateStarted = new Date(f.dateStarted);
+                        let dateStarted = new Date(f.startDate);
                         let created = new Date(f.created);
-                        return(<FeedElement usefulData={"£"+(f.price * f.quantity)+".00"} ikey={i} subtitle={f.creator.name+" on "+created.toLocaleDateString()} title={f.location.line1+" on "+dateStarted.toLocaleDateString()} data={f} key={i} onRemove={this.handleRemoveProperty} onAdd={this.handleNewProperty}/>)
+                        return(<FeedElement 
+                                    data={f} 
+                                    badge={f.idRef} 
+                                    usefulData={"£"+(f.price * f.quantity)+".00"} 
+                                    ikey={i} 
+                                    description={f.work}
+                                    title={ (f.location && f.location.line1)+" on "+dateStarted.toLocaleDateString()} 
+                                    subtitle={ (f.creator && f.creator.name)+" on "+created.toLocaleDateString()} 
+                                    key={i} 
+                                    onRemove={this.handleRemoveProperty} 
+                                    onAdd={this.handleNewProperty}
+                                    people={f.people}
+                                    displayPeopleAs={['fname','name']}
+                                    />)
                     }) }
                     {
                         selected.length > 0 ? 
@@ -208,6 +249,9 @@ export class Feed extends Component{
                         null
                     }
                 </div>)
+            }else{
+                return("Loading");
+            }
     }
 }
 export default Feed;

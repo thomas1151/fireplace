@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Link,State, Route} from 'react-router';
 import moment from 'moment';
+import { JobInfoBar } from './JobInfoBar';
+import ReactHtmlParser from 'react-html-parser';
 
 export class ViewJob extends Component{
     constructor(props) {
@@ -9,15 +11,21 @@ export class ViewJob extends Component{
     }
    
     render(){
-            let d = this.props.getItemByProp('id',this.props.match.params.id);
+            let d = this.props.getItemByProp('idRef',this.props.match.params.id);
             console.log(d);
             let dateToday = new Date();
             let total = 0;
-            d.items.forEach(function(el,i){
-                                   total += el.price * el.quantity
+            d.actions.forEach(function(el,i){
+                                      total += el.price * el.quantity
                                 })
             // let inputProps = {...this.props.inputProps};
-            return(<div className="document a4"  style={{size: 'A4'}}>
+            return(
+            <React.Fragment>
+
+            {!this.props.asPrint && <JobInfoBar onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname+'/view'}/>}
+            <style type="text/css" media="print" href="/styles/css/print.css"/>
+            <link rel="stylesheet" type="text/css" href="/styles/css/document.css"/>
+            <div className="document a4 toPrint"  style={{size: 'A4'}}>
 
                     <div className="header">
                         <div class="header-content-wrapper">
@@ -29,9 +37,9 @@ export class ViewJob extends Component{
                                 <div className="details">
                                     <div className="left-details row">
                                         <div className="job-detail job-date col-xs-6"><div className="job-label">Date</div><h3>{ new Date(d.date).toLocaleDateString() }</h3></div>
-                                        <div className="job-detail job-type col-xs-6"><div className="job-label">Type</div><h3>{d.type}</h3></div>
-                                        <div className="job-detail job-amount col-xs-6"><div className="job-label">Amount</div><h3>£{d.price.toFixed(2)}</h3></div>
-                                        <div className="job-detail job-id col-xs-6"><div className="job-label">Type</div><h3>#{d.id}</h3></div>
+                                        <div className="job-detail job-type col-xs-6"><div className="job-label">Type</div><h3>{d.status.name}</h3></div>
+                                        <div className="job-detail job-amount col-xs-6"><div className="job-label">Amount</div><h3>£{total.toFixed(2)}</h3></div>
+                                        <div className="job-detail job-id col-xs-6"><div className="job-label">Type</div><h3>#{d.idRef}</h3></div>
                                     </div>
                                 </div>
                             </div>
@@ -44,6 +52,7 @@ export class ViewJob extends Component{
                                 <div className="job-section-title">
                                     Your Ref
                                 </div>
+                                <div className="line">Thomas Barratt</div>
                                 {d.people.map( (el,i)=>{
                                     if(el.type=="provider"){
                                         return(<div className="line">{el.name}</div>)
@@ -54,6 +63,8 @@ export class ViewJob extends Component{
                                 <div className="job-section-title">
                                     Our Ref
                                 </div>
+                                <div className="line">Lee Mellor</div>
+
                                 {d.people.map( (el,i)=>{
                                     if(el.type=="client"){
                                         return(<div className="line">{el.name}</div>)
@@ -63,20 +74,24 @@ export class ViewJob extends Component{
                         </div>
                         <div className="col-xs row">
                             <div className="addresses col-xs-12 row">
-                                <div className="invoice-address job-address-section  col-xs-12 col-sm-6">
+                                <div className="invoice-address job-address-section  col-xs-6 col-sm-6">
                                     <div className="job-section-title">
                                         Invoice address
                                     </div>
-                                    {Object.values(d.invoice_addr).map( (el,i)=>{
-                                        return(<div className="line">{el}</div>)
+                                    {Object.values(d.invoiceAddr).map( (el,i)=>{
+                                        if (Object.keys(d.invoiceAddr)[i] != 'url') {
+                                            return(<div className="line">{el}</div>)
+                                        }
                                     })}
                                 </div>
-                                <div className="job-address job-address-section col-xs-12 col-sm-6">
+                                <div className="job-address job-address-section col-xs-6 col-sm-6">
                                     <div className="job-section-title">
                                         Job address
                                     </div>
-                                    {Object.values(d.job_addr).map( (el,i)=>{
-                                        return(<div className="line">{el}</div>)
+                                    {Object.values(d.jobAddr).map( (el,i)=>{
+                                        if(Object.keys(d.jobAddr)[i] != 'url'){
+                                            return(<div className="line">{el}</div>)
+                                        }
                                     })}
                                 </div>
                             </div>
@@ -93,9 +108,10 @@ export class ViewJob extends Component{
                                     <th>Total</th>
                                 </tr>
                             </thead>
-                        {d.items.map( (el,i)=>{
+                            <tbody>
+                        {d.actions.map( (el,i)=>{
                             let endDate = false
-                            let startDate = new Date(el.dateStarted);
+                            let startDate = new Date(el.startDate);
                                 let date = startDate.toLocaleDateString();
                             if(el.dateEnded){
                                 let endDate = new Date(el.dateStarted).toLocaleDateString(); 
@@ -108,7 +124,7 @@ export class ViewJob extends Component{
                                     
                                 </td>
                                 <td>
-                                    {el.description}
+                                    { ReactHtmlParser(el.work)}
                                 </td>
                                  <td className="right-align">
                                     {parseInt(el.price).toFixed(2)}
@@ -123,6 +139,7 @@ export class ViewJob extends Component{
                             </tr>
                             )
                         })}
+                        </tbody>
                         <tfoot className="job-table-footer-section"> 
                             <tr>
                                 <td></td>
@@ -156,7 +173,7 @@ export class ViewJob extends Component{
                         </table>
                             <div>
                                 <div className="notes col-xs">
-                                {d.notes}
+                                {ReactHtmlParser(d.notes)}
                                 </div>
                             </div>
                         </div>
@@ -164,6 +181,9 @@ export class ViewJob extends Component{
 
                     <div className="footer">
                         <div class="footer-content-wrapper">
+                            <div class="footer-section location left-align">
+                            {Object.values(this.props.config.organisation.financial).map((el, i) => <div className="location_line">{el[0]}: {el[1]} </div>)}
+                            </div>
                             <div class="footer-section location left-align"> 
                                 {Object.values(this.props.config.organisation.address).map( (el,i) => <div className="location_line">{(el)} </div> )}
                             </div>
@@ -174,7 +194,9 @@ export class ViewJob extends Component{
                     </div>
                  
                 
-            </div>)
+            </div>
+            </React.Fragment>
+            )
             // return(template())
 
     }

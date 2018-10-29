@@ -9,12 +9,13 @@ import { ActionSelection } from '../components/ActionSelection';
 import { InvoiceInbox } from './InvoiceInbox';
 import { ViewJob } from '../components/ViewJob';
 import { Redirect } from 'react-router-dom';
-
+import jsPDF from 'jspdf';
 import {
     BrowserRouter as Router,
     Route,
     Link
 } from 'react-router-dom';
+import axios from "axios";
 
 const feed = [{
         "id": "REW190918",
@@ -559,6 +560,88 @@ const feed = [{
         }]
 
     },
+    {
+        "id": "1SAW100918",
+        "organisation": "Thomas Barratt Design and Development",
+        "type": "invoice",
+        "date": "Mon Sep 10 2018 11:20:00 GMT",
+        "notes": "Any additional notes regarding work or payment here.",
+        "invoice_addr": {
+            "line1": "Sample Street",
+            "line2": "Sheffield",
+            "line3": "",
+            "line4": "",
+            "postcode": "S1A MPL"
+        },
+        "job_addr": {
+            "line1": "http://thomasbarratt.co.uk",
+            "line2": "",
+            "line3": "",
+            "line4": "",
+            "postcode": ""
+        },
+        "price": 200,
+        "creator": {
+            "id": "1",
+            "name": "Thomas Barratt"
+        },
+        "created": "Mon Sep 10 2018 11:20:00 GMT",
+        "people": [
+            {
+                "id": "1",
+                "name": "Thomas Barratt",
+                "organisation": "Thomas Barratt Design & Development",
+                "type": "provider"
+            },
+            {
+                "id": "2",
+                "name": "Donald Trump",
+                "organisation": "Trump Hotels",
+                "type": "NS"
+            },
+            {
+                "id": "50",
+                "name": "Sample Client",
+                "organisation": "Sampletons",
+                "type": "client"
+            }
+        ],
+        "items": [
+            {
+                "id": "A251295",
+                "description": "Order form rewrite as requested.",
+                "dateStarted": "Mon Sep 10 2018 10:24:00 GMT",
+                "location": {
+                    "line1": "Sample",
+                    "line2": "Sheffield",
+                    "line3": "",
+                    "line4": "",
+                    "postcode": "S1A MPL"
+                },
+                "quantity": "5",
+                "price": "20",
+                "creator": {
+                    "id": "1",
+                    "name": "Thomas Barratt"
+                },
+                "created": "Sun Dec 17 2018 03:24:00 GMT",
+                "people": [
+                    {
+                        "id": "1",
+                        "name": "Thomas Barratt"
+                    },
+                    {
+                        "\n": "",
+                        "name": "Cosmo Kramer"
+                    }
+                ],
+                "job": {
+                    "id": 1,
+                    "name": "1SAW100918"
+                }
+            }
+        ]
+    }
 ]
 
 export class Invoices extends Component{
@@ -584,8 +667,34 @@ export class Invoices extends Component{
                     }
                 ],
                 items: feed,
+                isLoaded: false,
             }
             this.getItemByProp = this.getItemByProp.bind(this);
+    }
+    componentDidMount() {
+        let self = this;
+        axios.get(this.props.src.url + 'jobs/')
+            .then(function (response) {
+                let data = response.data;
+                // handle success
+                self.setState({
+                    isLoaded: true,
+                    items: data,
+                    response
+                });
+                console.log(response);
+            })
+            .catch(function (error) {
+                // handle error
+                self.setState({
+                    isLoaded: true,
+                    error
+                });
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
     }
     getItemByProp(prop, value) {
         for (let i = 0; i < this.state.items.length; i++) {
@@ -594,23 +703,63 @@ export class Invoices extends Component{
             }
         }
     }
+    createPDF(){
+        
+    }
     render(){
         let bg =this.props.backgroundColor;
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2><h3> {this.props.config.organisation.address.map( (el,i) => <div className="location_line">{Object.values(el)} </div> )}</h3></div></div>;
-        
+        if(this.state.isLoaded){
         return(
             <React.Fragment>
             { this.props.isMobile ?  <ShortcutsBar isMobile={this.props.isMobile}/>:null}
 
             {this.props.isMobile ?
-                <Route path="/invoices/:id" render={routeProps => <ViewJob 
-                                                            {...routeProps} config={this.props.config} data={this.state.items} getItemByProp={this.getItemByProp} isMobile={this.props.isMobile}/>} />
+                <Route exact path="/invoices/:id" render={routeProps => <ViewJob 
+                                                            {...routeProps} createPDF={this.createPDF} config={this.props.config} data={this.state.items} getItemByProp={this.getItemByProp} isMobile={this.props.isMobile}/>} />
                 : null
             }
-            <Route exact to="/" render={routeProps => <InvoiceInbox {...routeProps} getItemByProp={this.getItemByProp} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}/>}/>            
+            {this.props.isMobile &&
+            <Route exact path="/invoices" render={routeProps => 
+            <InvoiceInbox {...routeProps} getItemByProp={this.getItemByProp} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
+            </InvoiceInbox>
+            }/>
+            }
 
+            <Route path="/invoices/:id/view" render={routeProps => <ViewJob 
+                                                            {...routeProps} asPrint={true} createPDF={this.createPDF} config={this.props.config} data={this.state.items} getItemByProp={this.getItemByProp} isMobile={this.props.isMobile}/>} />
+                
+            {!this.props.isMobile &&
+            <Route exact path="/invoices/:id" render={routeProps => 
+            <InvoiceInbox {...routeProps} getItemByProp={this.getItemByProp} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
+
+                    <div className="invoice-inspection col-xs-8">
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css"/>
+                        <Route exact path="/invoices/:id" render={routeProps => <ViewJob 
+                                                            {...routeProps} config={this.props.config} data={this.state.items} getItemByProp={this.getItemByProp} createPDF={this.createPDF} isMobile={this.isMobile}/>} />
+                    </div>
+            </InvoiceInbox>
+            }/>
+            }
+            {!this.props.isMobile &&
+            <Route exact path="/invoices" render={routeProps => 
+            <InvoiceInbox {...routeProps} getItemByProp={this.getItemByProp} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
+
+                    <div className="invoice-inspection col-xs-8">
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css"/>
+                        <Route exact path="/invoices/:id" render={routeProps => <ViewJob 
+                                                            {...routeProps} config={this.props.config} data={this.state.items} getItemByProp={this.getItemByProp} createPDF={this.createPDF} isMobile={this.isMobile}/>} />
+                    </div>
+            </InvoiceInbox>
+            }/>
+
+
+            }
             </React.Fragment>
-        )
+            )
+        }else{
+            return "Loading!";
+        }
     }
 }
 export default Invoices;

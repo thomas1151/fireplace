@@ -22,7 +22,7 @@ export class Home extends Component{
                 <ShortcutsBar isMobile={this.props.isMobile}/>
                 <main className="col-xs">
                     <Route path='/' render={routeProps => <ActionBox isMobile={this.props.isMobile}/>} />
-                    <Feed isMobile={this.props.isMobile}/>
+                    <Feed src={this.props.src} isMobile={this.props.isMobile}/>
                 </main>
             </React.Fragment>
         )

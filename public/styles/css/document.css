@@ -1,0 +1,12 @@
+/* 
+.document.toPrint h1,
+.document.toPrint h2,
+.document.toPrint h3,
+.document.toPrint p,
+.document.toPrint div{
+    font-family: "Times New Roman" !important;
+}
+.document.toPrint h2{
+    font-weight: 300;
+    font-size: 225%;
+}  */

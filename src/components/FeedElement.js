@@ -95,6 +95,7 @@ export class FeedElement extends Component{
 
     render(){
             const d = this.props.data;
+            console.log(d);
             // let inputProps = {...this.props.inputProps};
             return(<div className={"feed-element "+(d.selected ? 'selected' : '')+(d.job ? 'withJob' : '')}>
                     <div className="row">
@@ -108,15 +109,16 @@ export class FeedElement extends Component{
                                         <div className="subtitle">{this.props.subtitle}</div>
                                     </div>
                                 <div className="col-xs-3">
-                                    <div className="id-badge">#{d.id}</div>
+                                    <div className="id-badge">{this.props.badge}</div>
                                     <div className="price">{this.props.usefulData}</div>
                                 </div>
                             </div>
 
                         </div>
                         <div className="col-xs-12 col-sm-12 section body">
-                            <div className="description">
-                                {d.description}
+                            <div className="description"
+                            dangerouslySetInnerHTML={{__html:this.props.description}}>
+                                
                             </div>
                             <div className="footer">
                             </div>
@@ -141,16 +143,19 @@ export class FeedElement extends Component{
                         <div className="col-xs-12 section people row">
                             <i className="fa fa-user-circle"></i>
                             
-                            {d.people.map( (p,i) => {
+                            {this.props.people.map( (p,i) => {
                                 return(<div className="person">
                                     {p.name}
+                                    {this.props.displayPeopleAs.map( (i)=> {
+                                        return(p[i])+" "
+                                    })}
                                 </div>)
                             })}
                         </div>
                         
                         {d.job ? 
                         <div className="col-xs-12 section people row">
-                            <i className="fas fa-info-circle"></i><div className="person">Part of job: {d.job.name}</div>
+                            <i className="fas fa-info-circle"></i><div className="person">Part of job: {d.job.idRef}</div>
      
                         </div>
                         :

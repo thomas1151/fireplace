@@ -3,6 +3,7 @@
 @import 'flexboxgrid.css'; 
 // @import "colours.less";
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,300|Roboto:300,400,700");
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
 
 @main: #00537F;
 @light: #ede6e3;
@@ -534,6 +535,19 @@ button.button-remove{
         width: 100%;
         padding: .2em 0;
         color: @complementary;
+    }
+}
+.button-content-wrap{
+    font-weight: 700;
+    margin: 0 1em;
+    height: 100%;
+    p{
+        font-size: inherit;
+        display: inline-block;
+        padding: 0 .75em 0 0;
+    }
+    i{
+        padding: 1em;
     }
 }
 .shortcutList{
@@ -1068,6 +1082,7 @@ margin-left: -198px;
         ActionSelection
 
 ===============================*/
+
 .actionSelection{
     transition: .3s all;
     position: fixed;
@@ -1088,19 +1103,7 @@ margin-left: -198px;
             margin-left: 0 0 .25em 0;
         }
     }
-    .button-content-wrap{
-        font-weight: 700;
-        margin: 0 1em;
-        height: 100%;
-        p{
-            font-size: inherit;
-            display: inline-block;
-            padding: 0 .75em 0 0;
-        }
-        i{
-            padding: 1em;
-        }
-    }
+
     .elements{
         padding: .5em;
         .element{
@@ -1248,6 +1251,9 @@ margin-left: -198px;
         text-align: left;
         padding: 1em;
     }
+    table .right-align{
+        font-family: 'Source Code Pro', monospace;
+    }
     .address-wrapper{
         text-align: left;
         padding: 1em 0;
@@ -1258,9 +1264,9 @@ margin-left: -198px;
     &.a4{
         max-width: 100%;
         width: 21cm;
-        height: 29.7cm; 
+        min-height: 29.7cm; 
 
-        size: a4;
+        // size: a4;
         margin: 1em auto;
     }
 }
@@ -1272,6 +1278,11 @@ margin-left: -198px;
         Invoice Page
 
 ============================= */
+.job-info-bar{
+    padding: 1em;
+    width: 100%;
+    background: #f6f6f6;
+}
 @import url('https://fonts.googleapis.com/css?family=Poppins:400|600');
 .header{
     background: #f6f6f6;
@@ -1362,7 +1373,6 @@ margin-left: -198px;
         text-align: center;
         padding: 1em 0 0 0;
         img{
-            filter: invert(1);
         }
     }
 }
@@ -1372,9 +1382,19 @@ margin-left: -198px;
     position: relative;
     .header{
         padding: .5em;
+        img{
+            max-width: 7em;
+        }
     }
     .invoice-address,.job-address{
         padding: 0;
+    }
+    .job-details-wrap{
+        font-size: 80%;
+
+    }
+    &.a4 .body table{
+        font-size: 80%;
     }
     .body{
         table{
@@ -1416,6 +1436,10 @@ margin-left: -198px;
         text-transform: uppercase;
         margin-bottom: .5em;
     }
+    .notes{
+        text-align: left;
+        font-size: 85%;
+    }
     .job-address-section{
         text-align: left;
     }
@@ -1441,9 +1465,17 @@ margin-left: -198px;
         width: 100%;
         color: #555;
         padding: 1.5em;
+        font-size: 80%;
+        .footer-content-wrapper{
+            display: flex;
+        }
         .footer-section{
-            width: 50%;
-            display: inline-block;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            line-height: 1.15em;
+            // width: 50%;
+            // display: inline-block;
 
         }
     }
@@ -1456,14 +1488,14 @@ margin-left: -198px;
 }
 
 
-@media (min-width: 768px) { 
+@media (min-width: 768px), only print{ 
     .document .job-details-wrap{
-        padding: 1em 4em;
+        padding: 1em 6em;
     }
     .document{
         .body{
+            padding: 1em 4em;
             table{
-                padding: 1em 4em;
                 overflow: none;
             }
         }
@@ -1473,11 +1505,10 @@ margin-left: -198px;
     }
     .header .header-content-wrapper{
         display: flex;
-        padding: 1.5em;
+        padding: 1.5em 2.5em;
     }
     .header .logo-wrapper{
-        padding: 2em 1em 0 0;
-        
+        padding: 1em 1em 0 0;        
     }
     .address-wrapper{
         padding: 2em 0;
@@ -1583,6 +1614,7 @@ margin-left: -198px;
             }
             .icon-holder.for-input{
                 border-radius: 0 .25em .25em 0;
+ 
                 
                 background: @light;
                 border: 1px solid rgba(250,250,250,1);
@@ -1631,6 +1663,37 @@ margin-left: -198px;
 
 
 }
+@media print { 
+ /* All your print styles go here */
+    body{
+        visibility: hidden;
+        background: transparent
+    }
+    *{
+        visibility: hidden;
+    }
+    .toPrint{
+        & *{
+            visibility: visible;
+        }
+        &.document{
+            margin: 0;
+            min-height: 100%;
+            height: auto;
+            // padding: 0;
+        }
+        position: fixed;
+        margin: 0;
+        padding: 0;
+        left: 0;    
+        top: 0;
+        visibility: visible;
+        width: 100%;
+
+    }
+
+}
+
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { }

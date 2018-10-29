@@ -1,0 +1,39 @@
+{
+    "application-name": "Fireplace 2.0",
+    "application-style": {
+        "theme": "#e84118",
+        "orange": "#FF8B00",
+        "main": "#00537F",
+        "purple": "#216ba5",
+        "oldmain": "#f11818",
+        "light": "#ede6e3",
+        "dark": "#36382e",
+        "complementary": "#0097e6"
+    },
+    "organisation": {
+        "name": "North Eastern Tree Company",
+        "address": {
+            "line1": "1 Hudson Street",
+            "line2": "Ferryhill",
+            "postcode": "DL17 8LZ"
+        },
+        "financial": {
+            "account_name": [
+                "Acc. Name",
+                "Campbell Sinclair T/A North Eastern Tree Company"
+            ],
+            "account_number": [
+                "Acc. No",
+                "12956689"
+            ],
+            "sort_code": [
+                "Sort Code",
+                "04-00-04"
+            ]
+        },
+        "online": {
+            "website": "http://netree.co.uk"
+        },
+        "logo": "images/netreelogo.png"
+    }
+}

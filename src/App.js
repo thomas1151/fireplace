@@ -14,8 +14,24 @@ import {
   Link
 } from 'react-router-dom';
 
+import { SrcContext } from "./contexts/api-context";
 
-
+const InvoicesWithSrcContext = (props) =>{
+    return(
+        <SrcContext.Consumer>
+            {src =>
+            <Invoices src={src} {...props}/>}
+        </SrcContext.Consumer>
+    )
+}
+const HomeWithSrcContext = (props) =>{
+      return(
+        <SrcContext.Consumer>
+            {src =>
+            <Home src={src} {...props}/>}
+        </SrcContext.Consumer>
+    )
+}
 class App extends Component {
   constructor() {
     super();
@@ -52,8 +68,8 @@ class App extends Component {
         <div className="app-content row">
 
           {/* <Route path='/' render={RenderableHome}/> */}
-          <Route path='/invoices' render={routeProps => <Invoices {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
-          <Route exact path='/' render={routeProps => <Home {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
+          <Route path='/invoices' render={routeProps => <InvoicesWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
+          <Route exact path='/' render={routeProps => <HomeWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
 
         </div>
         </div>
