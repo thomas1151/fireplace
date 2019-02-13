@@ -18,9 +18,9 @@
             "postcode": "S10 5BA"
         },
         "financial": {
-            "account_name": ["Acc. Name", "Thomas Barratt"],
-            "account_number": ["Acc. No", "12956689"],
-            "sort_code": ["Sort Code", "04-00-04"]
+            "account_name":  "Thomas Barratt",
+            "account_number": "12956689",
+            "sort_code": "04-00-04"
         },
         "online": {
             "website": "http://thomasbarratt.co.uk",

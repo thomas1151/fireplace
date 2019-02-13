@@ -1,0 +1,18 @@
+{   
+    "application-name": "Fireplace instance name (e.g Fireplace, LCARSS etc)",
+    "application-style.theme": "Main theme colour",
+    "application-style.light": "Light colour to use in theme",
+    "application-style.dark": "Dark colour to use in theme",
+    "application-style.complementary": "Complementary colour to use in theme",
+    "organisation.name": "Name of organisation",
+    "organisation.address.line1": "Organisation address line 1",
+    "organisation.address.line2": "Organisation address line 2",
+    "organisation.address.postcode": "Organisation postcode",
+    "organisation.financial.account_name": "Account name",
+    "organisation.financial.account_number": "Account number",
+    "organisation.financial.sort_code": "Sort Code",
+    "organisation.online.website": "Website Address",
+    "organisation.online.twitter": "Twitter URL",
+    "organisation.online.facebook": "Facebook URL",
+    "organisation.logo": "Logo address (location on server, maybe http?)"
+}

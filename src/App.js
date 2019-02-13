@@ -7,28 +7,41 @@ import { ActionBox } from './components/ActionBox';
 import { ShortcutsBar } from './components/ShortcutsBar';
 import { Invoices } from './views/Invoices';
 import { Home } from './views/Home';
+import { DefaultView } from './views/DefaultView';
+import { Login } from './views/Login';
+import { ModifyFireplace } from './views/ModifyFireplace';
 
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  Switch
 } from 'react-router-dom';
 
 import { SrcContext } from "./contexts/api-context";
 
-const InvoicesWithSrcContext = (props) =>{
-    return(
-        <SrcContext.Consumer>
-            {src =>
-            <Invoices src={src} {...props}/>}
-        </SrcContext.Consumer>
-    )
-}
-const HomeWithSrcContext = (props) =>{
+
+const LoginWithSrcContext = (props) =>{
       return(
         <SrcContext.Consumer>
             {src =>
-            <Home src={src} {...props}/>}
+            <Login src={src} {...props}/>}
+        </SrcContext.Consumer>
+    )
+}
+const DefaultWithSrcContext = (props) =>{
+      return(
+        <SrcContext.Consumer>
+            {src =>
+            <DefaultView src={src} {...props}/>}
+        </SrcContext.Consumer>
+    )
+}
+const ModifyFireplaceWithSrcContext = (props) =>{
+      return(
+        <SrcContext.Consumer>
+            {src =>
+            <ModifyFireplace src={src} {...props}/>}
         </SrcContext.Consumer>
     )
 }
@@ -62,17 +75,13 @@ class App extends Component {
 
     return (
       <Router>
+
       <div className="App">
-        <SearchBar isMobile={isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
-        <div className="app-content-wrapper">
-        <div className="app-content row">
-
-          {/* <Route path='/' render={RenderableHome}/> */}
-          <Route path='/invoices' render={routeProps => <InvoicesWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
-          <Route exact path='/' render={routeProps => <HomeWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
-
-        </div>
-        </div>
+        <Switch>
+          <Route exact path='/login' render={routeProps => <LoginWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
+          <Route exact path='/modify-fireplace' render={routeProps => <ModifyFireplaceWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
+          <Route component={DefaultWithSrcContext}/>
+        </Switch>
       </div>
       </Router>
     );

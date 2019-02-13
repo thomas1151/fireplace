@@ -160,11 +160,24 @@ const src_autocomplete = [
 ]
 // Teach Autosuggest how to calculate suggestions for any given input value.
 const getSuggestions = (value,src) => {
+
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-  return inputLength === 0 ? [] : src.filter(lang => {
-    return(lang['data'][0][1].toLowerCase().slice(0, inputLength) === inputValue)
+  return (inputLength < 3 || src.length === 0) ? [] : src.filter(lang => {
+        let found = false;
+        for (var key in Object.keys(lang.data)) {
+        if (typeof (lang['data'][key][1]) === 'string'){
+                if (lang['data'][key][1].toLowerCase().slice(0, inputLength) === inputValue){
+                    found = true;
+                    break;
+                    // return lang['data'][i][1].toLowerCase().slice(0, inputLength);
+                }
+            }
+        }
+        if(found){
+            return lang;
+        }
   });
 };
 
@@ -177,10 +190,9 @@ const renderSuggestion = function(suggestion){
 
     return(
           <div>
-
             <div className={"suggestion-content-wrapper"}>
                 <p className="title">{suggestion['data'][0][1] }   {suggestion["other"].length== 0 ? null:<span>{suggestion["other"]}</span>}</p>
-                <p>  {suggestion['data'].hasOwnProperty(1) ? suggestion['data'][1][1]:null}</p>
+                <p>  {suggestion['data'].hasOwnProperty(1) ? (typeof(suggestion['data'][1][1]) === "string" ? suggestion['data'][1][1]: suggestion['data'][1][1][ Object.keys(suggestion['data'][1][1])[0]] ) :null}</p>
             </div>
             </div>
     )
@@ -223,6 +235,7 @@ export class ActionPerson extends Component{
         if (this.props.debug) {
             var a = eval(("src_" + this.props.src))
         }else{
+            var a = this.props.src;
         }
         return a;
     }
@@ -248,7 +261,7 @@ export class ActionPerson extends Component{
 
     onSuggestionSelected(e,s){
         if(this.props.onSelectedForParent){
-            this.props.onSelectedForParent(s);
+            this.props.onSelectedForParent(s, this.props.id);
         }
     }
     // Autosuggest will call this function every time you need to clear suggestions.

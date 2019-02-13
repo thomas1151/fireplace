@@ -10,6 +10,8 @@ import { InvoiceInbox } from './InvoiceInbox';
 import { ViewJob } from '../components/ViewJob';
 import { Redirect } from 'react-router-dom';
 import jsPDF from 'jspdf';
+import { Loading } from '../components/Loading';
+
 import {
     BrowserRouter as Router,
     Route,
@@ -18,7 +20,7 @@ import {
 import axios from "axios";
 
 const feed = [{
-        "id": "REW190918",
+        "idRef": "REW190918",
         "organisation": "Thomas Barratt Design and Development",
         "type": "invoice",
         "date": "Sun Dec 17 1995 03:24:00 GMT",
@@ -66,7 +68,7 @@ const feed = [{
 
             }
         ],
-        "items": [{
+        "actions": [{
             "id": "A251295",
             "description": "Making thirsty pretzels",
             "dateStarted": "Sun Dec 25 1995 03:24:00 GMT",
@@ -162,7 +164,7 @@ const feed = [{
     },
 
     {
-        "id": "REW250918",
+        "idRef": "REW250918",
         "organisation": "Thomas Barratt Design and Development",
         "type": "invoice",
         "date": "Sun Dec 17 1995 03:24:00 GMT",
@@ -206,7 +208,7 @@ const feed = [{
             }
         ],
         "notes": "As agreed, prompt payment would be appreciated.",
-        "items": [{
+        "actions": [{
             "id": "A251295",
             "description": "Making thirsty pretzels",
             "dateStarted": "Fri Aug 24 2018 03:24:00 GMT",
@@ -296,7 +298,7 @@ const feed = [{
 
     },
     {
-        "id": "REW280818",
+        "idRef": "REW280818",
         "organisation": "Thomas Barratt Design and Development",
         "type": "invoice",
         "date": "Sun Dec 17 1995 03:24:00 GMT",
@@ -340,7 +342,7 @@ const feed = [{
                 "type":"client",
             }
         ],
-        "items": [{
+        "actions": [{
             "id": "A251295",
             "description": "Making thirsty pretzels",
             "dateStarted": "Sun Dec 25 1995 03:24:00 GMT",
@@ -431,7 +433,7 @@ const feed = [{
     },
 
     {
-        "id": "REW250918",
+        "idRef": "REW250918",
         "organisation": "Thomas Barratt Design and Development",
         "type": "invoice",
         "date": "Sun Dec 17 1995 03:24:00 GMT",
@@ -471,7 +473,7 @@ const feed = [{
                 "organisation": "Savilles",
             }
         ],
-        "items": [{
+        "actions": [{
             "id": "A251295",
             "description": "Making thirsty pretzels",
             "dateStarted": "Sun Dec 25 1995 03:24:00 GMT",
@@ -561,7 +563,7 @@ const feed = [{
 
     },
     {
-        "id": "1SAW100918",
+        "idRef": "1SAW100918",
         "organisation": "Thomas Barratt Design and Development",
         "type": "invoice",
         "date": "Mon Sep 10 2018 11:20:00 GMT",
@@ -606,7 +608,7 @@ const feed = [{
                 "type": "client"
             }
         ],
-        "items": [
+        "actions": [
             {
                 "id": "A251295",
                 "description": "Order form rewrite as requested.",
@@ -758,7 +760,7 @@ export class Invoices extends Component{
             </React.Fragment>
             )
         }else{
-            return "Loading!";
+            return <Loading />;
         }
     }
 }

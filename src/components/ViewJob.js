@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link,State, Route} from 'react-router';
+import CONFIGLABELS from '../ConfigLabels.json';
 import moment from 'moment';
 import { JobInfoBar } from './JobInfoBar';
 import ReactHtmlParser from 'react-html-parser';
@@ -15,6 +16,7 @@ export class ViewJob extends Component{
             console.log(d);
             let dateToday = new Date();
             let total = 0;
+            d.actions.sort(function (a, b) { return Date.parse(a.startDate) - Date.parse(b.startDate) });
             d.actions.forEach(function(el,i){
                                       total += el.price * el.quantity
                                 })
@@ -52,10 +54,9 @@ export class ViewJob extends Component{
                                 <div className="job-section-title">
                                     Your Ref
                                 </div>
-                                <div className="line">Thomas Barratt</div>
-                                {d.people.map( (el,i)=>{
-                                    if(el.type=="provider"){
-                                        return(<div className="line">{el.name}</div>)
+                                {d.people.map( (p,i)=>{
+                                    if(p.refType.id == 2){
+                                        return(<div className="line">{p.person.name}</div>)
                                     }
                                 })}
                             </div>
@@ -63,11 +64,9 @@ export class ViewJob extends Component{
                                 <div className="job-section-title">
                                     Our Ref
                                 </div>
-                                <div className="line">Lee Mellor</div>
-
-                                {d.people.map( (el,i)=>{
-                                    if(el.type=="client"){
-                                        return(<div className="line">{el.name}</div>)
+                                {d.people.map( (p,i)=>{
+                                    if(p.refType.id == 1){
+                                        return(<div className="line">{p.person.name}</div>)
                                     }
                                 })}
                             </div>
@@ -79,7 +78,7 @@ export class ViewJob extends Component{
                                         Invoice address
                                     </div>
                                     {Object.values(d.invoiceAddr).map( (el,i)=>{
-                                        if (Object.keys(d.invoiceAddr)[i] != 'url') {
+                                        if (Object.keys(d.invoiceAddr)[i] != 'url' && Object.keys(d.invoiceAddr)[i] != 'id') {
                                             return(<div className="line">{el}</div>)
                                         }
                                     })}
@@ -89,7 +88,7 @@ export class ViewJob extends Component{
                                         Job address
                                     </div>
                                     {Object.values(d.jobAddr).map( (el,i)=>{
-                                        if(Object.keys(d.jobAddr)[i] != 'url'){
+                                        if (Object.keys(d.invoiceAddr)[i] != 'url' && Object.keys(d.invoiceAddr)[i] != 'id') {
                                             return(<div className="line">{el}</div>)
                                         }
                                     })}
@@ -109,7 +108,9 @@ export class ViewJob extends Component{
                                 </tr>
                             </thead>
                             <tbody>
+                        {console.log(d.actions)}
                         {d.actions.map( (el,i)=>{
+                            console.log(el);
                             let endDate = false
                             let startDate = new Date(el.startDate);
                                 let date = startDate.toLocaleDateString();
@@ -117,26 +118,26 @@ export class ViewJob extends Component{
                                 let endDate = new Date(el.dateStarted).toLocaleDateString(); 
                             }
                             return(
-                            <tr>
-                                <td>
-                                    {date}
-                                    {endDate? '- '+endDate : null}
+                                <tr>
+                                    <td>
+                                        {date}
+                                        {endDate? '- '+endDate : null}
+                                        
+                                    </td>
+                                    <td>
+                                        { ReactHtmlParser(el.work)}
+                                    </td>
+                                    <td className="right-align">
+                                        {parseFloat(el.price).toFixed(2)}
+                                    </td>
+                                    <td className="right-align">
+                                        {parseFloat(el.quantity).toFixed(2)} 
+                                    </td>
+                                    <td className="right-align">
+                                        { (el.quantity * el.price).toFixed(2) }
+                                    </td>
                                     
-                                </td>
-                                <td>
-                                    { ReactHtmlParser(el.work)}
-                                </td>
-                                 <td className="right-align">
-                                    {parseInt(el.price).toFixed(2)}
-                                </td>
-                                <td className="right-align">
-                                    {parseInt(el.quantity).toFixed(2)} 
-                                </td>
-                                <td className="right-align">
-                                    { (el.quantity * el.price).toFixed(2) }
-                                </td>
-                                
-                            </tr>
+                                </tr>
                             )
                         })}
                         </tbody>
@@ -182,13 +183,13 @@ export class ViewJob extends Component{
                     <div className="footer">
                         <div class="footer-content-wrapper">
                             <div class="footer-section location left-align">
-                            {Object.values(this.props.config.organisation.financial).map((el, i) => <div className="location_line">{el[0]}: {el[1]} </div>)}
+                            {Object.values(this.props.config.organisation.financial).map((el, i) => <div className="location_line">{el} </div>)}
                             </div>
                             <div class="footer-section location left-align"> 
                                 {Object.values(this.props.config.organisation.address).map( (el,i) => <div className="location_line">{(el)} </div> )}
                             </div>
                             <div class="footer-section social-media right-align row">
-                                {Object.entries(this.props.config.organisation.online).map((el, i) => <div className="social_line"><div >{(el[1])}</div></div>)}
+                                {Object.entries(this.props.config.organisation.online).map((el, i) => <div className="social_line"><div >{(el)}</div></div>)}
                             </div>
                         </div>
                     </div>

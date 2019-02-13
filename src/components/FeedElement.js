@@ -95,9 +95,8 @@ export class FeedElement extends Component{
 
     render(){
             const d = this.props.data;
-            console.log(d);
-            // let inputProps = {...this.props.inputProps};
-            return(<div className={"feed-element "+(d.selected ? 'selected' : '')+(d.job ? 'withJob' : '')}>
+             // let inputProps = {...this.props.inputProps};
+            return(<div className={"feed-element "+(d.selected ? 'selected' : '')+(d.job ? ' withJob' : '')}>
                     <div className="row">
                         {
                             this.state.redirect ? <Redirect to={this.props.onMoreUrl} /> : null
@@ -142,12 +141,11 @@ export class FeedElement extends Component{
 
                         <div className="col-xs-12 section people row">
                             <i className="fa fa-user-circle"></i>
-                            
                             {this.props.people.map( (p,i) => {
                                 return(<div className="person">
-                                    {p.name}
                                     {this.props.displayPeopleAs.map( (i)=> {
-                                        return(p[i])+" "
+                                       console.log(Object.keys(p).length)
+                                       return(Object.keys(p).length <= 2 ?  (p.person[i])+" " : (p[i])+" ")
                                     })}
                                 </div>)
                             })}

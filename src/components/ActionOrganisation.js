@@ -12,69 +12,57 @@ export class ActionLocation extends Component {
         this.handleLocationAutofill = this.handleLocationAutofill.bind(this);
         this.onChangeForParent = this.onChangeForParent.bind(this);
         this.state ={
-            line1:undefined,
-            line2:undefined,
-            line3:undefined,
-            line4:undefined,
-            postcode:undefined,
-            isLoaded: false
+
         }
     }
 
      componentDidMount() {
-         if(!this.state.isLoaded){
-            let self = this;
-            axios.get(this.props.src.url + 'locations/')
-                .then(function (response) {
-                    let data = response.data;
-                    // handle success
+         let self = this;
+         axios.get(this.props.src.url + 'locations/')
+             .then(function (response) {
+                 let data = response.data;
+                 // handle success
 
-                    let suggestData = []
+                 let suggestData = []
 
 
-                    data.map((option, i) => {
-                        suggestData.push({
-                            id: option.id,
-                            data: [],
-                            other: '1'
-                        })
-                        for (var key in option) {
-                            if (option.hasOwnProperty(key)) {
-                                switch (key) {
-                                    case 'line1':
-                                        suggestData[suggestData.length - 1]['data'].unshift([key, option[key]]);
-                                        break;
-                                    case 'line2':
-                                        suggestData[suggestData.length - 1]['data'].splice(1, 0, [key, option[key]]);
-                                        break;
+                 data.map((option, i) => {
+                     suggestData.push({
+                         id: option.id,
+                         data: [],
+                         other: '1'
+                     })
+                     for (var key in option) {
+                         if (option.hasOwnProperty(key)) {
+                             switch (key) {
+                                 case 'line1': suggestData[suggestData.length - 1]['data'].unshift([key, option[key]]); break;
+                                case 'line2': suggestData[suggestData.length - 1]['data'].splice(1,0,[key, option[key]]); break;
 
-                                    default:
-                                        suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
-                                }
-                            }
-                        }
-                    })
-                    console.log(suggestData);
-                    self.setState({
-                        isLoaded: true,
-                        items: data,
-                        suggestData: suggestData,
-                        response
-                    });
-                })
-                .catch(function (error) {
-                    // handle error
-                    self.setState({
-                        isLoaded: true,
-                        error
-                    });
-                    console.log(error);
-                })
-                .then(function () {
-                    // always executed
-                });
-         }
-        
+                                 default:
+                                     suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
+                             }
+                         }
+                     }
+                 })
+                 console.log(suggestData);
+                 self.setState({
+                     isLoaded: true,
+                     items: data,
+                     suggestData: suggestData,
+                     response
+                 });
+             })
+             .catch(function (error) {
+                 // handle error
+                 self.setState({
+                     isLoaded: true,
+                     error
+                 });
+                 console.log(error);
+             })
+             .then(function () {
+                 // always executed
+             });
      }
 
 

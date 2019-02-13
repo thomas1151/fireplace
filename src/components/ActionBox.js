@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SingleDateInput } from './SingleDateInput';
 import { RangeDateInput } from './RangeDateInput';
 import { RemovableSuggestable } from './RemovableSuggestable';
+import axios from "axios";
 
             // <div>
             //   <button onClick={this.notify}>Notify !</button>
@@ -24,11 +25,15 @@ export class ActionBox extends Component{
                 formActive: false,
                 userForms: [],
                 people: [],
+                existing_people: [],
                 description: '',
                 quantity: '',
                 price: '',
                 start_date: new Date(),
                 end_date: undefined,
+                isLoaded: false,
+                items: [],
+                suggestData: []
 
             };
             this.handleAddUser = this.handleAddUser.bind(this);
@@ -55,12 +60,66 @@ export class ActionBox extends Component{
             this.handleRemoveLocation = this.handleRemoveLocation.bind(this);
             this.handleRemove = this.handleRemove.bind(this);
     }
+
+    componentDidMount() {
+        let self = this;
+
+        axios.get(this.props.src.url + 'actions/')
+            .then(function (response) {
+                let data = response.data;
+
+                let suggestData = []
+
+
+                data.map((option, i) => {
+                    suggestData.push({
+                        id: option.idRef,
+                        data: [],
+                        other: '1'
+                    })
+                    for (var key in option) {
+                        if (option.hasOwnProperty(key)) {
+                            switch (key) {
+                                case 'work':
+                                    suggestData[suggestData.length - 1]['data'].unshift([key, option[key]]);
+                                    break;
+                                case 'location':
+                                    suggestData[suggestData.length - 1]['data'].unshift([key, option[key].line1]);
+                                    break;
+                                default:
+                                    suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
+                            }
+                        }
+                    }
+                })
+
+                self.setState({
+                    isLoaded: true,
+                    items: data,
+                    suggestData: suggestData,
+                    response
+                });
+            })
+            .catch(function (error) {
+                // handle error
+                self.setState({
+                    isLoaded: false,
+                    error
+                });
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+    }
+
+
+
     notify = (content) => toast(content);
 
     handleAddUser(){
         if(!this.state.newUserForm){
             this.setState({newUserForm:true});
-            console.log("seeting newuser");
         }
         this.addPerson();
 
@@ -112,9 +171,10 @@ export class ActionBox extends Component{
                     key={i} 
                     assigned={el} 
                     id={i} 
-                    src={'languages'} 
+                    src={this.props.src} 
                     onChangeForParent={this.handlePersonChange.bind(this)} 
-                    debug={true} 
+                    onSelectedForParent={this.handlePersonSelected.bind(this)} 
+                    debug={false} 
                     existingPeopleLength={this.state.people.length} 
                     onRemove={this.removeNewPerson}
                     inputProps={{button:'button-remove col-xs',suggestable:'col-xs-6'}}
@@ -133,7 +193,7 @@ export class ActionBox extends Component{
 
     
     createLocationForm(){
-        return(<ActionLocation onChangeForParent={this.handleLocationChange.bind(this)}>
+        return ( <ActionLocation src={this.props.src} onChangeForParent={this.handleLocationChange.bind(this)}>
                     <button className="button-remove col-xs" onClick={this.handleRemoveLocation}><i className="fas fa-times"></i></button>
                 </ActionLocation>    
             )
@@ -249,9 +309,17 @@ export class ActionBox extends Component{
     }
     handlePersonChange(i, value) {
         let people = [...this.state.people];
+
         people[i] = value;
         this.setState({ people });
     }
+    handlePersonSelected(person,i){
+        let existing_people = [...this.state.existing_people];
+        existing_people[i] = person;
+
+        this.setState({existing_people});
+    }
+
     handleStartDateChange(value){
         this.setState({start_date:value})
     }
@@ -275,11 +343,12 @@ export class ActionBox extends Component{
         let locations = this.state.location
         if(i === undefined){
 
-            locations.line1 = values[0]
-            locations.line2 = values[1]
-            locations.line3 = values[2]
-            locations.line4 = values[3]
-            locations.postcode = values[4]
+            locations.line1 = values.line1
+            locations.line2 = values.line2
+            locations.line3 = values.line3
+            locations.line4 = values.line4
+            locations.postcode = values.postcode
+            locations.id    = values.id
             this.setState({location:locations})
         }else{
             locations[[i]] = values;
@@ -300,9 +369,10 @@ export class ActionBox extends Component{
     }
     removeNewPerson(i){
         let people = [...this.state.people];
-
+        let existing_people = [...this.state.existing_people];
+        existing_people.splice(i,1);
         people.splice(i,1);
-        this.setState({ people });
+        this.setState({ people, existing_people });
         if(people.length < 1){
             this.setState({newUserForm:false});
         }
@@ -319,7 +389,8 @@ export class ActionBox extends Component{
     }
     constructFormJSON(){
         let data = {}
-            data['people'] = this.state.people;
+            data['manual_entrance_people'] = this.state.people;
+            data['existing_people'] = this.state.existing_people;
             data['description'] = this.state.description;
             data['quantity'] = this.state.quantity;
             data['price'] = this.state.price;
@@ -334,8 +405,19 @@ export class ActionBox extends Component{
         this.setState({formActive:false});
     }
     handleSubmit(event) {
-        console.log(this.constructFormJSON());
+
         event.preventDefault();
+         axios.post(this.props.src.url + 'actions/', this.constructFormJSON())
+             .then(function (response) {
+                 let data = response.data;
+                 console.log(data);
+             })
+             .catch(function (error) {
+             })
+             .then(function () {
+                 // always executed
+             });
+
     }
 
 //   render() {
@@ -364,7 +446,15 @@ export class ActionBox extends Component{
                         </div> */}
                         <div className="new-action col-xs">
 
-                            <ActionPerson className="description-box" renderComponent={'textarea'} value={1}  id={1} src={'autocomplete'} debug={true} onChangeForParent={this.handleDescriptionChange} placeholder="Raising crowns over stonewalls and fencelines"/>
+                            {this.state.isLoaded && <ActionPerson 
+                                                        className="description-box" 
+                                                        renderComponent={'textarea'} 
+                                                        value={1}  
+                                                        id={1} 
+                                                        src={this.state.suggestData}
+                                                        debug={false} 
+                                                        onChangeForParent={this.handleDescriptionChange} 
+                                                        placeholder="Raising crowns over stonewalls and fencelines"/>}
                             {this.state.formActive ?
                                 
                                 this.createForm() 
@@ -373,7 +463,7 @@ export class ActionBox extends Component{
 
                                 null
                             }
-                            {/* </textarea> */}
+
                            
                         </div>
                     </div>

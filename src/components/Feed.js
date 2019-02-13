@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {FeedElement} from './FeedElement';
 import { ActionSelection } from './ActionSelection';
 import axios from 'axios';
+import { Loading } from './Loading';
 const feed = [
     {
         "id": "A171295",
@@ -151,34 +152,35 @@ export class Feed extends Component{
             this.handleRemoveProperty = this.handleRemoveProperty.bind(this);            
             this.handleChangeAllOfProperty = this.handleChangeAllOfProperty.bind(this);            
             this.handleProcessSelected = this.handleProcessSelected.bind(this);
-
+            let self = this;
+            axios.get(this.props.src.url + 'actions/')
+                .then(function (response) {
+                    let data = response.data;
+                    // handle success
+                    self.setState({
+                        isLoaded: true,
+                        items: (data)
+                            .sort((a, b) => new Date(b.created) - new Date(a.created)),
+                        response
+                    });
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+                    self.setState({
+                        isLoaded: true,
+                        error
+                    });
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
 
 
     }
     componentDidMount() {
-        let self = this;
-        axios.get(this.props.src.url + 'actions/')
-            .then(function (response) {
-                let data = response.data;
-                // handle success
-                self.setState({
-                    isLoaded: true,
-                    items: data,
-                    response
-                });
-                console.log(response);
-            })
-            .catch(function (error) {
-                // handle error
-                self.setState({
-                    isLoaded: true,
-                    error
-                });
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
+      
     }
     getSelected(){
         let a = this.state.items.filter(function(val,idx){
@@ -239,18 +241,18 @@ export class Feed extends Component{
                                     onRemove={this.handleRemoveProperty} 
                                     onAdd={this.handleNewProperty}
                                     people={f.people}
-                                    displayPeopleAs={['fname','name']}
+                                    displayPeopleAs={['name']}
                                     />)
                     }) }
                     {
                         selected.length > 0 ? 
-                    <ActionSelection isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected}/>
+                    <ActionSelection src={this.props.src} isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected}/>
                         :
                         null
                     }
                 </div>)
             }else{
-                return("Loading");
+                return( <Loading/> );
             }
     }
 }

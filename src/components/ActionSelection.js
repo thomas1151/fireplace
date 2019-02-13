@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ActionPerson } from './ActionPerson';
 import { JobForm } from './JobForm';
+import axios from "axios";
 
 export class ActionSelection extends Component{
 
@@ -10,7 +11,7 @@ export class ActionSelection extends Component{
         this.handleRemove = this.handleRemove.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleJobChange = this.handleJobChange.bind(this);
-        this.exportFormJSON = this.exportFormJSON.bind(this);
+        this.exportFormJSON = this.constructFormJSON.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleNewJob = this.handleNewJob.bind(this);
         this.addActions = this.addActions.bind(this);
@@ -21,6 +22,7 @@ export class ActionSelection extends Component{
         this.onOrgChange = this.onOrgChange.bind(this);
         this.onPeopleChange = this.onPeopleChange.bind(this);
         this.onJobChange = this.onJobChange.bind(this);
+        this.handleSelected = this.handleSelected.bind(this);
         this.state ={jobLinkForm:false, job: {}}
     }
     totalPrice(){
@@ -49,6 +51,8 @@ onInvoiceAddrChange={this.onInvoiceAddrChange}
 onJobAddrChange={this.onJobAddrChange}
 onOrgChange={this.onOrgChange}
 onPeopleChange={this.onPeopleChange}
+src={this.props.src}
+handleSelected={this.handleSelected}
 handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={this.props.items}/>);
 
     }
@@ -79,21 +83,34 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
             </div>
         )
     }
-    exportFormJSON(){
+    constructFormJSON(){
         let d = {}
         d['items'] = this.props.items;
         d['job'] = this.state.job
         return d;
     }
-    handleSubmit(){
-        
+    handleSubmit(event){
         let data = this.exportFormJSON()
+
         if(this.state.jobLinkForm){
             this.props.onRemove("job", data.job.name, ['selected'], [true]);
             this.props.onRemove();
 
             //TODO: SEND;
-            this.setState({jobLinkForm:false});
+
+            event.preventDefault();
+            axios.post(this.props.src.url + 'jobs/', this.constructFormJSON())
+                .then(function (response) {
+                    let data = response.data;
+                    console.log(data);
+                    this.setState({jobLinkForm:false});
+
+                })
+                .catch(function (error) {})
+                .then(function () {
+                    // always executed
+                });
+
         }if(this.state.newJobForm){
             //
         }else{
@@ -176,7 +193,15 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
         prevJob[ [i] ] = val;
         this.setState({job:prevJob})
     }
-            // this.props.onOrgChange({
+    handleSelected(s, state_val) {
+        console.log(s);
+        let prevJob = this.state.job
+        prevJob[state_val] = s
+        this.setState({
+            job: prevJob
+        })
+    }
+    // this.props.onOrgChange({
             //     org: s.suggestion.data[0][1],
             //     invoice_address: locations
             // });
@@ -188,7 +213,7 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
                     {this.props.items.map((el, i) => (
                         <div className="element">
                         {/* <button className="button-remove pip" onClick={() => this.handleRemoveSingle(i)}><i className="fas fa-times"></i></button> */}
-                            <div className="wrap"><span>{el.id}: </span> {el.location.line1}</div>
+                            <div className="wrap"><span>{el.idRef}: </span> {el.location.line1}</div>
                         </div>
                     ))}
 
@@ -201,8 +226,6 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
                     </div>
                 </div>        
             </div>);         
-
-
     }
 }
 export default ActionSelection;

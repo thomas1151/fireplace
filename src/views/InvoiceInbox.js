@@ -8,6 +8,7 @@ import { FeedElement } from '../components/FeedElement';
 import { ActionSelection } from '../components/ActionSelection';
 import { ViewJob } from '../components/ViewJob';
 import { Redirect } from 'react-router-dom';
+import { Loading } from '../components/Loading';
 
 import {
     BrowserRouter as Router,
@@ -71,12 +72,12 @@ export class InvoiceInbox extends Component{
                                         ikey={f.idRef} 
                                         data={f} 
                                         key={f.idRef} 
-                                        badge={"#"+f.idRef}
+                                        badge={"#"+f.id}
                                         onRemove={this.handleRemoveProperty} 
                                         onAdd={this.handleNewProperty}
                                         onMoreUrl={"/invoices/"+f.idRef}
                                         people={f.people && f.people}
-                                        displayPeopleAs={ ['fname','lname']}
+                                        displayPeopleAs={ ['name']}
                                     />)
                         }) }
 

@@ -4,21 +4,22 @@ import { ActionPerson } from './ActionPerson';
 import { SingleDateInput} from './SingleDateInput';
 import { DropdownWithContext } from './DropdownWithContext';
 import { isEqual } from 'lodash';
-
-const people_types= [
-    {
-        label: <div><i className="fas fa-user"/>Provider</div>,
-        value: '1',
-    },
-    {
-        label: <div><i className="fas fa-user"/>Client</div>,
-        value: '2',
-    },
-    {
-        label: <div><i className="fas fa-times"/>Don't Show</div>,
-        value: '3',
-    },
-]
+import axios from "axios";
+import fetchSuggestions from "../logic/fetchSuggestions";
+// const people_types= [
+//     {
+//         label: <div><i className="fas fa-user"/>Provider</div>,
+//         value: '1',
+//     },
+//     {
+//         label: <div><i className="fas fa-user"/>Client</div>,
+//         value: '2',
+//     },
+//     {
+//         label: <div><i className="fas fa-times"/>Don't Show</div>,
+//         value: '3',
+//     },
+// ]
 export class JobForm extends Component{
     constructor(props) {
             super(props);
@@ -28,6 +29,7 @@ export class JobForm extends Component{
             this.handleJobAddrChange = this.handleJobAddrChange.bind(this);
             this.calcPeople = this.calcPeople.bind(this);
             this.onPeopleTypeChange = this.onPeopleTypeChange.bind(this);
+            this.handleSelected = this.handleSelected.bind(this);
 
             let jobAddr = this.actionAddressCalcEquality(this.props.selectedActions)
             let people = this.calcPeople()
@@ -48,6 +50,22 @@ export class JobForm extends Component{
             this.props.onDateChange(this.state.start_date);
             this.props.onPeopleChange(this.state.people)
     }
+
+    componentDidMount() {
+        let self = this;
+        fetchSuggestions(this.props.src.url, "organisation", [], self, "org");        
+        fetchSuggestions(this.props.src.url, "status-type", [], self, "statusType");
+        fetchSuggestions(this.props.src.url,"work-type",[],self,"workType");
+        fetchSuggestions(this.props.src.url, "ref-type", [], self, "refType");
+        let people_types = []
+        
+
+        this.setState({people_types: people_types})
+    }
+
+        
+
+
     handleChange(id,value){
         if(id!="organisation"){
             this.setState({ [id] :value});
@@ -101,17 +119,35 @@ export class JobForm extends Component{
         this.props.onJobAddrChange(locations)
 
     }
+    generatePeopleTypes(){
+        let people = []
+        for (let i = 0; i < this.state.refTypeSuggestData.length; i++){
+            let peep_type = {}
+
+            for (let l = 0; l < this.state.refTypeSuggestData[i].data.length; l++) {
+
+                switch (this.state.refTypeSuggestData[i].data[l][0]) {
+                    case 'id': peep_type["value"] = this.state.refTypeSuggestData[i].data[l][1]; break; 
+                    case 'name': peep_type["label"] =  <div><i className="fas fa-user"/>{this.state.refTypeSuggestData[i].data[l][1]}</div>; break; 
+                }
+            }
+            people.push(peep_type);
+        }
+        return people;
+    }
     handleOrgChange(s){
+        console.log(s);
         let locations = this.state.invoice_address
         locations={
-            line1:    s.suggestion.data[1][1],
-            line2:    s.suggestion.data[2][1],
-            line3:    s.suggestion.data[3][1],
-            line4:    s.suggestion.data[4][1],
-            postcode: s.suggestion.data[5][1],
+            line1:    s.suggestion.data[1][1].line1,
+            line2:    s.suggestion.data[1][1].line2,
+            line3:    s.suggestion.data[1][1].line3,
+            line4:    s.suggestion.data[1][1].line4,
+            postcode: s.suggestion.data[1][1].postcode,
+            id: s.suggestion.data[1][1].id
         }
-        this.props.onOrgChange({organisation: s.suggestion.data[0][1], invoice_address: locations});
-        this.setState({organisation: s.suggestion.data[0][1], invoice_address: locations})
+        this.props.onOrgChange({organisation: s.suggestion.data[4][1], invoice_address: locations});
+        this.setState({organisation: s.suggestion.data[4], invoice_address: locations})
 
     }
     actionAddressCalcEquality(acts){
@@ -188,6 +224,13 @@ export class JobForm extends Component{
         }
         return peeps;
     }
+    handleSelected(s, state_val) {
+        console.log(s);
+        this.setState({ [state_val+"_data"]:s.suggestion.id})
+        if(this.props.handleSelected){
+            this.props.handleSelected(s.suggestion.id,state_val);
+        }
+    }
     render(){
         return(
             <div className="jobForm">
@@ -198,28 +241,40 @@ export class JobForm extends Component{
                         <div className="section-title">
                             <p>Organisation and Invoice Address</p>
                         </div>
-                        <ActionPerson className="col-xs-12" id={'organisation'} src={'org'} onSelectedForParent={this.handleOrgChange} onChangeForParent={this.handleChange} debug={true}/>
-                        <ActionLocation id={'inv-addr'} onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.invoice_address}>
-                        </ActionLocation>
+                        {this.state.orgLoaded && 
+                        
+                            <React.Fragment>
+                                <ActionPerson className="col-xs-12" id={'organisation'} src={this.state.orgSuggestData} onSelectedForParent={this.handleOrgChange} onChangeForParent={this.handleChange} debug={false}/>
+                                <ActionLocation src={this.props.src} id={'inv-addr'} onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.invoice_address}>
+                                </ActionLocation> 
+                            </React.Fragment>
+                        }
                     </div>
                     <div className="org col-xs-12 col-sm-6">
                         <div className="section-title">
                             <p>Job Address</p>
                         </div>
-                        <ActionLocation values={this.state.job_address} id={'job-addr'} onChangeForParent={this.handleJobAddrChange.bind(this)}>
+                        <ActionLocation src={this.props.src} values={this.state.job_address} id={'job-addr'} onChangeForParent={this.handleJobAddrChange.bind(this)}>
                         </ActionLocation>
+                    </div>
+                    <div className="type col-xs-12 col-sm-6 row">
+                        <div className="section-title col-xs-12">
+                            <p>Status</p>
+                        </div>
+                        <p className="col-xs-3">This is a</p> 
+                        {this.state.statusTypeLoaded && <ActionPerson className="col-xs" id={'statusType'} src={this.state.statusTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false}/> }
+                    </div>
+                    <div className="type col-xs-12 col-sm-6 row">
+                        <div className="section-title col-xs-12">
+                            <p>Work Type</p>
+                        </div>
+                        {this.state.workTypeLoaded && <ActionPerson className="col-xs" id={'workType'} src={this.state.workTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false}/> }
                     </div>
                     <div className="date-wrapper col-xs-12 col-sm-6 row">
                         <div className="section-title col-xs-12">
                             <p>Date</p>
                         </div>
                         <SingleDateInput className="col-xs-12" isMobile={this.props.isMobile} onChangeForParent={this.handleDateChange} start_date={this.state.start_date}/>
-                    </div>
-                    <div className="type col-xs-12 col-sm-6 row">
-                        <div className="section-title col-xs-12">
-                            <p>Type</p>
-                        </div>
-                        <p className="col-xs-3">This is a</p> <ActionPerson className="col-xs" id={'type'} src={'type'} onChangeForParent={this.handleChange} debug={true}/>
                     </div>
                     <div className="type col-xs-12 col-sm-6 row">
                         <div className="section-title col-xs-12">
@@ -233,8 +288,8 @@ export class JobForm extends Component{
                             <p>People</p>
                         </div>
                         <div className="col-xs-12 row">
-                        {this.state.people.map( (el,i) =>{
-                            return(<DropdownWithContext id={i} items={people_types}
+                        {this.state.refTypeLoaded && this.state.people.map( (el,i) =>{
+                            return(<DropdownWithContext id={i} items={this.generatePeopleTypes()}
                                     customStyles={{
                                         container: 'col-xs-6 col-sm-3', 
                                         wrapper:   '',
@@ -244,7 +299,7 @@ export class JobForm extends Component{
                                     onSelect={this.onPeopleTypeChange}>
                                     <div className="info">
                                         <div className="title">{el.name}</div>
-                                        <div className="subtitle">{el.organisation}</div>
+                                        <div className="subtitle">{el.organisation.name}</div>
                                     </div>
                                     </DropdownWithContext>)
                          })}            
