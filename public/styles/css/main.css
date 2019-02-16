@@ -810,8 +810,6 @@ button.button-remove i {
 .login-wrapper {
   min-height: max-content;
   line-height: auto;
-  background-color: #DFDBE5;
-  height: 100%;
 }
 .login-wrapper * {
   box-sizing: border-box;
@@ -822,6 +820,10 @@ button.button-remove i {
   font-size: 2vh;
   line-height: 1em;
 }
+.login-wrapper.isStandalone {
+  background-color: #DFDBE5;
+  height: 100%;
+}
 .login-wrapper .intro-section {
   background: #FDC830;
   /* fallback for old browsers */
@@ -830,7 +832,7 @@ button.button-remove i {
   background: linear-gradient(to bottom, #FF9800, #FDC830);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   padding: 2.5em 1em;
-  border-radius: 1em 0 0 1em;
+  border-radius: 1em;
 }
 .login-wrapper .intro-section.formal {
   line-height: 1em;
@@ -847,7 +849,6 @@ button.button-remove i {
   line-height: 1em;
 }
 .login-wrapper .intro-section.formal .site-subtitle {
-  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   line-height: 1em;
 }
@@ -934,6 +935,7 @@ button.button-remove i {
   text-align: left;
   font-size: 5vh;
   color: #f6f6f6;
+  line-height: 1em;
 }
 .login-wrapper .site-description {
   text-align: left;
@@ -942,6 +944,7 @@ button.button-remove i {
   color: white;
   padding: 1em 0;
   font-size: 115%;
+  line-height: 1em;
 }
 .login-wrapper .site-logo {
   font-family: 'Poppins', sans-serif;
@@ -953,11 +956,12 @@ button.button-remove i {
 }
 .login-wrapper .site-subtitle {
   text-align: left;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   padding-top: .25em;
   font-size: 130%;
-  font-weight: 700;
+  font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2em;
 }
 .login-wrapper .description {
   font-size: 90%;
@@ -977,7 +981,8 @@ button.button-remove i {
   border: 0;
   border-bottom: 1px solid rgba(200, 200, 200, 0.8);
   padding: .6em;
-  font-size: 100%;
+  font-size: 110%;
+  font-weight: 200;
   color: #282828;
   transition: .2s all;
 }
@@ -1664,6 +1669,9 @@ button.button-remove i {
   }
   .total-price {
     margin-left: auto;
+  }
+  .login-wrapper .login-outer .box .row {
+    min-height: 30em;
   }
 }
 @media (min-width: 992px) {

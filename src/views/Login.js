@@ -26,15 +26,15 @@ export class Login extends Component{
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2><h3> {this.props.config.organisation.address.map( (el,i) => <div className="location_line">{Object.values(el)} </div> )}</h3></div></div>;
         return (
 
-        <div class="login-wrapper row center-xs middle-xs">
+        <div class="login-wrapper row center-xs middle-xs isStandalone">
             <div class="login-outer col-xs-9 col-md-6">
                 <div class="box">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-7 intro-section">
+                        <div class="col-xs-12 col-sm-6 intro-section">
                             <div class="titles-wrap">
                                 <div class="site-title">Finger Friendly Finances</div>
                                 {/* <div class="site-subtitle">Finger Friendly Finances</div> */}
-                                <div class="site-description">Fireplace is an advanced business management system designed to help you focus on what you do best.</div>
+                                <div class="site-subtitle">Fireplace is an advanced <span>business management system</span> designed to help you focus on what you do best.</div>
                                 {/* <div class="site-logo">Fireplace 2019</div> */}
                             </div>
                             {/* <div class="description">
@@ -44,7 +44,7 @@ export class Login extends Component{
 
                         </div>
 
-                        <div class="col-xs-12 col-sm-5 login-section">
+                        <div class="col-xs-12 col-sm-6 login-section">
                             <div class="titles-wrap">
 
                                 <div class="login-title">

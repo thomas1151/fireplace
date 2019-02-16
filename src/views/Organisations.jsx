@@ -12,6 +12,7 @@ import {
 } from 'react-router-dom';
 import { SrcContext } from "../contexts/api-context";
 import { DefaultView } from "./DefaultView";
+import { LoginWrapper } from '../components/LoginWrapper.jsx';
 
 
 
@@ -20,7 +21,16 @@ const OrgsHome = (props) => {
         <SrcContext.Consumer>
             {src =>
                 <DefaultView>
-                    <h1>Hello.</h1>
+                    <div>
+                        <h1>Hello.</h1>
+                        <LoginWrapper
+                            siteImg={"/" + CONFIG.organisation.logo}
+                            siteName={CONFIG.organisation.name}
+                            pageTitle={"Course Submission Form"}
+                            pageSubtitle={<div>for <span>North Eastern Tree Company</span></div>}
+                            pageHead={<div>Fill out the form below and we'll be in touch regarding your request.</div>}
+                        ></LoginWrapper>
+                    </div>
                 </DefaultView>   
             }
         </SrcContext.Consumer>

@@ -37,7 +37,8 @@ export class RequestACourse extends Component{
             siteName={CONFIG.organisation.name}
             pageTitle={"Course Submission Form"}
             pageSubtitle={<div>for <span>North Eastern Tree Company</span></div>}
-            pageHead={<div>Fill out the form below and we'll be in touch regarding your request.</div>}>
+            pageHead={<div>Fill out the form below and we'll be in touch regarding your request.</div>}
+            standalone={true}>
 
                 <div class="login-form">
                     <div class ="input-group" >

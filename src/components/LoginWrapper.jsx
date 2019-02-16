@@ -30,7 +30,7 @@ export class LoginWrapper extends Component{
     render(){
         let bg =this.props.backgroundColor;
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2><h3> {this.props.config.organisation.address.map( (el,i) => <div className="location_line">{Object.values(el)} </div> )}</h3></div></div>;
-        return (<div class="login-wrapper login-wrapper-full-width row center-xs middle-xs">
+        return (<div class={"login-wrapper login-wrapper-full-width row center-xs middle-xs "+(this.props.standalone && "isStandalone")}>
             <div class="login-outer col-xs-10 col-md-8">
                 <div class="box">
                     <div class="row">
