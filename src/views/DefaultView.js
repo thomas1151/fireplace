@@ -6,6 +6,7 @@ import CONFIG from '../AppConfig.json';
 import { ActionBox } from '../components/ActionBox';
 import { ShortcutsBar } from '../components/ShortcutsBar';
 import { Invoices } from './Invoices';
+import { Organisations } from './Organisations';
 import { Home } from './Home';
 import { Login } from './Login';
 
@@ -34,6 +35,7 @@ const HomeWithSrcContext = (props) =>{
     )
 }
 
+
 export class DefaultView extends Component {
     constructor(props) {
         super(props);
@@ -48,11 +50,9 @@ export class DefaultView extends Component {
                 <SearchBar isMobile={this.props.isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
                 <div className="app-content-wrapper">
                     <div className="app-content row">
-
-                        {/* <Route path='/' render={RenderableHome}/> */}
                         <Route path='/invoices' render={routeProps => <InvoicesWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
                         <Route exact path='/' render={routeProps => <HomeWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
-
+                        {this.props.children}
                     </div>
                 </div>
             </React.Fragment>

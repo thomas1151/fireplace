@@ -11,15 +11,15 @@
         "complementary": "#0097e6"
     },
     "application-font": {
-        "family":"'Poppins', sans-serif",
-        "weight": "600"
+        "family": "'Times New Roman', Times, serif",
+        "weight": "500"
     },
     "organisation": {
-        "name": "Thomas Barratt Design & Development",
+        "name": "North Eastern Tree Company",
         "address": {
-            "line1": "43 Crookes Rd",
-            "line2": "Sheffield",
-            "postcode": "S10 5BA"
+            "line1": "1 Hudson Street",
+            "line2": "Ferryhill",
+            "postcode": "DL17 8LZ"
         },
         "financial": {
             "account_name":  "Thomas Barratt",
@@ -27,10 +27,10 @@
             "sort_code": "04-00-04"
         },
         "online": {
-            "website": "http://thomasbarratt.co.uk",
-            "twitter": "@thomas_1151",
-            "facebook": "thomas1151development"
+            "website": "http://netree.co.uk",
+            "twitter": "@netreeco",
+            "facebook": "netreeco"
         },
-        "logo": "images/logo.png"
+        "logo": "images/netreelogo.png"
     }
 }
