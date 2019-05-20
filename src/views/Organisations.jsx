@@ -29,7 +29,10 @@ const OrgsHome = (props) => {
                             pageTitle={"Course Submission Form"}
                             pageSubtitle={<div>for <span>North Eastern Tree Company</span></div>}
                             pageHead={<div>Fill out the form below and we'll be in touch regarding your request.</div>}
-                        ></LoginWrapper>
+                            leftPanelClass="redBG"
+                        >
+                            <input type="password"/>
+                        </LoginWrapper>
                     </div>
                 </DefaultView>   
             }

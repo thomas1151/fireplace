@@ -784,6 +784,7 @@ button.button-remove{
 }
 .app-content-wrapper{
         .app-format{
+            height: 100%;
             flex-direction: column;
             .action-feed,.invoice-inspection{
                 height: 100%;
@@ -923,6 +924,7 @@ margin-left: -198px;
         height: 100%;
 
     }
+
     .intro-section{
         background: #FDC830;  /* fallback for old browsers */
         background: -webkit-linear-gradient(to bottom, #F37335, #FDC830);  /* Chrome 10-25, Safari 5.1-6 */
@@ -930,9 +932,13 @@ margin-left: -198px;
         padding: 2.5em 1em;
         border-radius: 1em;
         
-        &.formal{
-            line-height: 1em;
+        // &.redBG {
+            //     background: red;
+            // }
+            
+            &.formal{
             background: #282828;
+            line-height: 1em;
             padding: initial;
             span{
                 font-size: 110%;
@@ -1508,7 +1514,40 @@ margin-left: -198px;
     }
 }
 
+/* ==========================
+        
+        Custom Tables
 
+============================= */
+
+.custom-table{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    
+    .table-head, .table-body{
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        flex-wrap: wrap;
+        .table-row{
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            // flex-direction: column;
+            .table-data{
+                display: table-cell;
+                &.short-field{
+                    width: 4em;
+                }
+            }
+        }   
+    }
+
+    .table-head{
+        background: grey;
+    }
+}
 
 /* ==========================
 
@@ -1837,7 +1876,7 @@ margin-left: -198px;
     }
     .app-content{
         margin: 0;
-        // padding: 0 5em;
+        overflow: auto;
         main{
             // max-width: 70%;
         }

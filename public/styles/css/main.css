@@ -701,6 +701,7 @@ button.button-remove i {
   width: 100%;
 }
 .app-content-wrapper .app-format {
+  height: 100%;
   flex-direction: column;
   flex: 1;
 }
@@ -835,8 +836,8 @@ button.button-remove i {
   border-radius: 1em;
 }
 .login-wrapper .intro-section.formal {
-  line-height: 1em;
   background: #282828;
+  line-height: 1em;
   padding: initial;
 }
 .login-wrapper .intro-section.formal span {
@@ -1354,6 +1355,40 @@ button.button-remove i {
   margin: 1em auto;
 }
 /* ==========================
+        
+        Custom Tables
+
+============================= */
+.custom-table {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.custom-table .table-head,
+.custom-table .table-body {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.custom-table .table-head .table-row,
+.custom-table .table-body .table-row {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+.custom-table .table-head .table-row .table-data,
+.custom-table .table-body .table-row .table-data {
+  display: table-cell;
+}
+.custom-table .table-head .table-row .table-data.short-field,
+.custom-table .table-body .table-row .table-data.short-field {
+  width: 4em;
+}
+.custom-table .table-head {
+  background: grey;
+}
+/* ==========================
 
         Invoice Page
 
@@ -1628,6 +1663,7 @@ button.button-remove i {
   }
   .app-content {
     margin: 0;
+    overflow: auto;
   }
   .page-settings ul:before {
     position: absolute;

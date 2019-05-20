@@ -10,6 +10,7 @@ import { Home } from './views/Home';
 import { DefaultView } from './views/DefaultView';
 import { Organisations } from './views/Organisations';
 import { Login } from './views/Login';
+import { People } from './views/People.jsx';
 import { ModifyFireplace } from './views/ModifyFireplace';
 
 import {
@@ -54,7 +55,17 @@ const OrgsWithSrcContext = (props) =>{
         </SrcContext.Consumer>
     )
 }
-                        {/* <Route path='/' render={RenderableHome}/> */}
+const PeopleWithSrcContext = (props) =>{
+  return(
+    <SrcContext.Consumer>
+        {src =>
+        <DefaultView src={src} {...props}>
+          <People src={src} {...props}/>
+        </DefaultView>}
+    </SrcContext.Consumer>
+  )
+} 
+{/* <Route path='/' render={RenderableHome}/> */}
 
 class App extends Component {
   constructor() {
@@ -92,7 +103,8 @@ class App extends Component {
           <Route exact path='/login' render={routeProps => <LoginWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />
           <Route exact path='/modify-fireplace' render={routeProps => <ModifyFireplaceWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>} />          
           <Route path='/organisations' render={routeProps => <OrgsWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
-          <Route component={DefaultWithSrcContext}/>
+          <Route path='/people' render={routeProps => <PeopleWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
+          <Route render={routeProps => <DefaultWithSrcContext {...routeProps} config={CONFIG} isMobile={isMobile}/>}/>
         </Switch>
       </div>
       </Router>

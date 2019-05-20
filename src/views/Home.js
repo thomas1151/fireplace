@@ -19,11 +19,9 @@ export class Home extends Component{
         let bg =this.props.backgroundColor;
         return(
             <React.Fragment>
-                <ShortcutsBar isMobile={this.props.isMobile}/>
-                <main className="col-xs">
-                    <Route src={this.props.src} path='/' render={routeProps => <ActionBox src={this.props.src} isMobile={this.props.isMobile}/>} />
-                    <Feed src={this.props.src} isMobile={this.props.isMobile}/>
-                </main>
+                <Route src={this.props.src} path='/' render={routeProps => <ActionBox src={this.props.src} isMobile={this.props.isMobile}/>} />
+                <Feed src={this.props.src} isMobile={this.props.isMobile}/>
+                {this.props.children}
             </React.Fragment>
         )
     }

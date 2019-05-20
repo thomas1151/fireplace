@@ -50,9 +50,12 @@ export class DefaultView extends Component {
                 <SearchBar isMobile={this.props.isMobile} logo={CONFIG['application-name']} backgroundColor={CONFIG['application-style']['main']}/>
                 <div className="app-content-wrapper">
                     <div className="app-content row">
-                        <Route path='/invoices' render={routeProps => <InvoicesWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
-                        <Route exact path='/' render={routeProps => <HomeWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
-                        {this.props.children}
+                        <ShortcutsBar isMobile={this.props.isMobile}/>
+                        <main class="col-xs">
+                            <Route path='/invoices' render={routeProps => <InvoicesWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
+                            <Route exact path='/' render={routeProps => <HomeWithSrcContext {...routeProps} config={CONFIG} isMobile={this.props.isMobile}/>} />
+                            {this.props.children}
+                        </main>
                     </div>
                 </div>
             </React.Fragment>
