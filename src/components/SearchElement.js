@@ -5,13 +5,15 @@ import {
     Route,
     Link
 } from 'react-router-dom';
+import axios from 'axios';
 
 const typesToUrl = function(type){
     switch(type){
         case 'invoice' : return "invoices";
         case 'person'  : return "people";
         case 'location': return "locations";
-        case 'quotes'  : return "quotes";
+        case 'quotes': return "quotes";
+        case 'jobs'  : return "jobs";
     }
 }
 // Imagine you have a list of languages that you'd like to autosuggest.
@@ -48,15 +50,28 @@ const languages = [{
 
 ];
 
-// Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = value => {
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
+// // Teach Autosuggest how to calculate suggestions for any given input value.
+// const getSuggestions = value => {
 
-  return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.title.toLowerCase().slice(0, inputLength) === inputValue
-  );
-};
+
+//   const inputValue = value.trim().toLowerCase();
+//   const inputLength = inputValue.length;
+
+//   return inputLength === 0 ? [] :
+
+//     axios.get(this.props.src.url + "search/?query="+inputValue)
+//         .then(function(response){
+
+//             return response.data.results.map( res =>
+//                 {
+//                     res['icon'] = 'fas fa-briefcase'
+//                     res['type'] = 'person'
+//                     res['title'] = 'id'
+//                     res['sub'] = 'TEst'
+//                 })
+//         })
+
+// };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
@@ -66,9 +81,9 @@ const getSuggestionValue = suggestion => suggestion.title;
 const renderSuggestion = function(suggestion){
 
     return(
-          <Link to={typesToUrl(suggestion.type)+"/"+suggestion.id.toString()}>
+          <Link to={suggestion.url}>
             <div className="type icon middle-xs">
-                <i className={suggestion.icon}></i>
+                <i className={suggestion.icon && suggestion.icon}></i>
             </div>
             <div className={"suggestion-content-wrapper"}>
                 <p className="title">{suggestion.title} <span>{suggestion.type}</span></p>
@@ -78,7 +93,38 @@ const renderSuggestion = function(suggestion){
     )
 }
 
+function getSuggestions(value, _this){
 
+
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    // let _this = this;
+    if (inputLength === 0) {
+        return _this.setState({ suggestions: [] })
+    } else {
+        _this.props.src.rest.get("search/?limit=5&query=" + inputValue)
+            .then(function (response) {
+
+                _this.setState({
+                    suggestions: response.data.results.map(res => {
+                        console.log(res);
+                        let newSug = res;
+                        newSug.icon = res.name ? 'fas fa-user' : 'fas fa-briefcase'
+                        newSug.type = res.name ? 'person' : 'job'
+                        newSug.title = res.name ? res.name : res.id + res.organisation.name.slice(0, 3).toUpperCase()
+                        newSug.sub = new Date(Date.parse(res.date)).toLocaleDateString()
+                        newSug.url = newSug.type === 'person' ? '/people/' + newSug.username : '/jobs/' + newSug.title
+                        newSug.other = ''
+                        return (
+                            newSug
+                        )
+                    })
+                })
+            })
+    }
+
+
+};
 
 export class SearchElement extends Component{
     constructor() {
@@ -104,18 +150,27 @@ export class SearchElement extends Component{
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
     onSuggestionsFetchRequested = ({ value }) => {
-        this.setState({
-        suggestions: getSuggestions(value)
-        });
+        getSuggestions(value, this);
     };
 
     // Autosuggest will call this function every time you need to clear suggestions.
     onSuggestionsClearRequested = () => {
+        console.log("Clear");
         this.setState({
         suggestions: []
         });
     };
-   
+    componentDidMount(){
+    //     {
+    //     title: 'REW2901318',
+    //     id: 1,
+    //     sub: '£300.00 for James Reynolds, 2x Man Days',
+    //     other: '29/03/18',
+    //     type: "invoice",
+    //     icon: 'fas fa-file-invoice',
+    //     // search_string:"REW2901318 James Reynolds £300 29/03/18 invoice"
+    // },
+    }
     render(){
         const { value, suggestions } = this.state;
 
@@ -136,9 +191,10 @@ export class SearchElement extends Component{
                         suggestions={suggestions}
                         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                        getSuggestionValue={getSuggestionValue}
+                        getSuggestionValue={this.getSuggestionValue}
                         renderSuggestion={renderSuggestion}
                         inputProps={inputProps}
+                        onSuggestionSelected={this.onSuggestionsClearRequested}
                     />
                 </div>
                 <button className="icon-holder for-input col-xs-1">

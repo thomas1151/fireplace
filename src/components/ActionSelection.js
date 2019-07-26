@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { ActionPerson } from './ActionPerson';
 import { JobForm } from './JobForm';
 import axios from "axios";
+import fetchSuggestions from '../logic/fetchSuggestions';
+import { DropdownWithContext } from './DropdownWithContext';
+
+import { isEqual } from 'lodash';
 
 export class ActionSelection extends Component{
 
@@ -23,7 +27,26 @@ export class ActionSelection extends Component{
         this.onPeopleChange = this.onPeopleChange.bind(this);
         this.onJobChange = this.onJobChange.bind(this);
         this.handleSelected = this.handleSelected.bind(this);
-        this.state ={jobLinkForm:false, job: {}}
+        this.fetchSuggestions = this.fetchSuggestions.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSelected = this.handleSelected.bind(this);
+        this.onPeopleTypeChange = this.onPeopleTypeChange.bind(this);
+        this.state ={
+            jobLinkForm:false, 
+            documentForm: false,
+            addToJobForm: false,
+            job: {},
+            statusTypeSuggestData: [],
+            jobSuggestData: [],
+            documentSuggestData: [],
+            refTypeSuggestData: []
+        }
+    }
+    componentDidMount(){
+        let self = this;
+        fetchSuggestions("", this.props.src.url, "ref-type/", [], "refType", self);
+        let people = this.calcPeople()
+        this.setState({people:people});
     }
     totalPrice(){
         if(this.props.items.length > 0){
@@ -56,6 +79,27 @@ handleSelected={this.handleSelected}
 handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={this.props.items}/>);
 
     }
+    handleChange(id, value) {
+        console.log(id)
+        console.log(value)
+        this.setState({ [id]: value });
+        if (this.props.handleChange) {
+            this.props.handleChange(id, value)
+        }
+
+    }
+    handleSelected(s, state_val) {
+        console.log(s);
+        this.setState({ [state_val + "_data"]: s.suggestion.id })
+        if (this.props.handleSelected) {
+            this.props.handleSelected(s.suggestion.id, state_val);
+        }
+    }
+    fetchSuggestions(value, src, endpoint, keyPositions, propName, idField = 'id', other = "1") {
+        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField = idField, other = other);
+        
+    }
+
     jobLink(){
         return(
             <div className="col-xs-12">
@@ -63,18 +107,93 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
                 null:
                     <React.Fragment>
                         <div className="job-ref">
-                            <div className="section-title">
-                            <p>Add to Job</p>
-                            </div>
-                            <div className="row">
-                                        <ActionPerson className="col-xs-12 col-sm-9" id={'jobLink'} src={'jobs'} onChangeForParent={this.handleJobChange} debug={true}/>
-                                        <div className="col-xs-12 new-job-button">
-                                        <p className="or">or</p>
-                                        <button onClick={this.handleNewJob} className="button-content-wrap success">
-                                            <i className="fas fa-plus"></i><p>New</p> 
-                                        </button>
-                                        </div>
-                            </div>
+                                {/* <ActionPerson className="col-xs-12 col-sm-9" id={'jobLink'} src={'jobs'} onChangeForParent={this.handleJobChange} debug={true}/> */}
+                                <button onClick={this.handleNewJob} className="button-content-wrap success">
+                                    <i className="fas fa-plus"></i><p>New Job, Document</p>
+                                </button>
+                                {this.state.documentForm ?
+                                <div className="row">
+                                    <div className="section-title">
+                                        <p>Add to existing document</p>
+                                    </div>
+                                    <ActionPerson
+                                        minQueryLength={0}
+                                        endpoint={'documents/?search='}
+                                        propName={"document"}
+                                        className="col-xs-12"
+                                        id={'document'}
+                                        keyPositions={{'idRef':0, 'url  ': 1}}
+                                        data={this.state.documentSuggestData}
+                                        onFetchForParent={this.fetchSuggestions}
+                                        onSelectedForParent={this.handleSelected}
+                                        onChangeForParent={this.handleChange}
+                                        debug={false} /> 
+                                </div>
+                                :
+                                <button onClick={() => (this.setState({ documentForm: !this.state.documentForm, addToJobForm: false, showPeopleSelection: true, job: Object.assign({}, this.state.job, { job_id: undefined }) }))} className="button-content-wrap success"><i className="fas fa-file-alt" />Add to existing document</button>
+
+                                }        
+                                {this.state.addToJobForm ?
+                                <div className="row">
+
+                                    <div className="section-title">
+                                        <p>>Add actions to a new document on an existing job</p>
+                                    </div>
+                                    <ActionPerson
+                                        minQueryLength={0}
+                                        endpoint={'jobs/?search='}
+                                        propName={"job"}
+                                        className="col-xs-12"
+                                        id={'job_id'}
+                                        keyPositions={{ 'idRef': 0, 'url  ': 1 }}
+                                        data={this.state.jobSuggestData}
+                                        onFetchForParent={this.fetchSuggestions}
+                                        onSelectedForParent={this.handleSelected}
+                                        onChangeForParent={this.handleChange}
+                                        debug={false} />
+
+                                    <div className="section-title col-xs-12">
+                                        <p>Status</p>
+                                    </div>
+                                    <div className="type col-xs-12 col-sm-6 row">
+                                        <p className="col-xs-3">This is a</p>
+                                        <ActionPerson className="col-xs" minQueryLength={0} endpoint={'status-type/?name__icontains='} id={'statusType'} propName={"statusType"} onFetchForParent={this.fetchSuggestions} data={this.state.statusTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false} />
+                                    </div>
+                                    <textarea className="col-xs" onChange={(e) => this.handleChange('notes', e.target.value)} placeholder="Prompt payment would be appreciated">
+                                    </textarea>
+
+                                </div>
+                                :
+                                <button onClick={() => (this.setState({ addToJobForm: !this.state.addToJobForm, documentForm: false, showPeopleSelection: true, job: Object.assign({}, this.state.job, { document: undefined }) }))} className="button-content-wrap success"><i className="fas fa-briefcase"/>Add to new document to existing job</button>
+                                }
+                                {this.state.showPeopleSelection &&
+                                
+                                <div className="type col-xs-12">
+                                    <div className="section-title col-xs-12">
+                                        <p>People</p>
+                                    </div>
+                                    <div className="col-xs-12 row">
+                                        {this.state.refTypeLoaded && this.state.people.map((el, i) => {
+                                            return (<DropdownWithContext id={i} items={this.generatePeopleTypes()}
+                                                customStyles={{
+                                                    container: 'col-xs-6 col-sm-3',
+                                                    wrapper: '',
+                                                    select: '',
+                                                    opton: ''
+                                                }}
+                                                onSelect={this.onPeopleTypeChange}
+                                                key={el.username}>
+                                                <div className="info">
+                                                    <div className="title">{el.name}</div>
+                                                    <div className="subtitle">{el.organisation.name}</div>
+                                                </div>
+                                            </DropdownWithContext>)
+                                        })}
+                                    </div>
+                                </div>
+                                }
+
+
                         </div>
                     </React.Fragment>
                 }
@@ -83,32 +202,92 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
             </div>
         )
     }
+
+    generatePeopleTypes() {
+        let people = []
+        for (let i = 0; i < this.state.refTypeSuggestData.length; i++) {
+            let peep_type = {}
+
+            for (let l = 0; l < this.state.refTypeSuggestData[i].data.length; l++) {
+
+                switch (this.state.refTypeSuggestData[i].data[l][0]) {
+                    case 'id': peep_type["value"] = this.state.refTypeSuggestData[i].data[l][1]; break;
+                    case 'name': peep_type["label"] = this.state.refTypeSuggestData[i].data[l][1];
+                    // case 'name': peep_type["label"] =  <div><i className="fas fa-user"/>{this.state.refTypeSuggestData[i].data[l][1]}</div>; break; 
+                }
+            }
+            people.push(peep_type);
+        }
+        console.log(people);
+        return people;
+    }
+    onPeopleTypeChange(i, val) {
+        let peeps = this.state.people
+        peeps[i][['type']] = val;
+        this.setState({ people: peeps })
+        this.onPeopleChange(this.state.people)
+
+    }
+    calcPeople() {
+        let acts = this.props.items;
+        let peeps = []
+        for (let i = 0; i < acts.length; i++) {
+            for (let j = 0; j < acts[i].people.length; j++) {
+                let exists = false;
+                for (let k = 0; k < peeps.length; k++) {
+                    if (isEqual(peeps[k], acts[i].people[j])) {
+                        exists = true;
+                    }
+                    // if(exists){
+                    //     continue
+                    // }
+                }
+                if (exists == false) {
+                    peeps.push(acts[i].people[j])
+                }
+            }
+        }
+        return peeps;
+    }
+
+
     constructFormJSON(){
         let d = {}
         d['items'] = this.props.items;
         d['job'] = this.state.job
+        d['people'] = this.state.people;
+        d['notes'] = this.state.notes;
+        console.log(d);
         return d;
     }
     handleSubmit(event){
         let data = this.exportFormJSON()
-
+        let _this = this;
         if(this.state.jobLinkForm){
             this.props.onRemove("job", data.job.name, ['selected'], [true]);
             this.props.onRemove();
-
+            let url = 'jobs/';
+            if(this.state.job.document){
+                url = 'actions/add_job/'
+            }
+            if(this.state.job.job_id){
+                url = 'documents/' 
+            }
             //TODO: SEND;
-
+            console.log(this.constructFormJSON());
             event.preventDefault();
-            axios.post(this.props.src.url + 'jobs/', this.constructFormJSON())
+            this.props.src.rest.post(url, this.constructFormJSON(), {
+                'method': 'post', })
                 .then(function (response) {
                     let data = response.data;
                     console.log(data);
-                    this.setState({jobLinkForm:false});
+                    _this.setState({jobLinkForm:false});
 
                 })
                 .catch(function (error) {})
                 .then(function () {
                     // always executed
+                    _this.props.onSubmit && _this.props.onSubmit();
                 });
 
         }if(this.state.newJobForm){
@@ -171,6 +350,9 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
             job: prevJob
         })
     }
+    // onJobChange(job){
+    //     // this.setState({})
+    // }
     onOrgChange(vals){
         console.log(vals);
         let prevJob = this.state.job;
@@ -194,7 +376,10 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
         this.setState({job:prevJob})
     }
     handleSelected(s, state_val) {
-        console.log(s);
+        if(s.hasOwnProperty('suggestion')){
+            s = s.suggestion.id
+        }
+
         let prevJob = this.state.job
         prevJob[state_val] = s
         this.setState({
@@ -211,9 +396,10 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
             <div className={"stuck-bottom actionSelection "+(this.state.jobLinkForm ? 'height-100' : null)}>
                 <div className="elements row">
                     {this.props.items.map((el, i) => (
-                        <div className="element">
-                        {/* <button className="button-remove pip" onClick={() => this.handleRemoveSingle(i)}><i className="fas fa-times"></i></button> */}
-                            <div className="wrap"><span>{el.idRef}: </span> {el.location.line1}</div>
+                        <div key={el.idRef} className="element">
+                            <div className="wrap">
+                                <button className="button-remove pip" onClick={() => this.handleRemoveSingle(i)}><i className="fas fa-times"></i></button>
+                                <span>{el.idRef}: </span> {el.location.line1}</div>
                         </div>
                     ))}
 

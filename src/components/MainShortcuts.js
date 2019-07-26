@@ -19,19 +19,24 @@ const shortcuts_main = [
         icon: 'fas fa-fire',
     },
     {
-        title: 'Invoices',
-        url: "invoices",
-        icon: 'fas fa-file-invoice',
+        title: 'Jobs',
+        url: "jobs",
+        icon: 'fas fa-briefcase',
     },
     {
-        title: 'Quotes',
-        url: "quotes",
-        icon: 'fas fa-receipt',
+        title: 'Documents',
+        url: "documents",
+        icon: 'fas fa-file-alt',
     },
     {
         title: 'People',
         url: "people",
         icon: 'fas fa-user',
+    },
+    {
+        title: 'Organisations',
+        url: "organisations",
+        icon: 'fas fa-building',
     },
     {
         title: 'Location',
@@ -45,16 +50,12 @@ const shortcuts_mostUsed = [{
         title: 'Ray Estate',
         url: "locations/ray-estate",
         icon: 'fas fa-map-marker',
-    }, {
-        title: 'Durham County Council',
-        url: "locations/dcc",
-        icon: 'fas fa-map-marker',
-    },
+    }
 ];
 
 const shortcuts_people = [{
         title: 'Thomas Barratt',
-        url: 'people/thomas-barratt',
+        url: 'people/tbarratt',
         icon: 'fas fa-user',
         
 },
@@ -85,7 +86,7 @@ export class MainShortcuts extends Component{
         }
 
         const listItems = this.state.items.map((item,i) =>
-            <li key={i}><Link to={item.url}><i className={item.icon}></i>{item.title}</Link></li>
+            <li key={i} className={(item.url.length > 1 ? (this.props.location.pathname.startsWith('/' + item.url) && 'selected') : (this.props.location.pathname === item.url + "/" && 'selected'))}><Link to={'/' + item.url}><i className={item.icon}></i><div className="item-title">{item.title}</div></Link></li>
         );
 
         return(

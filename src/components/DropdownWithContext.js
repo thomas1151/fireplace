@@ -36,7 +36,7 @@ export class DropdownWithContext extends Component{
                     <select className={styles.select} onChange={(e) => this.onChange(e)} value={this.state.value}>
                         <option value="select">Select</option>
                         {this.props.items.map( (f,i) =>{
-                            return(<option className={styles.option} value={f.value}>{f.label}</option>)
+                            return(<option key={f.value} className={styles.option} value={f.value}>{f.label}</option>)
                         }) }            
                     </select>
                     </div>

@@ -1,28 +1,59 @@
 import React, { Component } from 'react';
-import CONFIG from '../AppConfig.json';
-import {SearchBar} from '../components/SearchBar.js';
-import { Feed } from '../components/Feed';
-import { ActionBox } from '../components/ActionBox';
-import { ShortcutsBar } from '../components/ShortcutsBar';
-import { FeedElement } from '../components/FeedElement';
-import { ActionSelection } from '../components/ActionSelection';
-import { InvoiceInbox } from './InvoiceInbox';
-import { Checkbox } from '../components/Checkbox';
-import { ViewJob } from '../components/ViewJob';
-import { Redirect } from 'react-router-dom';
-import jsPDF from 'jspdf';
-import { Loading } from '../components/Loading';
+import { AuthContext } from '../contexts/authContext';
+import Axios from 'axios';
+import logIn from '../logic/logIn';
 
 export class Login extends Component{
        constructor(props) {
-            super(props);
+        super(props);
+        this.state = {
+
+        }
+        this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
     componentDidMount() {
         
     }
+    fetchToken(){
 
+    }
+    handleChange(event) {
+        this.setState({ [event.target.name]: event.target.value });
+    }
+    onSubmit(e){
+        console.log(e);
+        console.log(this.context);
+        e.preventDefault();
+        let data = {};
+        data.domain = this.state.domain;
+        data.username = this.state.username;
+        data.password = this.state.password;
+        data.profile = this.state.profile;
+
+        let _this = this;
+        let domain = data.domain.endsWith("/") ? data.domain : data.domain + '/'
+        Axios.post(domain+data.profile+'/api-token-auth/', data)
+            .then(function(response){
+                if(response.data.token){
+                    _this.setState({token: response.data.token});
+                    logIn(response.data.token, domain, data.username, data.profile);
+                    _this.props.onSubmit(
+                        {
+                            token: response.data.token,
+                            username: data.username,
+                            domain: domain + data.profile + '/',
+                            profile: data.profile,
+                        }
+                    )
+
+                    console.log(response.data);
+                    // _this.props.onSuccess();
+                }
+            })
+
+    }
     render(){
-        let bg =this.props.backgroundColor;
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2><h3> {this.props.config.organisation.address.map( (el,i) => <div className="location_line">{Object.values(el)} </div> )}</h3></div></div>;
         return (
 
@@ -53,21 +84,28 @@ export class Login extends Component{
                                 <div class="login-description">
                                     Enter your login details below.
                                 </div>
-                                <div class="login-form">
+                                <form class="login-form" onSubmit={this.onSubmit}>
                                     <div class="input-group">
-                                        <div class="input-label">Email Address</div>
-                                        <input type="text" />
+                                        <div class="input-label">profile</div>
+                                        <input onChange={this.handleChange} name="profile" type="text" />
                                     </div>
                                     <div class="input-group">
-                                        <div class="input-label">Password</div>
-                                        <input type="password" />
+                                        <div class="input-label">Domain</div>
+                                        <input onChange={this.handleChange} name="domain" type="text" />
                                     </div>
-
+                                    <div class="input-group">
+                                        <div class="input-label">Username</div>
+                                        <input onChange={this.handleChange} name="username"  type="text" />
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-label">Pass</div>
+                                        <input  name="password" onChange={this.handleChange} type="password" />
+                                    </div>
 
                                     <div class="">
                                         <button type="submit" class="sign-in-button">Sign in</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -79,4 +117,7 @@ export class Login extends Component{
         )
     }
 }
+
+Login.contextType = AuthContext;
+
 // export default Invoices;

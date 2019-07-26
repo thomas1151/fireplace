@@ -20,13 +20,13 @@ const shortcuts_main = [
     },
     {
         title: '',
-        url: "invoices",
-        icon: 'fas fa-file-invoice',
+        url: "jobs",
+        icon: 'fas fa-briefcase',
     },
     {
         title: '',
-        url: "quotes",
-        icon: 'fas fa-receipt',
+        url: "documents",
+        icon: 'fas fa-file-alt',
     },
     {
         title: '',
@@ -81,11 +81,11 @@ export class ShortcutsMobile extends Component{
             classesToAdd += "stuck-top"
         }
         const listItems = this.state.items.map((item) =>
-            <div className="col-xs mobile-shortcut for-input "><Link to={item.url}><i className={item.icon}></i>{item.title}</Link></div>
+            <div key={item.icon + item.url} className={"col-xs mobile-shortcut for-input " +  (item.url.length > 1 ? (this.props.location.pathname.startsWith('/' + item.url) && 'selected') : (this.props.location.pathname === item.url + "/" && 'selected'))}><Link to={'/'+item.url}><i className={item.icon}></i>{item.title}</Link></div>
         );
 
         return(
-            <div className={"main-shortcuts "+classesToAdd} id="shortcuts-bar" >
+            <div className={"main-shortcuts "+classesToAdd} id="shortcuts-bar" style={this.props.style}>
                 <div className="row">
                     {listItems}
                 </div>

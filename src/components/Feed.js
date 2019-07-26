@@ -3,144 +3,13 @@ import {FeedElement} from './FeedElement';
 import { ActionSelection } from './ActionSelection';
 import axios from 'axios';
 import { Loading } from './Loading';
-const feed = [
-    {
-        "id": "A171295",
-        "description": "Taking care of business, you know, TCB",
-        "dateStarted": "Sun Dec 17 1995 03:24:00 GMT",
-        "dateEnded": "Sun Dec 18 1995 03:24:00 GMT",
-        "location": {
-            "line1": "43 Crookes Rd",
-            "line2": "Sheffield",
-            "line3": "",
-            "line4": "",
-            "postcode": "S10 5BA"
-        },
-        "quantity": "2",
-        "price": "75.00",
-        "creator": {
-            "id": "1",
-            "name": "Thomas Barratt"
-        },
-        "created": "Sun Dec 17 2018 03:24:00 GMT",
-        "people": [
-        {
-            "id": "1",
-            "name": "Thomas Barratt",
-            "organisation": "Thomas Barratt Design & Development",
-        },
-            {
-                "id": "2",
-                "name": "Donald Trump",
-                "organisation": "Trump Hotels",
-            },
-            {
-                "id": "3",
-                "name": "James Reynolds",
-                "organisation": "Savilles",                
-            }
-        ],
-
-    },
-      
-        {
-            "id":"A251295",
-            "description": "Making thirsty pretzels",
-            "dateStarted": "Sun Dec 25 1995 03:24:00 GMT",
-            "location": {
-                "line1": "Gill's",
-                "line2": "Sheffield",
-                "line3": "",
-                "line4": "",
-                "postcode": "A14 5BC"
-            },
-            "quantity": "5",
-            "price": "100.00",
-            "creator": {
-                "id": "1",
-                "name": "Jerry Seinfeld"
-            },
-            "created": "Sun Dec 17 2018 03:24:00 GMT",
-            "people": [{
-                    "id": "1",
-                    "name": "Jerry Seinfeld"
-                },
-                {
-                    "id": "2",
-                    "name": "Cosmo Kramer"
-                },
-            ],
-            "job":{
-                "id":1,
-                "name": "SEI180818",
-            }
-
-        },
-          {
-              "id": "A150508",
-              "description": "Continued work on Fireplace",
-              "dateStarted": "Sun May 15 2008 03:24:00 GMT",
-              "location": {
-                  "line1": "6 South View",
-                  "line2": "Kirk Merrington",
-                  "line2": "Spennymoor",
-                  "line3": "",
-                  "line4": "",
-                  "postcode": "DL167JB"
-              },
-              "quantity": "4",
-              "price": "100",
-              "creator": {
-                  "id": "1",
-                  "name": "Thomas Barratt"
-              },
-              "created": "Sun Aug 18 2018 03:24:00 GMT",
-              "people": [{
-                      "id": "1",
-                      "name": "Thomas Barratt",
-                      "organisation": "Thomas Barratt Design & Development",
-                  },
-              ],
-
-          }, 
-            {
-                "id": "A200818",
-                "description": "Aloe Vera Management Systems",
-                "dateStarted": "Mon Aug 20 2018 03:24:00 GMT",
-                "location": {
-                    "line1": "547D Crookesmoor Road",
-                    "line2": "Sheffield",
-                    "line3": "",
-                    "line4": "",
-                    "postcode": "S10 1BJ"
-                },
-                "quantity": "2",
-                "price": "75.00",
-                "creator": {
-                    "id": "1",
-                    "name": "Thomas Barratt"
-                },
-                "created": "Sun Dec 17 2018 03:24:00 GMT",
-                "people": [{
-                        "id": "1",
-                        "fname": "Thomas",
-                        "lname": "Barratt",
-                        "organisation": "Thomas Barratt Design & Development",
-                    },
-                    {
-                        "id": "5",
-                        "name": "Jane Hayman"
-                    },
-                ],
-
-            },
-]
+import ReactHtmlParser from 'react-html-parser';
 
 export class Feed extends Component{
     constructor(props) {
             super(props);
             this.state ={
-                items: feed,
+                items: [],
                 selected: [],
                 date: undefined,
                 invoiceAddr: {},
@@ -152,15 +21,22 @@ export class Feed extends Component{
             this.handleRemoveProperty = this.handleRemoveProperty.bind(this);            
             this.handleChangeAllOfProperty = this.handleChangeAllOfProperty.bind(this);            
             this.handleProcessSelected = this.handleProcessSelected.bind(this);
+            this.reloadItems = this.reloadItems.bind(this);
+
+    }
+    reloadItems(){
+        if(this.props.onReloadItems){
+            this.props.onReloadItems()
+        }else{
+
             let self = this;
-            axios.get(this.props.src.url + 'actions/')
+            self.props.src.rest.get(this.props.dataSrc)
                 .then(function (response) {
-                    let data = response.data;
+                    let data = response.data.results;
                     // handle success
                     self.setState({
                         isLoaded: true,
-                        items: (data)
-                            .sort((a, b) => new Date(b.created) - new Date(a.created)),
+                        items: (data).filter((a, b) => self.props.filterFeed ? self.props.filterFeed(a, b) : true).sort((a, b) => new Date(b.created) - new Date(a.created)),
                         response
                     });
                     console.log(response);
@@ -168,7 +44,7 @@ export class Feed extends Component{
                 .catch(function (error) {
                     // handle error
                     self.setState({
-                        isLoaded: true,
+                        isLoaded: false,
                         error
                     });
                     console.log(error);
@@ -176,11 +52,11 @@ export class Feed extends Component{
                 .then(function () {
                     // always executed
                 });
-
+        }
 
     }
     componentDidMount() {
-      
+        this.reloadItems();
     }
     getSelected(){
         let a = this.state.items.filter(function(val,idx){
@@ -224,29 +100,37 @@ export class Feed extends Component{
     render(){
             // let inputProps = {...this.props.inputProps};
             let selected = this.getSelected();
-            if(this.state.isLoaded){
-            return(<div class={"action-feed "+(selected.length >0 ? 'menu-padding' : null)}>
-                    {this.state.items.map( (f,i) =>{
-                        let dateStarted = new Date(f.startDate);
-                        let created = new Date(f.created);
-                        return(<FeedElement 
-                                    data={f} 
-                                    badge={f.idRef} 
-                                    usefulData={"£"+(f.price * f.quantity)+".00"} 
-                                    ikey={i} 
-                                    description={f.work}
-                                    title={ (f.location && f.location.line1)+" on "+dateStarted.toLocaleDateString()} 
-                                    subtitle={ (f.creator && f.creator.name)+" on "+created.toLocaleDateString()} 
-                                    key={i} 
-                                    onRemove={this.handleRemoveProperty} 
-                                    onAdd={this.handleNewProperty}
-                                    people={f.people}
-                                    displayPeopleAs={['name']}
-                                    />)
-                    }) }
+            if(this.state.isLoaded || (this.props.items)){
+            return(<div className={"action-feed "+(selected.length >0 ? 'menu-padding' : null)}>
+                    {console.log(this.state.items)}
+                    {
+                        (this.state.items.length > 0 || (this.props.items && this.props.items.length) > 0) ? 
+                            (this.props.items ? this.props.items : this.state.items).map( (f,i) =>{
+                            let dateStarted = new Date(f.startDate);
+                            let created = new Date(f.created);
+                            return(<FeedElement 
+                                        data={f} 
+                                        badge={f.idRef} 
+                                        usefulData={"£"+(f.price * f.quantity).toFixed(2)} 
+                                        ikey={i} 
+                                        title={ (f.location && f.location.line1)+" on "+dateStarted.toLocaleDateString()} 
+                                        subtitle={ (f.creator && f.creator.name)+" on "+created.toLocaleDateString()} 
+                                        key={i} 
+                                        onRemove={this.handleRemoveProperty} 
+                                        onAdd={this.handleNewProperty}
+                                        people={f.people}
+                                        displayPeopleAs={['name']}
+                                        onMoreUrl={"/actions/" + f.idRef}
+
+                                        >{ReactHtmlParser(f.work)}</FeedElement>)
+                            }) 
+                            :
+                            <p>No unselected items.</p>
+                    
+                    }
                     {
                         selected.length > 0 ? 
-                    <ActionSelection src={this.props.src} isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected}/>
+                        <ActionSelection src={this.props.src} config={this.props.config} isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected}/>
                         :
                         null
                     }

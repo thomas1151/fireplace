@@ -35,7 +35,7 @@ export class FeedElement extends Component{
         return(
             <button className="col-xs-4 action" onClick={() =>this.handleButton('add')}>
                 <i className="fas fa-plus"></i>
-                <p>Add</p>
+                <p>Select</p>
             </button>
             
         )
@@ -85,7 +85,7 @@ export class FeedElement extends Component{
         if(this.props.data.selected){
             buttons[0] = this.removeButton();
         }
-        if(this.props.data.job){
+        if(this.props.data.document){
             buttons.shift();
         }
         return(
@@ -96,7 +96,7 @@ export class FeedElement extends Component{
     render(){
             const d = this.props.data;
              // let inputProps = {...this.props.inputProps};
-            return(<div className={"feed-element "+(d.selected ? 'selected' : '')+(d.job ? ' withJob' : '')}>
+            return(<div className={"feed-element "+(d.selected ? 'selected' : '')+(d.documents ? ' withJob' : '')}>
                     <div className="row">
                         {
                             this.state.redirect ? <Redirect to={this.props.onMoreUrl} /> : null
@@ -116,8 +116,9 @@ export class FeedElement extends Component{
                         </div>
                         <div className="col-xs-12 col-sm-12 section body">
                             <div className="description"
-                            dangerouslySetInnerHTML={{__html:this.props.description}}>
-                                
+                            // dangerouslySetInnerHTML={{__html:this.props.description}}
+                            >
+                            {this.props.children}
                             </div>
                             <div className="footer">
                             </div>
@@ -139,21 +140,33 @@ export class FeedElement extends Component{
                             </div>
                         </div> */}
 
+                        {this.props.people &&
                         <div className="col-xs-12 section people row">
                             <i className="fa fa-user-circle"></i>
                             {this.props.people.map( (p,i) => {
-                                return(<div className="person">
+                                var complexPerson = Object.keys(p).length <= 2;
+
+                                return(<a 
+                                key={complexPerson ? p.person.id : p.id}
+                                href={"/people/"+(!complexPerson ? p.username: p.person.username)}
+                                className="person">
                                     {this.props.displayPeopleAs.map( (i)=> {
-                                       console.log(Object.keys(p).length)
-                                       return(Object.keys(p).length <= 2 ?  (p.person[i])+" " : (p[i])+" ")
+                                        return (complexPerson ? (p.person[i]) + " " : (p[i]) + " ")
                                     })}
-                                </div>)
+                                </a>)
                             })}
                         </div>
-                        
-                        {d.job ? 
+                        }
+                        {d.documents ? 
                         <div className="col-xs-12 section people row">
-                            <i className="fas fa-info-circle"></i><div className="person">Part of job: {d.job.idRef}</div>
+                            <i className="fas fa-info-circle"></i><div className="person">Part of Document(s): 
+                            {d.documents.map( (doc) => (
+                            <div className="">
+                                <Link key={doc.idRef} to={"/documents/"+doc.idRef}> {doc.idRef}</Link>
+                                { ", "}
+                            </div>
+                            ))}
+                            </div>
      
                         </div>
                         :

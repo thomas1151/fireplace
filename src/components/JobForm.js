@@ -30,6 +30,8 @@ export class JobForm extends Component{
             this.calcPeople = this.calcPeople.bind(this);
             this.onPeopleTypeChange = this.onPeopleTypeChange.bind(this);
             this.handleSelected = this.handleSelected.bind(this);
+            this.getOrgs = this.getOrgs.bind(this);
+            this.fetchSuggestions = this.fetchSuggestions.bind(this);
 
             let jobAddr = this.actionAddressCalcEquality(this.props.selectedActions)
             let people = this.calcPeople()
@@ -44,7 +46,15 @@ export class JobForm extends Component{
                 },
                 job_address: jobAddr,
                 people: people,
-                
+                minQueryLength: 0,
+                orgLoaded: true,
+                locationLoaded: true,
+                refTypeLoaded: true,
+                orgSuggestData: [],
+                locationSuggestData: [],
+                workTypeSuggestData: [],
+                statusTypeSuggestData: [],
+                refTypeSuggestData: []
             };
             this.props.onJobAddrChange(jobAddr);
             this.props.onDateChange(this.state.start_date);
@@ -53,18 +63,70 @@ export class JobForm extends Component{
 
     componentDidMount() {
         let self = this;
-        fetchSuggestions(this.props.src.url, "organisation", [], self, "org");        
-        fetchSuggestions(this.props.src.url, "status-type", [], self, "statusType");
-        fetchSuggestions(this.props.src.url,"work-type",[],self,"workType");
-        fetchSuggestions(this.props.src.url, "ref-type", [], self, "refType");
+        // fetchSuggestions(this.props.src.url, "organisation", [], self, "org");        
+        // fetchSuggestions(this.props.src.url, "status-type", [], self, "statusType");
+        // fetchSuggestions(this.props.src.url,"work-type",[],self,"workType");
+        fetchSuggestions("", this.props.src.url, "ref-type/", [], "refType", self );
+
         let people_types = []
         
 
         this.setState({people_types: people_types})
     }
 
-        
-
+    fetchSuggestions(value, src, endpoint, keyPositions, propName, idField = 'id', other = "1") {
+        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField=idField, other=other);
+    }
+    getOrgs(value){
+        if(value.length < this.state.minQueryLength){
+            this.setState({orgSuggestData: []});
+        }else{
+            let self = this;
+            self.props.src.rest.get('organisations/?name__icontains=' + value)
+                .then(function (response) {
+                    let data = response.data.results;
+                    // handle success
+    
+                    let suggestData = []
+    
+    
+                    data.map((option, i) => {
+                        suggestData.push({
+                            id: option.id,
+                            data: [],
+                            other: '1'
+                        })
+                        for (var key in option) {
+                            if (option.hasOwnProperty(key)) {
+                                switch (key) {
+                                    default:
+                                        suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
+                                }
+                            }
+                        }
+                    })
+                    self.setState({
+                        isLoaded: true,
+                        orgItems: data,
+                        orgSuggestData: suggestData,
+                        response
+                    });
+                })
+                .catch(function (error) {
+                    // handle error
+                    self.setState({
+                        isLoaded: true,
+                        orgSuggestData: [],
+                        error
+                    });
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
+        }
+            
+    }
 
     handleChange(id,value){
         if(id!="organisation"){
@@ -128,11 +190,13 @@ export class JobForm extends Component{
 
                 switch (this.state.refTypeSuggestData[i].data[l][0]) {
                     case 'id': peep_type["value"] = this.state.refTypeSuggestData[i].data[l][1]; break; 
-                    case 'name': peep_type["label"] =  <div><i className="fas fa-user"/>{this.state.refTypeSuggestData[i].data[l][1]}</div>; break; 
+                    case 'name': peep_type["label"] = this.state.refTypeSuggestData[i].data[l][1]; 
+                    // case 'name': peep_type["label"] =  <div><i className="fas fa-user"/>{this.state.refTypeSuggestData[i].data[l][1]}</div>; break; 
                 }
             }
             people.push(peep_type);
         }
+        console.log(people);
         return people;
     }
     handleOrgChange(s){
@@ -244,9 +308,20 @@ export class JobForm extends Component{
                         {this.state.orgLoaded && 
                         
                             <React.Fragment>
-                                <ActionPerson className="col-xs-12" id={'organisation'} src={this.state.orgSuggestData} onSelectedForParent={this.handleOrgChange} onChangeForParent={this.handleChange} debug={false}/>
-                                <ActionLocation src={this.props.src} id={'inv-addr'} onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.invoice_address}>
-                                </ActionLocation> 
+                            <ActionPerson 
+                                minQueryLength={0} 
+                                endpoint={'organisations/?name__icontains='} 
+                                propName={"org"}
+                                className="col-xs-12" 
+                                id={'organisation'} 
+                                data={this.state.orgSuggestData} 
+                                onFetchForParent={this.fetchSuggestions}
+                                onSelectedForParent={this.handleOrgChange}
+                                onChangeForParent={this.handleChange} 
+                                debug={false}/>
+
+                            <ActionLocation src={this.props.src} id={'inv-addr'} onChangeForParent={this.handleLocationChange.bind(this)} values={this.state.invoice_address}>
+                            </ActionLocation> 
                             </React.Fragment>
                         }
                     </div>
@@ -262,13 +337,13 @@ export class JobForm extends Component{
                             <p>Status</p>
                         </div>
                         <p className="col-xs-3">This is a</p> 
-                        {this.state.statusTypeLoaded && <ActionPerson className="col-xs" id={'statusType'} src={this.state.statusTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false}/> }
+                        <ActionPerson className="col-xs" minQueryLength={0} endpoint={'status-type/?name__icontains='} id={'statusType'} propName={"statusType"} onFetchForParent={this.fetchSuggestions} data={this.state.statusTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false}/>
                     </div>
                     <div className="type col-xs-12 col-sm-6 row">
                         <div className="section-title col-xs-12">
                             <p>Work Type</p>
                         </div>
-                        {this.state.workTypeLoaded && <ActionPerson className="col-xs" id={'workType'} src={this.state.workTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false}/> }
+                        <ActionPerson className="col-xs" minQueryLength={0} endpoint={'work-type/?name__icontains='} propName={"workType"} id={'workType'} onFetchForParent={this.fetchSuggestions}  data={this.state.workTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false}/>
                     </div>
                     <div className="date-wrapper col-xs-12 col-sm-6 row">
                         <div className="section-title col-xs-12">
@@ -296,7 +371,8 @@ export class JobForm extends Component{
                                         select: '',
                                         opton: ''
                                     }}
-                                    onSelect={this.onPeopleTypeChange}>
+                                    onSelect={this.onPeopleTypeChange}
+                                    key={el.username}>
                                     <div className="info">
                                         <div className="title">{el.name}</div>
                                         <div className="subtitle">{el.organisation.name}</div>
@@ -304,7 +380,7 @@ export class JobForm extends Component{
                                     </DropdownWithContext>)
                          })}            
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
         )

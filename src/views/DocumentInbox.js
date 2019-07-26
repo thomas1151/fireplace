@@ -8,7 +8,7 @@ import ReactHtmlParser from 'react-html-parser';
 //         sh = 'scrollHeight';
 //     return (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
 // }
-export class InvoiceInbox extends Component{
+export class DocumentInbox extends Component{
 
     handleScroll = (e) => {
         // let scrollPos = (e.target.scrollHeight - e.target.scrollTop);
@@ -58,7 +58,7 @@ export class InvoiceInbox extends Component{
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2></div></div>;
         return(
             <React.Fragment>
-               
+                
                 <div className="app-wrapper row">
                     <div className="invoice-feed action-feed col-xs" onScroll={this.handleScroll}>
                         {this.props.items.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).map( (f) =>{
@@ -68,7 +68,7 @@ export class InvoiceInbox extends Component{
 
                             return(<FeedElement 
                                         usefulData={"£"+f.totalPrice.toFixed(2)} 
-                                        subtitle={ (f.creator ? f.creator.fname+' '+f.creator.lname : 'Unknown')+" on "+created} 
+                                        subtitle={ (f.creator ? f.creator.name : 'Unknown')+" on "+created} 
                                         title={f.idRef} 
                                         ikey={f.idRef} 
                                         data={f} 
@@ -76,12 +76,10 @@ export class InvoiceInbox extends Component{
                                         badge={"#"+f.id}
                                         onRemove={this.handleRemoveProperty} 
                                         onAdd={this.handleNewProperty}
-                                        onMoreUrl={"/jobs/"+f.idRef}
+                                        onMoreUrl={"/documents/"+f.idRef}
                                         people={f.people && f.people}
                                         displayPeopleAs={ ['name']}
                             >
-                                {f.latestDocument ? <p>Latest: {f.latestDocument.idRef} ({f.latestDocument.status.name})</p> : <p>No documents on this job</p>}
-                                <p>{f.noOfDocuments} document{f.noOfDocuments !=1 && 's'} belong{f.noOfDocuments ==1 && 's'} to this job.</p>
                                 <p>{ReactHtmlParser(f.notes)}</p>
                             
                             </FeedElement>)
@@ -96,4 +94,4 @@ export class InvoiceInbox extends Component{
         )
     }
 }
-export default InvoiceInbox;
+export default DocumentInbox;

@@ -8,11 +8,12 @@ export class JobInfoBar extends Component{
     constructor(props) {
         super(props);
         this.handleDownload = this.handleDownload.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.state ={ }
     }
   
     addActions(){
-        let buttons = [ this.downloadButtonUI(),this.editButtonUI()]
+        let buttons = [ this.backButtonUI(), this.downloadButtonUI(),this.editButtonUI(), this.printButtonUI(), this.deleteButtonUI()]
         if(this.state.jobLinkForm){
             buttons.splice(1, 0, this.backButtonUI());
             buttons[-1] = (this.completeButtonUI());
@@ -23,43 +24,61 @@ export class JobInfoBar extends Component{
         )
     }
     handleBack(){
-        this.setState({jobLinkForm:false,hideJobBox:false,newJobForm:false});
+        this.props.history.goBack();
     }
     handleDownload(){
         this.props.onJobDownload();
     }
     downloadButtonUI(){
         return(
-                <Link to={this.props.viewURL}>
-                    <button onClick={this.handleDownload} className="button-content-wrap success">
+                <Link to={this.props.viewURL} onClick={this.handleDownload} className="button-content-wrap success ">
                         <i className="fas fa-eye"></i><p>View</p> 
-                    </button>
                 </Link>
 
         )   
     }
+
+    printButtonUI() {
+        return (
+            
+                <button onClick={window.print} className="button-content-wrap light ">
+                    <i className="fas fa-print"></i><p>Print</p>
+                </button>
+
+        )
+    }
+
     editButtonUI(){
-        return(<button onClick={this.handleSubmit} className="button-content-wrap light">
+        return(<button onClick={this.handleSubmit} className="button-content-wrap light ">
             <i className="fas fa-pencil-alt"></i><p>Edit</p> 
         </button>)   
     }
     completeButtonUI(){
-        return(<button onClick={this.handleSubmit} className="button-content-wrap success">
+        return(<button onClick={this.handleSubmit} className="button-content-wrap success ">
             <i className="fas fa-check-circle"></i><p>Save</p> 
         </button>)   
     }
     backButtonUI(){
-        return(<button onClick={this.handleBack} className="button-content-wrap light ">
+        return(<button onClick={this.handleBack} className="button-content-wrap light  ">
             <i className="fas fa-chevron-left"></i><p>Back</p> 
         </button>)   
     }
+    deleteButtonUI() {
+        return (<button onClick={this.handleBack} className="button-content-wrap light dangerous  ">
+            <i className="fas fa-times"></i><p>Delete</p>
+        </button>)
+    }
     render(){
         return(
-            <div className="job-info-bar">
-                <div className="for-save col-xs-12">
-                    <div className="total-price">
+            <div className="job-info-bar noPrint">
+                <div className="for-save  col-xs-12">
+                    <div className="row">
 
-                        {this.addActions()}
+                        {this.addActions().map( el => (
+                            <div className="button-outer-wrap col-xs-4 col-md-3 col-lg-2">
+                                {el}    
+                            </div>
+                        ))}
                     </div>
                 </div>        
             </div>);         

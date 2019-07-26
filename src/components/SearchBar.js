@@ -10,15 +10,15 @@ export class SearchBar extends Component{
         let bg =this.props.backgroundColor;
         if(this.props.isMobile){
             return(
-                <div id="search-bar" className="searchBar isMobile row" style={{background:bg}}>
+                <div id="search-bar" className="searchBar noPrint isMobile row" style={{background:bg}}>
                 
                 <div className="col-xs-11">
-                    <SearchElement/>
+                    <SearchElement src={this.props.src}/>
                 </div>
                
                 <div className="active-buttons col-xs-1">
                     <div className="active-outer ">
-                        <SearchBarSettings/>
+                        <SearchBarSettings onLogOut={this.props.onLogOut}/>
                     </div>
                 </div>
             </div>
@@ -26,12 +26,12 @@ export class SearchBar extends Component{
         }
         return(
 
-            <div id="search-bar" className="searchBar" style={{background:bg}}>
-                <div className="active-outer  col-md-2">
-                    <div className="logo-inner middle-xs"><i className="fas fa-fire"></i></div>
+            <div id="search-bar" className="searchBar noPrint" style={{background:bg}}>
+                <div className="active-outer  col-md-2 end-xs">
+                    <div className="logo-inner middle-xs "></div>
                 </div>
                 <div className="col-xs-10 col-md-8">
-                    <SearchElement/>
+                    <SearchElement src={this.props.src}/>
                 </div>
 
                 <div className="active-buttons col">
@@ -39,7 +39,7 @@ export class SearchBar extends Component{
                         <button className="icon middle-xs"><i class="fas fa-user"></i></button>
                     </div> */}
                     <div className="active-outer ">
-                        <SearchBarSettings/>
+                        <SearchBarSettings onLogOut={this.props.onLogOut}/>
 
                         
                     </div>

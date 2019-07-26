@@ -8,11 +8,11 @@ export class Loading extends Component{
     }
     render(){
             // let inputProps = {...this.props.inputProps};
-            return(<div class="cssload-container">
-                    <div class="cssload-lt"></div>
-                    <div class="cssload-rt"></div>
-                    <div class="cssload-lb"></div>
-                    <div class="cssload-rb"></div>
+            return(<div className="cssload-container">
+                    <div className="cssload-lt"></div>
+                    <div className="cssload-rt"></div>
+                    <div className="cssload-lb"></div>
+                    <div className="cssload-rb"></div>
                 </div>)
     }
 }

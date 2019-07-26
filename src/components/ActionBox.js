@@ -31,7 +31,7 @@ export class ActionBox extends Component{
                 price: '',
                 start_date: new Date(),
                 end_date: undefined,
-                isLoaded: false,
+                isLoaded: true,
                 items: [],
                 suggestData: []
 
@@ -59,58 +59,11 @@ export class ActionBox extends Component{
             this.handleRangeDateChange = this.handleRangeDateChange.bind(this);
             this.handleRemoveLocation = this.handleRemoveLocation.bind(this);
             this.handleRemove = this.handleRemove.bind(this);
+            this.suggestData = this.suggestData.bind(this);
     }
 
     componentDidMount() {
-        let self = this;
-
-        axios.get(this.props.src.url + 'actions/')
-            .then(function (response) {
-                let data = response.data;
-
-                let suggestData = []
-
-
-                data.map((option, i) => {
-                    suggestData.push({
-                        id: option.idRef,
-                        data: [],
-                        other: '1'
-                    })
-                    for (var key in option) {
-                        if (option.hasOwnProperty(key)) {
-                            switch (key) {
-                                case 'work':
-                                    suggestData[suggestData.length - 1]['data'].unshift([key, option[key]]);
-                                    break;
-                                case 'location':
-                                    suggestData[suggestData.length - 1]['data'].unshift([key, option[key].line1]);
-                                    break;
-                                default:
-                                    suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
-                            }
-                        }
-                    }
-                })
-
-                self.setState({
-                    isLoaded: true,
-                    items: data,
-                    suggestData: suggestData,
-                    response
-                });
-            })
-            .catch(function (error) {
-                // handle error
-                self.setState({
-                    isLoaded: false,
-                    error
-                });
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
+       
     }
 
 
@@ -127,7 +80,7 @@ export class ActionBox extends Component{
     handleAddLocation(){
         if (!this.state.newLocationForm) {
             this.setState({
-                newLocationForm: true
+                newLocationForm: true,
             });
         }
         this.addLocation();
@@ -174,7 +127,10 @@ export class ActionBox extends Component{
                     src={this.props.src} 
                     onChangeForParent={this.handlePersonChange.bind(this)} 
                     onSelectedForParent={this.handlePersonSelected.bind(this)} 
-                    debug={false} 
+                    debug={false}
+                    propName={""}
+                    keyPositions={{'name':0}}
+                    endpoint={"users/?lname__icontains="}
                     existingPeopleLength={this.state.people.length} 
                     onRemove={this.removeNewPerson}
                     inputProps={{button:'button-remove col-xs',suggestable:'col-xs-6'}}
@@ -205,7 +161,7 @@ export class ActionBox extends Component{
                                 <div className="days-input col-xs">
                                     <input type="number" placeholder="2"  onChange={(e)=> this.handleSingleChange('quantity', e.target.value)}/>
                                     <div className="label middle-xs">
-                                        days
+                                        units
                                     </div>
                                 </div>
                                 <div className="at">
@@ -274,7 +230,7 @@ export class ActionBox extends Component{
                                 
 
                             </div>
-                                <div className="new-action-tools row">
+                            <div className="new-action-tools row">
 
                                 <button onClick={this.handleAddUser} className="add add-user for-input col-xs">
                                     <i className="fas fa-user">+</i><p>Add User</p>
@@ -397,6 +353,7 @@ export class ActionBox extends Component{
             data['start_date'] = this.state.start_date
             data['end_date'] = this.state.end_date
             data['location'] = this.state.location
+            data['creator']  = this.props.src.user.id
 
         return data;
     }
@@ -405,18 +362,93 @@ export class ActionBox extends Component{
         this.setState({formActive:false});
     }
     handleSubmit(event) {
-
+        var _this = this;
         event.preventDefault();
-         axios.post(this.props.src.url + 'actions/', this.constructFormJSON())
+         axios.post(this.props.src.domain + 'actions/', this.constructFormJSON())
              .then(function (response) {
-                 let data = response.data;
-                 console.log(data);
+                 return response.data;
+
              })
-             .catch(function (error) {
+             .then(function(d){
+                if(d['created']){
+                    _this.setState({ formActive: false })
+                }
              })
-             .then(function () {
+             .catch(function (error) {  
+             })
+             .then(function (d) {
+
                  // always executed
              });
+
+    }
+    suggestData(query){
+        let self = this;
+        console.log("Doing a fetch")
+        self.props.src.rest.get('actions/?limit=10&work__icontains='+query)
+            .then(function (response) {
+                let data = response.data.results;
+
+                let suggestData = [];
+                let works = [];
+                console.log(data.length)
+                data.map((option, i) => {
+                    // let works_filter = works.map(w => w === option.work);
+                    // suggestData = suggestData.filter( (v,i) => works_filter[i]);
+                    // console.log(suggestData.length);
+                    // works.push(option.work);
+                    suggestData.push({
+                        id: option.work,
+                        data: [],
+                        other: 1,
+                    })
+                    for (var key in option) {
+                        if (option.hasOwnProperty(key)) {
+                            switch (key) {
+                                case 'work':
+                                    suggestData[suggestData.length - 1]['data'].unshift([key, option[key]]);
+                                    break;
+                                /*                                 case 'location':
+                                                                    if (option[key]){
+                                                                        suggestData[suggestData.length - 1]['data'].unshift([key, option[key].line1]);
+                                                                    }
+                                                                    break; */
+                                default:
+                                    suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
+                            }
+                        }
+                    }
+
+                })
+                suggestData = suggestData.filter((suggestion, i) => {
+                    let pos = suggestData.map(s => s.id).indexOf(suggestion.id)
+                    let curr = pos == i;
+                    if (!curr) {
+                        suggestData[pos].other += 1
+                    }
+                    return curr
+
+                }
+                )
+                self.setState({
+                    isLoaded: true,
+                    items: data,
+                    suggestData: suggestData,
+                    response
+                });
+
+            })
+            .catch(function (error) {
+                // handle error
+                self.setState({
+                    isLoaded: false,
+                    error
+                });
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
 
     }
 
@@ -449,16 +481,18 @@ export class ActionBox extends Component{
                             {this.state.isLoaded && <ActionPerson 
                                                         className="description-box" 
                                                         renderComponent={'textarea'} 
+                                                        minQueryLength={3} 
+                                                        propName={""} 
                                                         value={1}  
                                                         id={1} 
-                                                        src={this.state.suggestData}
+                                                        data={this.state.suggestData}
                                                         debug={false} 
+                                                        onFetchForParent={this.suggestData}
                                                         onChangeForParent={this.handleDescriptionChange} 
                                                         placeholder="Raising crowns over stonewalls and fencelines"/>}
                             {this.state.formActive ?
                                 
                                 this.createForm() 
-
                                 :
 
                                 null

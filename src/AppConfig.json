@@ -15,7 +15,7 @@
         "weight": "600"
     },
     "organisation": {
-        "name": "Thomas Barratt Design & Development",
+        "name": "Team 17 Software",
         "address": {
             "line1": "43 Crookes Rd",
             "line2": "Sheffield",
@@ -27,9 +27,9 @@
             "sort_code": "04-00-04"
         },
         "online": {
-            "website": "http://thomasbarratt.co.uk",
-            "twitter": "@thomas_1151",
-            "facebook": "thomas1151development"
+            "website": "",
+            "twitter": "",
+            "facebook": ""
         },
         "logo": "images/logo.png"
     }

@@ -159,32 +159,32 @@ const src_autocomplete = [
     
 ]
 // Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = (value,src) => {
+const getSuggestions = (value,src,_this) => {
 
   const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
-
-  return (inputLength < 3 || src.length === 0) ? [] : src.filter(lang => {
-        let found = false;
-        for (var key in Object.keys(lang.data)) {
-        if (typeof (lang['data'][key][1]) === 'string'){
-                if (lang['data'][key][1].toLowerCase().slice(0, inputLength) === inputValue){
-                    found = true;
-                    break;
-                    // return lang['data'][i][1].toLowerCase().slice(0, inputLength);
-                }
-            }
-        }
-        if(found){
-            return lang;
-        }
-  });
+  console.log("HERE!");
+  return src(value);
+//   src(value).filter(lang => {    
+//         let found = false;
+//         for (var key in Object.keys(lang.data)) {
+//         if (typeof (lang['data'][key][1]) === 'string'){
+//                 if (lang['data'][key][1].toLowerCase().slice(0, inputLength) === inputValue){
+//                     found = true;
+//                     break;
+//                     // return lang['data'][i][1].toLowerCase().slice(0, inputLength);
+//                 }
+//             }
+//         }
+//         if(found){
+//             return lang;
+//         }
+//      })
 };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.data[0][1];
+const getSuggestionValue = suggestion => suggestion ? suggestion.data[0][1] : "";
 
 const renderSuggestion = function(suggestion){
 
@@ -192,7 +192,13 @@ const renderSuggestion = function(suggestion){
           <div>
             <div className={"suggestion-content-wrapper"}>
                 <p className="title">{suggestion['data'][0][1] }   {suggestion["other"].length== 0 ? null:<span>{suggestion["other"]}</span>}</p>
-                <p>  {suggestion['data'].hasOwnProperty(1) ? (typeof(suggestion['data'][1][1]) === "string" ? suggestion['data'][1][1]: suggestion['data'][1][1][ Object.keys(suggestion['data'][1][1])[0]] ) :null}</p>
+                <p>                
+                    {(typeof(suggestion['data'][1][1]) === "string" ? 
+                            suggestion['data'][1][1]
+                            : 
+                            undefined
+                    )}
+                   </p>
             </div>
             </div>
     )
@@ -235,7 +241,7 @@ export class ActionPerson extends Component{
         if (this.props.debug) {
             var a = eval(("src_" + this.props.src))
         }else{
-            var a = this.props.src;
+            var a = this.props.data;
         }
         return a;
     }
@@ -254,8 +260,9 @@ export class ActionPerson extends Component{
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
     onSuggestionsFetchRequested = ({ value }) => {
+        (value.length > (this.props.minQueryLength !=null ? this.props.minQueryLength : 5)) &&
         this.setState({
-        suggestions: getSuggestions(value,this.state.src)
+        suggestions: this.props.onFetchForParent(value,this.state.src, this.props.endpoint, (this.props.keyPositions ? this.props.keyPositions : []), this.props.propName)
         });
     };
 
@@ -307,7 +314,7 @@ export class ActionPerson extends Component{
                     <div className={"searchBox row "+this.props.className}>   
                         <div className="col-xs-12">
                             <Autosuggest
-                                suggestions={suggestions}
+                                suggestions={this.props.data}
                                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                                 onSuggestionSelected={this.onSuggestionSelected}
@@ -326,7 +333,7 @@ export class ActionPerson extends Component{
                     <div className={"searchBox row "+this.props.className}>   
                         <div className="col-xs-12">
                             <Autosuggest
-                                suggestions={suggestions}
+                                suggestions={this.props.data}
                                 ref={storeInputReference}
                                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}

@@ -5,76 +5,32 @@ import React, {
 import moment from 'moment';
 import {ActionPerson} from './ActionPerson';
 import axios from "axios";
+import fetchSuggestions from '../logic/fetchSuggestions';
 
 export class ActionLocation extends Component {
     constructor(props) {
         super(props);
         this.handleLocationAutofill = this.handleLocationAutofill.bind(this);
         this.onChangeForParent = this.onChangeForParent.bind(this);
+        this.fetchSuggestions = this.fetchSuggestions.bind(this);
         this.state ={
             line1:undefined,
             line2:undefined,
             line3:undefined,
             line4:undefined,
             postcode:undefined,
-            isLoaded: false
+            isLoaded: true,
+            line1SuggestData: [],
+            line2SuggestData: [],
+            line3SuggestData: [],
+            line4SuggestData: [],
+            postcodeSuggestData:[],
+            
         }
     }
 
      componentDidMount() {
-         if(!this.state.isLoaded){
-            let self = this;
-            axios.get(this.props.src.url + 'locations/')
-                .then(function (response) {
-                    let data = response.data;
-                    // handle success
 
-                    let suggestData = []
-
-
-                    data.map((option, i) => {
-                        suggestData.push({
-                            id: option.id,
-                            data: [],
-                            other: '1'
-                        })
-                        for (var key in option) {
-                            if (option.hasOwnProperty(key)) {
-                                switch (key) {
-                                    case 'line1':
-                                        suggestData[suggestData.length - 1]['data'].unshift([key, option[key]]);
-                                        break;
-                                    case 'line2':
-                                        suggestData[suggestData.length - 1]['data'].splice(1, 0, [key, option[key]]);
-                                        break;
-
-                                    default:
-                                        suggestData[suggestData.length - 1]['data'].push([key, option[key]]);
-                                }
-                            }
-                        }
-                    })
-                    console.log(suggestData);
-                    self.setState({
-                        isLoaded: true,
-                        items: data,
-                        suggestData: suggestData,
-                        response
-                    });
-                })
-                .catch(function (error) {
-                    // handle error
-                    self.setState({
-                        isLoaded: true,
-                        error
-                    });
-                    console.log(error);
-                })
-                .then(function () {
-                    // always executed
-                });
-         }
-        
      }
 
 
@@ -96,7 +52,9 @@ export class ActionLocation extends Component {
         this.props.onChangeForParent(value, i);
 
     }
-
+    fetchSuggestions(value, src, endpoint, keyPositions, propName, idField = 'id', other = "1"){
+      fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField, other);
+    }
     render() {
 
         // autoFocus and initialDate are helper props for the example wrapper but are not
@@ -122,23 +80,23 @@ export class ActionLocation extends Component {
             this.state.isLoaded ?
             <div className="address row">
                 <div className="col-xs-6 address-1 input-wrap ">
-                    <ActionPerson assigned={assignedVals.line1} value={'line1'}  id={'line1'} src={this.state.suggestData} debug={false} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.onChangeForParent} placeholder="Line 1"/>
+                    <ActionPerson assigned={assignedVals.line1} endpoint={'locations/?line1__icontains='} propName={'line1'} value={'line1'}  id={'line1'} data={this.state.line1SuggestData} debug={false} onFetchForParent={this.fetchSuggestions} onSelectedForParent={this.handleLocationAutofill} onChangeForParent={this.onChangeForParent} placeholder="Line 1"/>
                 </div>
 
                 <div className="col-xs-6 address-2 input-wrap">
-                    <ActionPerson assigned={assignedVals.line2}   value={'line2'}   id={'line2'}  src={this.state.suggestData} debug={false} onChangeForParent={this.onChangeForParent} placeholder="Line 2"/>
+                    <ActionPerson assigned={assignedVals.line2}   endpoint={'locations/?line2__icontains='} propName={'line2'}   value={'line2'}   id={'line2'}  data={this.state.line2SuggestData} debug={false} onFetchForParent={this.fetchSuggestions} onChangeForParent={this.onChangeForParent} placeholder="Line 2"/>
                 </div>
                 
                 <div className="col-xs-6 address-3 input-wrap">
-                    <ActionPerson assigned={assignedVals.line3}  value={'line3'}   id={'line3'}  src={this.state.suggestData} debug={false} onChangeForParent={this.onChangeForParent} placeholder="Line 3"/>
+                    <ActionPerson assigned={assignedVals.line3}  endpoint={'locations/?line3__icontains='} propName={'line3'}  value={'line3'}   id={'line3'}  data={this.state.line3SuggestData} debug={false} onFetchForParent={this.fetchSuggestions} onChangeForParent={this.onChangeForParent} placeholder="Line 3"/>
                 </div>
                 
                 <div className="col-xs-6 address-4 input-wrap">
-                    <ActionPerson assigned={assignedVals.line4}  value={'line4'}   id={'line4'}  src={this.state.suggestData} debug={false} onChangeForParent={this.onChangeForParent} placeholder="Line 4"/>
+                    <ActionPerson assigned={assignedVals.line4}  endpoint={'locations/?line4__icontains='} propName={'line4'}  value={'line4'}   id={'line4'}  data={this.state.line4SuggestData} debug={false} onFetchForParent={this.fetchSuggestions} onChangeForParent={this.onChangeForParent} placeholder="Line 4"/>
                 </div>
                 
                 <div className="col-xs-6 address-postcode input-wrap">
-                    <ActionPerson assigned={assignedVals.postcode}  value={'postcode'}id={'postcode'}  src={this.state.suggestData} debug={false} onChangeForParent={this.onChangeForParent} placeholder="Postcode"/>
+                    <ActionPerson assigned={assignedVals.postcode} endpoint={'locations/?postcode__icontains='}  propName={'postcode'} value={'postcode'} id={'postcode'}  data={this.state.postcodeSuggestData} debug={false} onFetchForParent={this.fetchSuggestions} onChangeForParent={this.onChangeForParent} placeholder="Postcode"/>
                 </div>
                 {this.props.children}
 

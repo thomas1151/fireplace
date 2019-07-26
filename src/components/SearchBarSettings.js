@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { AuthContext } from '../contexts/authContext';
+import Link from 'react-router-dom/Link';
+import Loading from './Loading';
+import logOut from '../logic/logOut';
 
 export class SearchBarSettings extends Component{
 
@@ -12,7 +16,7 @@ export class SearchBarSettings extends Component{
         this.handleToggle = this.handleToggle.bind(this);
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
-
+        this.handleLogOut = this.handleLogOut.bind(this);
     }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
@@ -43,21 +47,45 @@ export class SearchBarSettings extends Component{
         }));
     }
 
+    handleLogOut(){
+        if(this.props.onLogOut){
+            this.props.onLogOut();
+        }
+    }
     render(){
         return(
-        <div className="menu-outer" ref={this.setWrapperRef}>
-            <button onClick={this.handleToggle} className="icon middle-xs"><i className="fas fa-user"></i></button>
-            <div className={"menu-settings "+(this.state.isToggleOn ? 'menu-open' : '')}>
-                <div className="menu-title">
-                    <p>Thomas Barratt</p>
+            (this.context.user ? 
+            <div className="menu-outer" ref={this.setWrapperRef}>
+                <button onClick={this.handleToggle} className="icon middle-xs profile-menu">
+                    <i className="fas fa-user"></i>
+                    <p>{this.context.user.name}</p>
+                </button>
+                <div className={"menu-settings "+(this.state.isToggleOn ? 'menu-open' : '')}>
+                    <div className="menu-title">
+                        <p>{this.context.user.name}</p>
+                    </div>
+                    <ul>
+                        <li><Link to={'/people/'+this.context.user.username}><i className="fas fa-info"></i>About You</Link></li>
+                        <li><a><i className="fas fa-cogs"></i>Settings</a></li>                    
+                        <li><a onClick={this.handleLogOut}><i className="fas fa-sign-out-alt"></i>Logout</a></li>
+                    </ul>
                 </div>
-                <ul>
-                    <li><a><i className="fas fa-info"></i>About You</a></li>
-                    <li><a><i className="fas fa-cogs"></i>Settings</a></li>                    
-                    <li><a><i className="fas fa-sign-out-alt"></i>Logout</a></li>
-                </ul>
             </div>
-        </div>)
+            :
+                <div className="menu-outer" ref={this.setWrapperRef}>
+                    <button onClick={this.handleToggle} className="icon middle-xs"><i className="fas fa-user"></i></button>
+                    <div className={"menu-settings " + (this.state.isToggleOn ? 'menu-open' : '')}>
+                        <div className="menu-title">
+                            <p>{this.context.username}</p>
+                        </div>
+                        <ul>
+                            <li onClick={this.handleLogOut}><a ><i className="fas fa-sign-out-alt"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>            
+                )
+        )
     }
 }
+SearchBarSettings.contextType = AuthContext;
 export default SearchBarSettings;

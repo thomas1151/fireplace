@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
 import CONFIG from '../AppConfig.json';
 import CONFIGLABELS from '../ConfigLabels.json';
-import {SearchBar} from '../components/SearchBar.js';
-import { Feed } from '../components/Feed';
-import { ActionBox } from '../components/ActionBox';
-import { ShortcutsBar } from '../components/ShortcutsBar';
-import { FeedElement } from '../components/FeedElement';
-import { ActionSelection } from '../components/ActionSelection';
-import { InvoiceInbox } from './InvoiceInbox';
-import { Checkbox } from '../components/Checkbox';
-import { ViewJob } from '../components/ViewJob';
-import { Redirect } from 'react-router-dom';
-import jsPDF from 'jspdf';
-import { Loading } from '../components/Loading';
-
+import { AuthContext } from '../contexts/authContext.js';
 
 
 export class ModifyFireplace extends Component{
+
        constructor(props) {
             super(props);
             this.onSave = this.onSave.bind(this);
@@ -46,7 +35,6 @@ export class ModifyFireplace extends Component{
         }, []);
     }
     keyifyToJSON(keys){
-        let obj = {};
         keys.map( el => {
             console.log(el);
             let segs = el.split(".");
@@ -68,7 +56,7 @@ export class ModifyFireplace extends Component{
             }
         }, []);
 
-        var keys = keyify(CONFIG);
+        var keys = keyify(this.props.config);
         var properties = {}                     
         for (var key in keys) { 
             let val = this.resolve(keys[key], CONFIG);
@@ -116,10 +104,10 @@ export class ModifyFireplace extends Component{
         console.log("SAVE INNIT");
     }
     render(){
-        let bg =this.props.backgroundColor;
+        let value = this.context;
+        console.log(value);
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2><h3> {this.props.config.organisation.address.map( (el,i) => <div className="location_line">{Object.values(el)} </div> )}</h3></div></div>;
         return (
-
         <div class="login-wrapper row center-xs middle-xs">
             <div class="login-outer col-xs-10 col-md-10">
                 <div class="box">
@@ -166,8 +154,9 @@ export class ModifyFireplace extends Component{
             </div>
             
         </div>
-
         )
     }
 }
+ModifyFireplace.contextType = AuthContext;
+
 // export default Invoices;

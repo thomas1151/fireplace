@@ -9,19 +9,28 @@ import {
     Route,
     Link
 } from 'react-router-dom';
+import titleGenerator from '../logic/titleGenerator';
 
+const homeActions = (a,b) => {
+    console.log(a);
+    return !Boolean(a['job']);
+    // console.log(!a.hasOwnProperty('job'))
+    // return !a.data.hasOwnProperty('job');
+}
 
 export class Home extends Component{
     constructor(props) {
             super(props);
     }
     render(){
+        titleGenerator("Home", this.props.config);
+
         let bg =this.props.backgroundColor;
         return(
             <React.Fragment>
-                <Route src={this.props.src} path='/' render={routeProps => <ActionBox src={this.props.src} isMobile={this.props.isMobile}/>} />
-                <Feed src={this.props.src} isMobile={this.props.isMobile}/>
                 {this.props.children}
+                <Route src={this.props.src} path='/' render={routeProps => <ActionBox src={this.props.src} config={this.props.config} isMobile={this.props.isMobile}/>} />
+                <Feed src={this.props.src} dataSrc={'actions/?document__isnull=True'} filterFeed={homeActions} config={this.props.config}  isMobile={this.props.isMobile}/>
             </React.Fragment>
         )
     }

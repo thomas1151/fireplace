@@ -3,6 +3,7 @@ import { SearchElement } from './SearchElement';
 import { SearchBarSettings } from './SearchBarSettings';
 import { MainShortcuts } from './MainShortcuts';
 import { ShortcutsMobile } from './ShortcutsMobile';
+import { AuthContext } from '../contexts/authContext';
 
 export class ShortcutsBar extends Component{
     constructor(props) {
@@ -15,26 +16,29 @@ export class ShortcutsBar extends Component{
             
             
             return(
-                <div className="shortcutsBar isMobile row">
-                    <ShortcutsMobile title="Shortcuts" src={'main'} debug={true}/>
+                <div className="shortcutsBar isMobile row" >
+                    <ShortcutsMobile location={this.props.location} title="Shortcuts" src={'main'} debug={true} style={{ background: this.context.config['application-style']['dark'] }}/>
                 </div>
             )
         }
         return(
-                <div className="shortcutsBar col-md-3 col-lg-2">
+                <div className="shortcutsBar col-md-2 col-lg-1 noPrint " style={ {background: this.context.config['application-style']['dark']}}>
+
                     <div className="user-title">
-                        <p>Thomas Barratt</p>
+                        <p>{this.context.config['application-name']}</p>
                     </div>
-                    <MainShortcuts title="Shortcuts" src={'main'} debug={true}/>
-                    <MainShortcuts title="Most Used" src={'mostUsed'} debug={true}/>
-                    <MainShortcuts title="People" src={'people'} debug={true}/>
-                    <div className="most-used-shortcuts">
-                    </div>
-                    <div className="people-shortucts">
-                    </div>
+                    
+                    <MainShortcuts location={this.props.location} title="Shortcuts" src={'main'} debug={true}/>
+                    <MainShortcuts location={this.props.location} title="Most Used" src={'mostUsed'} debug={true}/>
+                    <MainShortcuts location={this.props.location} title="People" src={'people'} debug={true}/>
+
+                    <div className="most-used-shortcuts"/>
+                    <div className="people-shortcuts"/>
                 </div>
 
         )
     }
 }
+ShortcutsBar.contextType = AuthContext;
+
 export default ShortcutsBar;

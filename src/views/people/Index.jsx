@@ -11,9 +11,9 @@ export class Index extends Component {
 
     componentDidMount(){
         let self = this;
-        axios.get(this.props.src.url + 'users/')
+        self.props.src.rest.get('users/')
             .then(function (response) {
-                let data = response.data;
+                let data = response.data.results;
                 // handle success
                 self.setState({
                     isLoaded: true,
