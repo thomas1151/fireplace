@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 
 
 export class Loading extends Component{
-    constructor(props) {
-            super(props);
-    }
+
     render(){
             // let inputProps = {...this.props.inputProps};
             return(<div className="cssload-container">

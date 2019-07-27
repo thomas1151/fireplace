@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 // import { ActionDate } from './ActionDate';
-import { ActionPerson } from '../../components/ActionPerson';
 import { ActionLocation } from '../../components/ActionLocation';
-import { ToastContainer, toast } from 'react-toastify';
-import moment from 'moment';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleDateInput } from '../../components/SingleDateInput';
 import { RangeDateInput } from '../../components/RangeDateInput';
 import { RemovableSuggestable } from '../../components/RemovableSuggestable';
-import axios from "axios";
 import titleGenerator from '../../logic/titleGenerator';
 import fetchSuggestions from '../../logic/fetchSuggestions';
-import { Checkbox } from '../../components/Checkbox';
 
 // <div>
 //   <button onClick={this.notify}>Notify !</button>

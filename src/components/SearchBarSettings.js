@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { AuthContext } from '../contexts/authContext';
 import Link from 'react-router-dom/Link';
-import Loading from './Loading';
-import logOut from '../logic/logOut';
+
 
 export class SearchBarSettings extends Component{
 
@@ -66,8 +65,8 @@ export class SearchBarSettings extends Component{
                     </div>
                     <ul>
                         <li><Link to={'/people/'+this.context.user.username}><i className="fas fa-info"></i>About You</Link></li>
-                        <li><a><i className="fas fa-cogs"></i>Settings</a></li>                    
-                        <li><a onClick={this.handleLogOut}><i className="fas fa-sign-out-alt"></i>Logout</a></li>
+                        {/* <li><a><i className="fas fa-cogs"></i>Settings</a></li>                     */}
+                        <li><Link to='/'  onClick={this.handleLogOut}><i className="fas fa-sign-out-alt"></i>Logout</Link></li>
                     </ul>
                 </div>
             </div>
@@ -79,7 +78,7 @@ export class SearchBarSettings extends Component{
                             <p>{this.context.username}</p>
                         </div>
                         <ul>
-                            <li onClick={this.handleLogOut}><a ><i className="fas fa-sign-out-alt"></i>Logout</a></li>
+                            <li><Link onClick={this.handleLogOut} to='/'><i className="fas fa-sign-out-alt"></i>Logout</Link></li>
                         </ul>
                     </div>
                 </div>            

@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { FeedElement } from '../components/FeedElement';
 import { Loading } from '../components/Loading';
-import axios from 'axios';
-import {
-    Link,
-} from 'react-router-dom';
+
 const subtitle = (f) => {
     let created = new Date(Date.parse(f.date)).toLocaleDateString();
     return (
@@ -49,7 +46,6 @@ export class OrganisationInbox extends Component {
                         {this.state.loaded ? 
                             (this.state.useProps ? this.props.items : this.state.items).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map((f) => {
                             // let date = new Date(Date.parse(f.date)).toLocaleDateString();
-                            {/* let totalPrice = f.actions.map(item => item.total).reduce((prev, next) => prev + next);  */ }
 
                             return (<FeedElement
                                 usefulData={f.id}

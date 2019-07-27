@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import ActionPerson from './ActionPerson';
-import axios from "axios";
-import objectMap from '../logic/objectMap';
 import fetchSuggestions from '../logic/fetchSuggestions';
 
 export class RemovableSuggestable extends Component{
@@ -13,11 +11,9 @@ export class RemovableSuggestable extends Component{
             }
         this.fetchData = this.fetchData.bind(this);
     }
-    componentDidMount() {
-        let self = this;
-    }
+
     fetchData(value, src, endpoint, keyPositions, propName, idField = idField, other = other) {
-        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField = idField, other = other);
+        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField, other);
     }
     render(){
             // let inputProps = {...this.props.inputProps};
@@ -37,8 +33,7 @@ export class RemovableSuggestable extends Component{
                             onSelectedForParent={this.props.onSelectedForParent}
                             keyPositions={this.props.keyPositions}
                             debug={this.props.debug}/>
-                        {/* <input type="text" value={el||''} onChange={this.handleChange.bind(this, i)} /> */}
-                        {this.props.existingPeopleLength < 1 ? <div><p>Add a new person</p></div> : null}
+                        {this.props.existingPeopleLength < 1 ? <div><p>Add a new person</p></div> : undefined}
                         <button className={this.props.inputProps.button} onClick={()=>this.props.onRemove(this.props.id)}><i className="fas fa-times"></i></button>
             </div> );
     }

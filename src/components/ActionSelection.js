@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ActionPerson } from './ActionPerson';
 import { JobForm } from './JobForm';
-import axios from "axios";
 import fetchSuggestions from '../logic/fetchSuggestions';
 import { DropdownWithContext } from './DropdownWithContext';
 
@@ -29,7 +28,7 @@ export class ActionSelection extends Component{
         this.handleSelected = this.handleSelected.bind(this);
         this.fetchSuggestions = this.fetchSuggestions.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleSelected = this.handleSelected.bind(this);
+        // this.handleSelected = this.handleSelected.bind(this);
         this.onPeopleTypeChange = this.onPeopleTypeChange.bind(this);
         this.state ={
             jobLinkForm:false, 
@@ -96,7 +95,7 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
         }
     }
     fetchSuggestions(value, src, endpoint, keyPositions, propName, idField = 'id', other = "1") {
-        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField = idField, other = other);
+        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField, other);
         
     }
 
@@ -213,6 +212,8 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
                 switch (this.state.refTypeSuggestData[i].data[l][0]) {
                     case 'id': peep_type["value"] = this.state.refTypeSuggestData[i].data[l][1]; break;
                     case 'name': peep_type["label"] = this.state.refTypeSuggestData[i].data[l][1];
+
+                    //TODO: Add default;
                     // case 'name': peep_type["label"] =  <div><i className="fas fa-user"/>{this.state.refTypeSuggestData[i].data[l][1]}</div>; break; 
                 }
             }
@@ -242,7 +243,7 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
                     //     continue
                     // }
                 }
-                if (exists == false) {
+                if (exists === false) {
                     peeps.push(acts[i].people[j])
                 }
             }

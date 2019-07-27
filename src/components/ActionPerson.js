@@ -1,185 +1,29 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Autosuggest from 'react-autosuggest';
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-} from 'react-router-dom';
 
-
-// Imagine you have a list of languages that you'd like to autosuggest.
-const src_languages = [
-    {
-        data: [
-            ["name", "Thomas Barratt"],
-            ["organisation", "Thomas Barratt Design & Development"],
-        ],
-        id: 2,
-        other: '',
-    }, {
-        data: [
-            ["name", "James Reynolds"],
-            ["organisation", "Savilles"],
-        ],
-        id: 4,
-        other: '',
-    },
-    {
-        data: [
-            ["name", "Donald Trump"],
-            ["organisation", "Trump Hotels"],
-        ],
-        id: 3,
-        other: '',
-    },
-];
-
-const src_jobs = [{
-        data: [
-            ["name", "REW180916"],
-            ["organisation", "Ray Estate"],
-        ],
-        id: 2,
-        other: '',
-    }, {
-        data: [
-            ["name", "TBW190918"],
-            ["organisation", "Thomas Barratt Design & Development"],
-        ],
-        id: 3,
-        other: '',
-    },
-    {
-        data: [
-            ["name", "DTW180918"],
-            ["organisation", "Trump Hotels"],
-        ],
-        id: 4,
-        other: '',
-    },
-];
-
-const src_org = [{
-        data: [
-            ["name", "Thomas Barratt Design and Development"],
-            ["line1", "43 Crookes Rd"],
-            ["line2", "Sheffield"],
-            ["line3", ""],
-            ["line4", ""],
-            ["postcode", "S10 5BA"]
-                ],
-        id: 2,
-        other: '',
-    }, {
-        data: [
-            ["name", "North Eastern Tree Company"],
-            ["line1", "1 Hudson Street"],
-            ["line2", "Ferryhill"],
-            ["line3", "Co. Durham"],
-            ["line4", ""],
-            ["postcode", "DL17 8LZ"]
-            ],
-        id: 4,
-        other: '',
-    },
-    {
-        data: [
-            ["name", "Trump Hotels"],
-            ["line1", "1600 Pennsylvania Avenue"],
-            ["line2", "Washington DC"],
-            ["line3", "America"],
-            ["line4", "America"],
-            ["postcode", "DC 20500"],
-        ],
-        id: 3,
-        other: '',
-    },
-];
-
-
-const src_type = [{
-        data: [
-            ["name", "Sales Invoice"],
-            ["description", "Sales Invoice for client."],
-        ],
-        id: 2,
-        other: '',
-    }, {
-        data: [
-            ["name", "Quote"],
-            ["description", "Proposed Works for client."],
-        ],
-        id: 4,
-        other: '',
-    },
-];
-
-
-const src_address = [{
-    data:[
-        ["line1","Ray Estate"],
-        ["line2", "Ray Demense Office"],
-        ["line3", "Kirkwhelpting"],
-        ["line4", "NOrthumberland"],
-        ["postcode", "NE19 2RG"]
-    ],
-    id: 1,
-    // sub: "Ray Demense Office, Kirkwhelpington, Northumberland, NE19 2 RG",
-    other: '',
-},
-{
-    data: [
-        ["line1", "43 Crookes Rd"],
-        ["line2", "Sheffield"],
-        ["line3", ""],
-        ["line4", ""],
-        ["postcode", "S10 5BA"]
-    ],
-    id: 2,
-    other: '',
-},
-]
-
-const src_autocomplete = [
-    {
-        data: [
-            ["description_fragment", "Continued work over fencelines"],
-        ],
-        id: 2,
-        other: 5,
-    }, 
-    {
-        data: [
-            ["description_fragment", "TCB - you know, taking care of business."],
-        ],
-        id: 3,
-        other: 5,
-    }, 
-    
-]
 // Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = (value,src,_this) => {
+// const getSuggestions = (value,src,_this) => {
 
-  const inputValue = value.trim().toLowerCase();
-  console.log("HERE!");
-  return src(value);
-//   src(value).filter(lang => {    
-//         let found = false;
-//         for (var key in Object.keys(lang.data)) {
-//         if (typeof (lang['data'][key][1]) === 'string'){
-//                 if (lang['data'][key][1].toLowerCase().slice(0, inputLength) === inputValue){
-//                     found = true;
-//                     break;
-//                     // return lang['data'][i][1].toLowerCase().slice(0, inputLength);
-//                 }
-//             }
-//         }
-//         if(found){
-//             return lang;
-//         }
-//      })
-};
+//   const inputValue = value.trim().toLowerCase();
+//   console.log("HERE!");
+//   return src(value);
+// //   src(value).filter(lang => {    
+// //         let found = false;
+// //         for (var key in Object.keys(lang.data)) {
+// //         if (typeof (lang['data'][key][1]) === 'string'){
+// //                 if (lang['data'][key][1].toLowerCase().slice(0, inputLength) === inputValue){
+// //                     found = true;
+// //                     break;
+// //                     // return lang['data'][i][1].toLowerCase().slice(0, inputLength);
+// //                 }
+// //             }
+// //         }
+// //         if(found){
+// //             return lang;
+// //         }
+// //      })
+// };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the

@@ -6,7 +6,6 @@ import {
     Route,
     Switch
 } from 'react-router-dom';
-import axios from "axios";
 import SingleOrganisation from './organisations/Single.jsx';
 import documentLinks from '../logic/documentLinks';
 import NewOrganisation from './organisations/New';
@@ -85,7 +84,7 @@ export class Organisations extends Component {
         console.log(value);
         for (let i = 0; i < this.state.items.length; i++) {
             console.log(this.state.items[i]);
-            if (this.state.items[i][prop] == value) {
+            if (this.state.items[i][prop] === value) {
                 return this.state.items[i];
             }
         }

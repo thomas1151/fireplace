@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 // import { ActionDate } from './ActionDate';
 import { ActionPerson } from './ActionPerson';
 import { ActionLocation } from './ActionLocation';
-import { ToastContainer, toast } from 'react-toastify';
-import moment from 'moment';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleDateInput } from './SingleDateInput';
 import { RangeDateInput } from './RangeDateInput';
@@ -287,11 +286,6 @@ export class ActionBox extends Component{
     }
     addLocation(){
         this.setState({'location':{
-            ['line1']:undefined,
-            ['line2']: undefined,
-            ['line3']: undefined,
-            ['line4']: undefined,
-            ['postcode']: undefined,
 
         }});
     }
@@ -336,7 +330,7 @@ export class ActionBox extends Component{
     handleRemoveDate(date_type){
         let form = ""
         // newState[(date_type)+'_date'] =undefined
-        if(date_type=='start'){
+        if(date_type === 'start'){
             form = "newSingleDateForm"
         }else{
             form = "newRangeDateForm";
@@ -390,8 +384,6 @@ export class ActionBox extends Component{
                 let data = response.data.results;
 
                 let suggestData = [];
-                let works = [];
-                console.log(data.length)
                 data.map((option, i) => {
                     // let works_filter = works.map(w => w === option.work);
                     // suggestData = suggestData.filter( (v,i) => works_filter[i]);
@@ -422,7 +414,7 @@ export class ActionBox extends Component{
                 })
                 suggestData = suggestData.filter((suggestion, i) => {
                     let pos = suggestData.map(s => s.id).indexOf(suggestion.id)
-                    let curr = pos == i;
+                    let curr = pos === i;
                     if (!curr) {
                         suggestData[pos].other += 1
                     }
@@ -490,15 +482,8 @@ export class ActionBox extends Component{
                                                         onFetchForParent={this.suggestData}
                                                         onChangeForParent={this.handleDescriptionChange} 
                                                         placeholder="Raising crowns over stonewalls and fencelines"/>}
-                            {this.state.formActive ?
-                                
-                                this.createForm() 
-                                :
+                            {this.state.formActive && this.createForm() }
 
-                                null
-                            }
-
-                           
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { FeedElement } from '../components/FeedElement';
 import { Loading } from '../components/Loading';
-import axios from 'axios';
-import {
-    Link,
-} from 'react-router-dom';
 const subtitle = (f) => {
     let created = new Date(Date.parse(f.date)).toLocaleDateString();
     return (
@@ -52,8 +48,6 @@ export class ContactsInbox extends Component {
                     <div className="invoice-feed action-feed col-xs">
                         {this.state.loaded ? 
                          (this.state.useProps ? this.props.items : this.state.items ).sort( (a,b) => a.lname.toLowerCase().localeCompare(b.lname.toLowerCase()) ).map((f) => {
-                            // let date = new Date(Date.parse(f.date)).toLocaleDateString();
-                            {/* let totalPrice = f.actions.map(item => item.total).reduce((prev, next) => prev + next);  */ }
 
                             return (<FeedElement
                                 usefulData={f.username}

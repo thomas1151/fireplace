@@ -23,6 +23,21 @@ export class JobInfoBar extends Component{
             buttons
         )
     }
+    handleDelete(e){
+        if(this.props.item){
+            console.log(this.props.item.url);
+            if(this.props.src){
+                console.log("Deleting")
+                this.props.src.rest.delete(this.props.item.url);
+            }else{
+                console.log("No src given :(");
+            }
+        }else{
+            console.log("No item! :O");
+        }
+        console.log(e);
+
+    }
     handleBack(){
         this.props.history.goBack();
     }
@@ -64,7 +79,7 @@ export class JobInfoBar extends Component{
         </button>)   
     }
     deleteButtonUI() {
-        return (<button onClick={this.handleBack} className="button-content-wrap light dangerous  ">
+        return (<button onClick={ (e) => { if (window.confirm('Are you sure you wish to delete this item?')) this.handleDelete(e) }} className="button-content-wrap light dangerous  ">
             <i className="fas fa-times"></i><p>Delete</p>
         </button>)
     }

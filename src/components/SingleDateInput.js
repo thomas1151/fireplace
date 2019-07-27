@@ -1,7 +1,7 @@
 import React from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-import { formatDate, parseDate } from 'react-day-picker/moment';
+import { formatDate } from 'react-day-picker/moment';
 
 export class SingleDateInput extends React.Component {
   constructor(props) {
@@ -23,7 +23,6 @@ export class SingleDateInput extends React.Component {
     this.props.onChangeForParent(day);
   }
   render() {
-    const { selectedDay } = this.state;
     let inputProps  = {}
     if(this.props.isMobile){
           inputProps={ readOnly: true }

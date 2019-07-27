@@ -2,21 +2,16 @@ import React, { Component } from 'react';
 // import { ActionDate } from './ActionDate';
 import { ActionPerson } from '../../components/ActionPerson';
 import { ActionLocation } from '../../components/ActionLocation';
-import { ToastContainer, toast } from 'react-toastify';
-import moment from 'moment';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleDateInput } from '../../components/SingleDateInput';
 import { RangeDateInput } from '../../components/RangeDateInput';
 import { RemovableSuggestable } from '../../components/RemovableSuggestable';
-import axios from "axios";
 import titleGenerator from '../../logic/titleGenerator';
 import fetchSuggestions from '../../logic/fetchSuggestions';
 import { Checkbox } from '../../components/Checkbox';
 
-// <div>
-//   <button onClick={this.notify}>Notify !</button>
-//   <ToastContainer />
-// </div>
+
 export class ActionBox extends Component {
     constructor(props) {
         super(props);
@@ -25,11 +20,7 @@ export class ActionBox extends Component {
             items: [],
             suggestData: [],
             location: {
-                ['line1']: undefined,
-                ['line2']: undefined,
-                ['line3']: undefined,
-                ['line4']: undefined,
-                ['postcode']: undefined,
+
             },
             contactable: true,
             persistent: false,
@@ -204,7 +195,7 @@ export class ActionBox extends Component {
         this.setState({ description: value, formActive: true });
     }
     handleSingleChange(property, value) {
-        if (property != "organisation") {
+        if (property !== "organisation") {
             this.setState({ [property]: value })
         }
     }
@@ -221,7 +212,7 @@ export class ActionBox extends Component {
     handleRemoveDate(date_type) {
         let form = ""
         // newState[(date_type)+'_date'] =undefined
-        if (date_type == 'start') {
+        if (date_type === 'start') {
             form = "newSingleDateForm"
         } else {
             form = "newRangeDateForm";

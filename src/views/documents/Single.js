@@ -4,7 +4,7 @@ import ReactHtmlParser from 'react-html-parser';
 import documentLinks from '../../logic/documentLinks';
 import titleGenerator from '../../logic/titleGenerator.js';
 import Loading from '../../components/Loading.js';
-import Axios from 'axios';
+import NotFound from '../../components/NotFound';
 
 
 const toSentenceCase = (el) => {
@@ -65,35 +65,35 @@ export class SingleDocument extends Component{
 
                     return(
                     <React.Fragment>
-                    {!this.props.asPrint && <JobInfoBar history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname+'/view'}/>}
+                    {!this.props.asPrint && <JobInfoBar item={d} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname+'/view'}/>}
                             <div className="document a4 toPrint fireplaceDoc" style={{ size: 'A4', "fontFamily": this.props.config['application-font']['family'] }}>
         
-                            <div className="header">
-                                <div class="header-content-wrapper">
-                                    <div className="logo-wrapper">
-                                        <img src={this.props.src.domain+"config/"+this.props.config.organisation.logo}/>
-                                    </div>
-                                    <div className="address-wrapper">
-                                        <h2>{this.props.config.organisation.name}</h2>
-                                        <div className="details">
-                                            <div className="left-details row">
-                                                <div className="job-detail job-date col-xs-6"><div className="job-label">Date</div><h3>{ new Date(d.date).toLocaleDateString() }</h3></div>
-                                                <div className="job-detail job-type col-xs-6"><div className="job-label">Type</div><h3>{d.status.name}</h3></div>
-                                                <div className="job-detail job-amount col-xs-6"><div className="job-label">Amount</div><h3>£{d.totalPrice.toFixed(2)}</h3></div>
-                                                    <div className="job-detail job-id col-xs-6"><div className="job-label">Type</div><h3>#{d.idRef}</h3></div>
-                                                { this.state.job ? this.state.job.order_number.length > 1 && 
-                                                    <React.Fragment>
-                                                        <div className="job-detail job-blank col-xs-6"></div>
-                                                        <div className="job-detail job-order_number col-xs-6"><div className="job-label">Order No:</div><h3>#{this.state.job.order_number}</h3></div>
-                                                    </React.Fragment>
-                                                :
-                                                <Loading/>
-                                                }
+                                <div className="header">
+                                    <div class="header-content-wrapper">
+                                        <div className="logo-wrapper">
+                                            <img src={this.props.src.domain+"config/"+this.props.config.organisation.logo}/>
+                                        </div>
+                                        <div className="address-wrapper">
+                                            <h2>{this.props.config.organisation.name}</h2>
+                                            <div className="details">
+                                                <div className="left-details row">
+                                                    <div className="job-detail job-date col-xs-6"><div className="job-label">Date</div><h3>{ new Date(d.date).toLocaleDateString() }</h3></div>
+                                                    <div className="job-detail job-type col-xs-6"><div className="job-label">Type</div><h3>{d.status.name}</h3></div>
+                                                    <div className="job-detail job-amount col-xs-6"><div className="job-label">Amount</div><h3>£{d.totalPrice.toFixed(2)}</h3></div>
+                                                        <div className="job-detail job-id col-xs-6"><div className="job-label">Type</div><h3>#{d.idRef}</h3></div>
+                                                    { this.state.job ? this.state.job.order_number.length > 1 && 
+                                                        <React.Fragment>
+                                                            <div className="job-detail job-blank col-xs-6"></div>
+                                                            <div className="job-detail job-order_number col-xs-6"><div className="job-label">Order No:</div><h3>#{this.state.job.order_number}</h3></div>
+                                                        </React.Fragment>
+                                                    :
+                                                    <Loading/>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
         
                             <div className="job-details-wrap row">
                                 <div className="addresses col-xs-4 row">
@@ -292,7 +292,10 @@ export class SingleDocument extends Component{
                     )
                 }
             }else{
-                return(<h1>Not Found :(</h1>)
+                return(
+                    NotFound("Document "+this.props.match.params.id)
+  
+                )
             }
 
     }

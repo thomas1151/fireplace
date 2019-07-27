@@ -7,7 +7,6 @@ import {
     Switch,
     Link
 } from 'react-router-dom';
-import axios from "axios";
 import documentLinks from '../logic/documentLinks';
 import SingleJob from './jobs/Single';
 
@@ -74,7 +73,7 @@ export class Invoices extends Component{
     }
     getItemByProp(prop, value) {
         for (let i = 0; i < this.state.items.length; i++) {
-            if (this.state.items[i][prop] == value) {
+            if (this.state.items[i][prop] === value) {
                 return this.state.items[i];
             }
         }

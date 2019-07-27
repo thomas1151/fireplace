@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import axios from 'axios';
 import { Loading } from '../../components/Loading';
 import documentLinks from '../../logic/documentLinks';
 import {
@@ -8,13 +7,9 @@ import {
 } from 'react-router-dom';
 import titleGenerator from '../../logic/titleGenerator';
 import { JobInfoBar } from '../../components/JobInfoBar';
+import NotFound from '../../components/NotFound';
 
-const toSentenceCase = (el) => {
-    return el.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function (key) {
-        return key.toUpperCase()
-    })
 
-}
 export class SinglePerson extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +29,7 @@ export class SinglePerson extends Component {
             _this.props.src.rest.get('users/?username=' + this.props.match.params.id)
                 .then(function (response) {
                     d = response.data;
-                    if (d.length == 1) {
+                    if (d.length === 1) {
                         _this.setState({ d: d[0] })
                     } else {
                         _this.setState({ notFound: true })
@@ -77,8 +72,7 @@ export class SinglePerson extends Component {
                 let d = this.state.d;
                 document.title = d.name + " |  " + this.props.config.organisation.name;
                 console.log(this.state.d);
-                let dateToday = new Date();
-                let total = 0;
+
 
                 // let inputProps = {...this.props.inputProps};
                 return (
@@ -86,7 +80,7 @@ export class SinglePerson extends Component {
                         {!this.props.dependent &&
                             documentLinks(this.props.src.domain, this.props.config['profile-details'].name)
                         }
-                        {!this.props.asPrint && <JobInfoBar history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
+                        {!this.props.asPrint && <JobInfoBar src={this.props.src} item={d} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
 
                         <div className="document fireplaceDoc toPrint" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
                             <div className="header">
@@ -114,7 +108,7 @@ export class SinglePerson extends Component {
                                                 Address
                                                 </div>
                                             {Object.values(d.address).map((el, i) => {
-                                                if (Object.keys(d.address)[i] != 'url' && Object.keys(d.address)[i] != 'id') {
+                                                if (Object.keys(d.address)[i] !== 'url' && Object.keys(d.address)[i] !== 'id') {
                                                     return (<div className="line">{el}</div>)
                                                 }
                                             })}
@@ -191,11 +185,7 @@ export class SinglePerson extends Component {
                                                     :
                                                     <Loading/>
                                                 }
-                                            {/* {Object.values(d.address).map((el, i) => {
-                                                if (Object.keys(d.address)[i] != 'url' && Object.keys(d.address)[i] != 'id') {
-                                                    return (<div className="line">{el}</div>)
-                                                }
-                                            })} */}
+
                                         </div>
                                     </div>
                                 </div>
@@ -214,7 +204,7 @@ export class SinglePerson extends Component {
             }
         }
         else{
-            return <h1>Not found :(</h1>
+            return NotFound("People: "+this.props.match.params.id);
         }
     }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import axios from 'axios';
 import { Loading } from '../../components/Loading';
 import documentLinks from '../../logic/documentLinks';
 import {
@@ -9,13 +8,8 @@ import {
 import titleGenerator from '../../logic/titleGenerator';
 import ReactHtmlParser from 'react-html-parser';
 import { JobInfoBar } from '../../components/JobInfoBar';
+import NotFound from '../../components/NotFound';
 
-const toSentenceCase = (el) => {
-    return el.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function (key) {
-        return key.toUpperCase()
-    })
-
-}
 export class SingleAction extends Component {
     constructor(props) {
         super(props);
@@ -36,44 +30,57 @@ export class SingleAction extends Component {
                 .then(function (response) {
                     d = response.data.results;
                     if (d.length == 1) {
-                        _this.setState({ d: d[0] })
+                        d = d[0];
+                        console.log(d.id);
+                        
+                        _this.setState({ d: d })
                     } else {
                         _this.setState({ notFound: true })
 
                     }
                 })
         }
-
-        if (d) {
-            // _this.props.src.rest.get('documents/?actions__contains=' + d.id)
-            //     .then(function (response) {
-            //         let data = response.data.results;
-            //         // handle success
-            //         _this.setState({
-            //             jobsLoaded: true,
-            //             jobs: data,
-            //             response
-            //         });
-            //         console.log(response);
-            //     })
-            //     .catch(function (error) {
-            //         // handle error
-            //         _this.setState({
-            //             jobsLoaded: false,
-            //             error
-            //         });
-            //         console.log(error);
-            //     })
-            //     .then(function () {
-            //         // always executed
-            //     });
-
+        console.log(d);
+       
+        if(d){
+            // this.fetchDocs();
         }
-
 
     }
 
+    fetchDocs(){
+        let _this = this;
+        if (this.state.d && !this.state.docsLoaded) {
+            _this.props.src.rest.get('documents/?actions__id=' + _this.state.d.id)
+                .then(function (response) {
+                    console.log("HERERERE!!");
+                    console.log(response);
+                    console.log('documents/?actions__id=' + _this.state.d.id);
+                    let data = response.data.results;
+                    // handle success
+                    _this.setState({
+                        docsLoaded: true,
+                        docs: data,
+                        response
+                    });
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+                    _this.setState({
+                        docsLoaded: false,
+                        error
+                    });
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
+
+        }
+    }
     render() {
+        // this.fetchDocs()
         if (!this.state.notFound) {
             if (this.state.d) {
                 let d = this.state.d;
@@ -83,13 +90,14 @@ export class SingleAction extends Component {
                 let total = 0;
                 let dateStarted = new Date(d.startDate);
                 let created = new Date(d.created);
+                let docs = this.state.docs ? this.state.docs : d.documents
                 // let inputProps = {...this.props.inputProps};
                 return (
                     <React.Fragment>
                         {!this.props.dependent &&
                             documentLinks(this.props.src.domain, this.props.config['profile-details'].name)
                         }
-                        {!this.props.asPrint && <JobInfoBar history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
+                        {!this.props.asPrint && <JobInfoBar src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
 
                         <div className="document fireplaceDoc toPrint" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
                             <div className="header">
@@ -117,24 +125,21 @@ export class SingleAction extends Component {
                                     <div className="addresses col-xs-12 row">
                                         <div className="invoice-address job-address-section  col-xs-12">
                                             <div className="job-section-title">
-                                                Jobs
+                                                Documents
                                             </div>
 
-                                            {this.state.jobsLoaded ?
-                                                (this.state.jobs.length > 0 ?
+                                            {this.state.docsLoaded || !this.state.docsLoaded ?
+                                                (docs.length > 0 ?
                                                     <div class="body">
                                                         <table>
                                                             <thead>
                                                                 <tr>
                                                                     <th>ID</th>
-                                                                    <th>Date</th>
-                                                                    <th>Latest Status</th>
-                                                                    <th>£</th>
-                                                                    <th>Paid</th>
+                                                                    <th>URL</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {this.state.jobs.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).map((j, i) => {
+                                                                {d.documents.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).map((j, i) => {
                                                                     // let endDate = false
                                                                     // let startDate = el.startDate ? new Date(el.startDate).toLocaleDateString() : '-';
                                                                     // let date = startDate;
@@ -150,16 +155,8 @@ export class SingleAction extends Component {
 
                                                                             </td>
                                                                             <td className="right-align">
-                                                                                {new Date(Date.parse(j.created ? j.created : j.date)).toLocaleDateString()}
-                                                                            </td>
-                                                                            <td>
-                                                                                {j.latestDocument && (j.latestDocument.status.name)}
-                                                                            </td>
-                                                                            <td className="right-align">
-                                                                                {j.latestDocument && "£" + (j.latestDocument.totalPrice.toFixed(2))}
-                                                                            </td>
-                                                                            <td className="right-align">
-                                                                                {j.paid ? "Paid on " + new Date(Date(j.paid)).toLocaleDateString() : 'Not Paid'}
+                                                                                {/* {new Date(Date.parse(j.created ? j.created : j.date)).toLocaleDateString()} */}
+                                                                                <Link to={'/documents/'+j.idRef}>{'/documents/'+j.idRef}</Link>
                                                                             </td>
 
                                                                         </tr>
@@ -169,7 +166,7 @@ export class SingleAction extends Component {
                                                         </table>
                                                     </div>
                                                     :
-                                                    <p>There are no jobs to display.</p>
+                                                    <p>There are no documents to display.</p>
                                                 )
                                                 :
                                                 <Loading />
@@ -197,7 +194,7 @@ export class SingleAction extends Component {
             }
         }
         else {
-            return <h1>Not found :(</h1>
+            return NotFound("Action " + this.props.match.params.id)
         }
     }
 }

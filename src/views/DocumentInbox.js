@@ -63,8 +63,8 @@ export class DocumentInbox extends Component{
                     <div className="invoice-feed action-feed col-xs" onScroll={this.handleScroll}>
                         {this.props.items.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).map( (f) =>{
                             let created = new Date(Date.parse(f.date)).toLocaleDateString();
-                            {/* let totalPrice = f.actions.map(item => item.total).reduce((prev, next) => prev + next);  */}
 
+                            
 
                             return(<FeedElement 
                                         usefulData={"£"+f.totalPrice.toFixed(2)} 

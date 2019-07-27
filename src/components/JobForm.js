@@ -4,7 +4,7 @@ import { ActionPerson } from './ActionPerson';
 import { SingleDateInput} from './SingleDateInput';
 import { DropdownWithContext } from './DropdownWithContext';
 import { isEqual } from 'lodash';
-import axios from "axios";
+
 import fetchSuggestions from "../logic/fetchSuggestions";
 // const people_types= [
 //     {
@@ -38,11 +38,11 @@ export class JobForm extends Component{
             this.state = {
                 start_date: new Date(),
                 invoice_address: {
-                    ['line1']: undefined,
-                    ['line2']: undefined,
-                    ['line3']: undefined,
-                    ['line4']: undefined,
-                    ['postcode']: undefined,
+                    // ['line1']: undefined,
+                    // ['line2']: undefined,
+                    // ['line3']: undefined,
+                    // ['line4']: undefined,
+                    // ['postcode']: undefined,
                 },
                 job_address: jobAddr,
                 people: people,
@@ -75,7 +75,7 @@ export class JobForm extends Component{
     }
 
     fetchSuggestions(value, src, endpoint, keyPositions, propName, idField = 'id', other = "1") {
-        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField=idField, other=other);
+        fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField, other);
     }
     getOrgs(value){
         if(value.length < this.state.minQueryLength){
@@ -104,6 +104,7 @@ export class JobForm extends Component{
                                 }
                             }
                         }
+                        return null;
                     })
                     self.setState({
                         isLoaded: true,

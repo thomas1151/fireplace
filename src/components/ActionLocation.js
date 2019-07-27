@@ -2,9 +2,7 @@
 import React, {
     Component
 } from 'react';
-import moment from 'moment';
 import {ActionPerson} from './ActionPerson';
-import axios from "axios";
 import fetchSuggestions from '../logic/fetchSuggestions';
 
 export class ActionLocation extends Component {
@@ -39,6 +37,7 @@ export class ActionLocation extends Component {
         let a = []
         s.suggestion.data.map((d, i) => { 
             a[[d[0]]] = d[1];
+            return null;
         })
         a["id"] = s.suggestion.id
         console.log(a)
@@ -46,7 +45,6 @@ export class ActionLocation extends Component {
         this.props.onChangeForParent(a)
     }
     onChangeForParent(i, value) {
-        const { l1,l2,l3,l4,postcode } = this.state;
         this.setState({[i]:value})
 
         this.props.onChangeForParent(value, i);
@@ -59,8 +57,6 @@ export class ActionLocation extends Component {
 
         // autoFocus and initialDate are helper props for the example wrapper but are not
         // props on the SingleDatePicker itself and thus, have to be omitted.
-        const props = this.props;
-        let bg = this.props.backgroundColor;
         if (this.props.isMobile) {
 
         }

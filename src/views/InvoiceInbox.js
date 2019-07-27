@@ -63,8 +63,8 @@ export class InvoiceInbox extends Component{
                     <div className="invoice-feed action-feed col-xs" onScroll={this.handleScroll}>
                         {this.props.items.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).map( (f) =>{
                             let created = new Date(Date.parse(f.date)).toLocaleDateString();
-                            {/* let totalPrice = f.actions.map(item => item.total).reduce((prev, next) => prev + next);  */}
 
+                            
 
                             return(<FeedElement 
                                         usefulData={"£"+f.totalPrice.toFixed(2)} 
@@ -81,7 +81,7 @@ export class InvoiceInbox extends Component{
                                         displayPeopleAs={ ['name']}
                             >
                                 {f.latestDocument ? <p>Latest: {f.latestDocument.idRef} ({f.latestDocument.status.name})</p> : <p>No documents on this job</p>}
-                                <p>{f.noOfDocuments} document{f.noOfDocuments !=1 && 's'} belong{f.noOfDocuments ==1 && 's'} to this job.</p>
+                                <p>{f.noOfDocuments} document{f.noOfDocuments !==1 && 's'} belong{f.noOfDocuments === 1 && 's'} to this job.</p>
                                 <p>{ReactHtmlParser(f.notes)}</p>
                             
                             </FeedElement>)

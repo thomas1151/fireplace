@@ -1,82 +1,9 @@
 import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import {
-    BrowserRouter as Router,
-    Route,
     Link
 } from 'react-router-dom';
-import axios from 'axios';
 
-const typesToUrl = function(type){
-    switch(type){
-        case 'invoice' : return "invoices";
-        case 'person'  : return "people";
-        case 'location': return "locations";
-        case 'quotes': return "quotes";
-        case 'jobs'  : return "jobs";
-    }
-}
-// Imagine you have a list of languages that you'd like to autosuggest.
-const languages = [{
-        title: 'REW2901318',
-        id: 1,
-        sub: '£300.00 for James Reynolds, 2x Man Days',
-        other: '29/03/18',
-        type: "invoice",
-        icon: 'fas fa-file-invoice',
-        // search_string:"REW2901318 James Reynolds £300 29/03/18 invoice"
-    },
-    {
-        title: 'Raymond Dobbins',
-        id: 1,
-        sub: 'First officer at Ray Estate',
-        other: '',
-        type: "person",
-        icon: 'fas fa-user',
-        // search_string:"Raymond Dobbins First Officer at Ray Estate person"
-
-
-    },
-    {
-        title: 'Ray Estate',
-        id: 1,
-        sub: '',
-        other: '',
-        type: "location",
-        icon: 'fas fa-map-marker-alt',
-        // search_string: "Ray Estate location"
-
-    },
-
-];
-
-// // Teach Autosuggest how to calculate suggestions for any given input value.
-// const getSuggestions = value => {
-
-
-//   const inputValue = value.trim().toLowerCase();
-//   const inputLength = inputValue.length;
-
-//   return inputLength === 0 ? [] :
-
-//     axios.get(this.props.src.url + "search/?query="+inputValue)
-//         .then(function(response){
-
-//             return response.data.results.map( res =>
-//                 {
-//                     res['icon'] = 'fas fa-briefcase'
-//                     res['type'] = 'person'
-//                     res['title'] = 'id'
-//                     res['sub'] = 'TEst'
-//                 })
-//         })
-
-// };
-
-// When suggestion is clicked, Autosuggest needs to populate the input
-// based on the clicked suggestion. Teach Autosuggest how to calculate the
-// input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.title;
 
 const renderSuggestion = function(suggestion){
 
@@ -87,7 +14,7 @@ const renderSuggestion = function(suggestion){
             </div>
             <div className={"suggestion-content-wrapper"}>
                 <p className="title">{suggestion.title} <span>{suggestion.type}</span></p>
-                <p> {suggestion.sub} {suggestion.other.length== 0 ? null:<span className="unimportant">{suggestion.other}</span>  } </p>
+                <p> {suggestion.sub} {suggestion.other.length === 0 ? null:<span className="unimportant">{suggestion.other}</span>  } </p>
             </div>
             </Link>
     )
@@ -181,8 +108,6 @@ export class SearchElement extends Component{
         onChange: this.onChange
         };
 
-
-        const { selectedOption } = this.state;
 
         return(
             <div className="searchBox row">   

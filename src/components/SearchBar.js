@@ -3,9 +3,7 @@ import { SearchElement } from './SearchElement';
 import { SearchBarSettings } from './SearchBarSettings';
 
 export class SearchBar extends Component{
-    constructor(props) {
-            super(props);
-    }
+
     render(){
         let bg =this.props.backgroundColor;
         if(this.props.isMobile){

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Feed } from '../../components/Feed';
 import { ActionBox } from '../../components/ActionBox'; 
 import {
-    Link,
     Switch,
     Route
 } from 'react-router-dom';
@@ -17,6 +16,9 @@ export class ActionIndex extends Component {
         this.getItemByProp = this.getItemByProp.bind(this);
         this.onReloadItems = this.onReloadItems.bind(this);
         this.fetchMore = this.fetchMore.bind(this);
+        this.handleNewProperty = this.handleNewProperty.bind(this);
+        this.handleRemoveProperty = this.handleRemoveProperty.bind(this);
+        this.handleChangeAllOfProperty = this.handleChangeAllOfProperty.bind(this);
     }
     getItemByProp(prop, value) {
         for (let i = 0; i < this.state.items.length; i++) {
@@ -74,6 +76,40 @@ export class ActionIndex extends Component {
             this.setState({ fetchingMore: false })
         }
     }
+
+    handleNewProperty(index, property = "selected", value = true) {
+
+        this.setState(prevState => { // prevState?
+            prevState.items[index][property] = value
+            return (prevState);
+        });
+    }
+
+    handleRemoveProperty(index, property = "selected") {
+        this.setState(prevState => { // prevState?
+            prevState.items[index]['selected'] = false
+            return (prevState);
+        });
+    }
+
+    handleChangeAllOfProperty(property = "selected", value = false, prereqs = [], prereqVals = []) {
+        this.setState(prevState => { // prevState?
+            prevState.items.forEach((element, index) => {
+                let t = prereqs.length === 0;
+                prereqs.some((prereq, j) => {
+                    if (element[prereq] === prereqVals[j]) {
+                        t = true;
+                    }
+                })
+                if (t) {
+                    element[property] = value;
+                }
+
+            });
+            return (prevState);
+        });
+    }
+
     render() {
         let bg = this.props.backgroundColor;
         return (
@@ -85,7 +121,7 @@ export class ActionIndex extends Component {
                     <React.Fragment>
                         {this.props.children}
                         <ActionBox src={this.props.src} config={this.props.config} isMobile={this.props.isMobile} />
-                        <Feed onReloadItems={this.onReloadItems} items={this.state.items} src={this.props.src} dataSrc={'actions/'} config={this.props.config} isMobile={this.props.isMobile} />
+                        <Feed onNewProperty={this.handleNewProperty} onRemoveProperty={this.onRemoveProperty} onChangeAllOfProperty={this.handleChangeAllOfProperty} onReloadItems={this.onReloadItems} items={this.state.items} src={this.props.src} dataSrc={'actions/'} config={this.props.config} isMobile={this.props.isMobile} />
                     </React.Fragment>
                 }/>
 

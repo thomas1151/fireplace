@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {FeedElement} from './FeedElement';
 import { ActionSelection } from './ActionSelection';
-import axios from 'axios';
 import { Loading } from './Loading';
 import ReactHtmlParser from 'react-html-parser';
 
@@ -59,40 +58,59 @@ export class Feed extends Component{
         this.reloadItems();
     }
     getSelected(){
-        let a = this.state.items.filter(function(val,idx){
-            return val.selected
-        })
-        return a;
+        if(this.props.items){
+            let a = this.props.items.filter(function(val,idx){
+                return val.selected
+            })
+            return a;
+        }
+        if(this.state.items){
+            let a = this.state.items.filter(function (val, idx) {
+                return val.selected
+            })
+            return a;        
+        }
     }
     handleNewProperty(index,property="selected",value=true){
-
-        this.setState(prevState => { // prevState?
-            prevState.items[index][property] = value
-            return (prevState);
-        });
+        if (this.props.onNewProperty){
+            this.props.onNewProperty(index, property, value);
+        }else{
+            this.setState(prevState => { // prevState?
+                prevState.items[index][property] = value
+                return (prevState);
+            });
+        }
     }
     handleRemoveProperty(index,property="selected"){
-        this.setState(prevState => { // prevState?
-            prevState.items[index]['selected'] = false
-            return(prevState);
-        });
+        if (this.props.onRemoveProperty){
+            this.props.onRemoveProperty(index, property);
+        }else{
+            this.setState(prevState => { // prevState?
+                prevState.items[index]['selected'] = false
+                return(prevState);
+            });
+        }
     }
     handleChangeAllOfProperty(property="selected",value=false,prereqs=[],prereqVals=[]){
-        this.setState(prevState => { // prevState?
-            prevState.items.forEach((element, index) => {
-                let t = prereqs.length == 0;
-                prereqs.some( (prereq,j) =>{
-                    if(element[prereq] == prereqVals[j]){
-                        t = true;
+        if(this.props.onChangeAllOfProperty){
+            this.props.onChangeAllOfProperty(property, value, prereqs, prereqVals);
+        }else{
+            this.setState(prevState => { // prevState?
+                prevState.items.forEach((element, index) => {
+                    let t = prereqs.length === 0;
+                    prereqs.some( (prereq,j) =>{
+                        if(element[prereq] === prereqVals[j]){
+                            t = true;
+                        }
+                    })
+                    if(t){
+                        element[property] = value;
                     }
-                })
-                if(t){
-                    element[property] = value;
-                }
-    
+        
+                });
+                return (prevState);
             });
-            return (prevState);
-        });
+        }
     }
     handleProcessSelected(){
         this.getSelected();
