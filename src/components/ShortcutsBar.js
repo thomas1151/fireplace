@@ -4,6 +4,7 @@ import { SearchBarSettings } from './SearchBarSettings';
 import { MainShortcuts } from './MainShortcuts';
 import { ShortcutsMobile } from './ShortcutsMobile';
 import { AuthContext } from '../contexts/authContext';
+import Loading from './Loading';
 
 export class ShortcutsBar extends Component{
     constructor(props) {
@@ -17,15 +18,16 @@ export class ShortcutsBar extends Component{
             
             return(
                 <div className="shortcutsBar isMobile row" >
-                    <ShortcutsMobile location={this.props.location} title="Shortcuts" src={'main'} debug={true} style={{ background: this.context.config['application-style']['dark'] }}/>
+                    <ShortcutsMobile location={this.props.location} title="Shortcuts" src={'main'} debug={true} style={{ background: this.props.config['application-style']['dark'] }}/>
                 </div>
             )
         }
         return(
-                <div className="shortcutsBar col-md-2 col-lg-1 noPrint " style={ {background: this.context.config['application-style']['dark']}}>
+                // <Loading/>
+                <div className="shortcutsBar col-md-2 col-lg-1 noPrint " style={ {background: this.props.config['application-style']['dark']}}>
 
                     <div className="user-title">
-                        <p>{this.context.config['application-name']}</p>
+                        <p>{this.props.config['application-name']}</p>
                     </div>
                     
                     <MainShortcuts location={this.props.location} title="Shortcuts" src={'main'} debug={true}/>
