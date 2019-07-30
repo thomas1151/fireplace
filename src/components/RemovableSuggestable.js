@@ -12,7 +12,7 @@ export class RemovableSuggestable extends Component{
         this.fetchData = this.fetchData.bind(this);
     }
 
-    fetchData(value, src, endpoint, keyPositions, propName, idField = idField, other = other) {
+    fetchData(value, src, endpoint, keyPositions, propName, idField, other) {
         fetchSuggestions(value, src, endpoint, keyPositions, propName, this, idField, other);
     }
     render(){

@@ -250,11 +250,14 @@ export class ActionBox extends Component {
 
             })
             .then(function (d) {
-                if (d['created']) {
-                    _this.setState({ formActive: false })
+                if (d['date']) {
+                    _this.props.history.push({
+                        pathname:'/people',
+                        state: { reload: true} })
                 }
             })
             .catch(function (error) {
+                _this.setState({error:error});
             })
             .then(function (d) {
 

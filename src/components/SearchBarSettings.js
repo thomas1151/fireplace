@@ -61,6 +61,9 @@ export class SearchBarSettings extends Component{
                 </button>
                 <div className={"menu-settings "+(this.state.isToggleOn ? 'menu-open' : '')}>
                     <div className="menu-title">
+                        <p>{this.context.domain}</p>
+                    </div>
+                    <div className="menu-title">
                         <p>{this.context.user.name}</p>
                     </div>
                     <ul>

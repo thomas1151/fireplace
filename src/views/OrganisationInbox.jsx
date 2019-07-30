@@ -53,7 +53,7 @@ export class OrganisationInbox extends Component {
                                 title={f.name}
                                 ikey={f.id}
                                 data={f}
-                                key={f.name}
+                                key={f.id}
                                 badge={"#" + f.id}
                                 onRemove={this.handleRemoveProperty}
                                 onAdd={this.handleNewProperty}

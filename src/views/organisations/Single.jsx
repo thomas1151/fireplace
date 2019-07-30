@@ -23,15 +23,23 @@ export class SingleOrganisation extends Component {
             })
             titleGenerator(d.idRef, this.props.config);
         } else {
-            _this.props.src.rest.get('organisations/?id=' + this.props.match.params.name)
+            console.log('organisations/' + this.props.match.params.id);
+            _this.props.src.rest.get('organisations/' + this.props.match.params.id+'/')
                 .then(function (response) {
                     d = response.data;
-                    if (d.length == 1) {
-                        _this.setState({ d: d[0] })
+                    if (d.hasOwnProperty('id')) {
+                        _this.setState({ d })
                     } else {
                         _this.setState({ notFound: true })
 
                     }
+                })
+                .catch( function(error){
+                    let e = {};
+                    if(error.response.status == 404){
+                        e['notFound'] = true;
+                    }
+                    _this.setState( { ...error, ...e});
                 })
         }
 

@@ -38,6 +38,12 @@ export class SingleAction extends Component {
                         _this.setState({ notFound: true })
 
                     }
+                }).catch(function (error) {
+                    let e = {};
+                    if (error.response.status == 404) {
+                        e['notFound'] = true;
+                    }
+                    _this.setState({ ...error, ...e });
                 })
         }
         console.log(d);

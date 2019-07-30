@@ -9,7 +9,6 @@ import { Organisations } from './Organisations';
 import { Home } from './Home';
 import { Login } from './Login';
 import { Contacts } from './Contacts.jsx';
-import { People } from './People.jsx';
 import { ActionIndex } from './actions/Index.jsx';
 import { Documents } from './Documents.jsx';
 

@@ -52,7 +52,8 @@ export class Contacts extends Component {
         }
         this.getItemByProp = this.getItemByProp.bind(this);
     }
-    componentDidMount() {
+
+    reloadItems() {
         let self = this;
         self.props.src.rest.get('users/')
             .then(function (response) {
@@ -78,6 +79,11 @@ export class Contacts extends Component {
             });
 
     }
+
+
+    componentDidMount() {
+        this.reloadItems();
+    }
     getItemByProp(prop, value) {
         console.log(prop);
         console.log(value);
@@ -91,9 +97,14 @@ export class Contacts extends Component {
     createPDF() {
 
     }
+ 
     render() {
         titleGenerator("People", this.props.config)
 
+        if( (this.props.location.state && this.props.location.state.reload) && !this.state.reloaded){
+            this.reloadItems()
+            this.setState({reloaded: true});
+        }
         // const jobHeader = <div class="header-content-wrapper"><div className="logo-wrapper"><img src={"/"+this.props.config.organisation.logo}/></div><div className="address-wrapper"><h2>{this.props.config.organisation.name}</h2><h3> {this.props.config.organisation.address.map( (el,i) => <div className="location_line">{Object.values(el)} </div> )}</h3></div></div>;
         if (this.state.isLoaded) {
             return (

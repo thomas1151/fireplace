@@ -118,44 +118,53 @@ export class Feed extends Component{
     render(){
             // let inputProps = {...this.props.inputProps};
             let selected = this.getSelected();
-            if(this.state.isLoaded || (this.props.items)){
-            return(<div className={"action-feed "+(selected.length >0 ? 'menu-padding' : null)}>
-                    {console.log(this.state.items)}
-                    {
-                        (this.state.items.length > 0 || (this.props.items && this.props.items.length) > 0) ? 
-                            (this.props.items ? this.props.items : this.state.items).map( (f,i) =>{
-                            let dateStarted = new Date(f.startDate);
-                            let created = new Date(f.created);
-                            return(<FeedElement 
-                                        data={f} 
-                                        badge={f.idRef} 
-                                        usefulData={"£"+(f.price * f.quantity).toFixed(2)} 
-                                        ikey={i} 
-                                        title={ (f.location && f.location.line1)+" on "+dateStarted.toLocaleDateString()} 
-                                        subtitle={ (f.creator && f.creator.name)+" on "+created.toLocaleDateString()} 
-                                        key={i} 
-                                        onRemove={this.handleRemoveProperty} 
+            if(!this.state.error){
+                if (this.state.isLoaded || (this.props.items)) {
+                    return (<div className={"action-feed " + (selected.length > 0 ? 'menu-padding' : null)}>
+                        {console.log(this.state.items)}
+                        {
+                            (this.state.items.length > 0 || (this.props.items && this.props.items.length) > 0) ?
+                                (this.props.items ? this.props.items : this.state.items).map((f, i) => {
+                                    let dateStarted = new Date(f.startDate);
+                                    let created = new Date(f.created);
+                                    return (<FeedElement
+                                        data={f}
+                                        badge={f.idRef}
+                                        usefulData={"£" + (f.price * f.quantity).toFixed(2)}
+                                        ikey={i}
+                                        title={(f.location && f.location.line1) + " on " + dateStarted.toLocaleDateString()}
+                                        subtitle={(f.creator && f.creator.name) + " on " + created.toLocaleDateString()}
+                                        key={i}
+                                        onRemove={this.handleRemoveProperty}
                                         onAdd={this.handleNewProperty}
                                         people={f.people}
                                         displayPeopleAs={['name']}
                                         onMoreUrl={"/actions/" + f.idRef}
 
-                                        >{ReactHtmlParser(f.work)}</FeedElement>)
-                            }) 
-                            :
-                            <p>No unselected items.</p>
-                    
-                    }
-                    {
-                        selected.length > 0 ? 
-                        <ActionSelection src={this.props.src} config={this.props.config} isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected}/>
-                        :
-                        null
-                    }
-                </div>)
+                                    >{ReactHtmlParser(f.work)}</FeedElement>)
+                                })
+                                :
+                                <p>No unselected items.</p>
+
+                        }
+                        {
+                            selected.length > 0 ?
+                                <ActionSelection src={this.props.src} config={this.props.config} isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected} />
+                                :
+                                null
+                        }
+                    </div>)
+                } else {
+                    return (<Loading />);
+                }
             }else{
-                return( <Loading/> );
+                return( 
+                    <p>
+                        {this.state.error.stack}    
+                    </p>
+                )
             }
+            
     }
 }
 export default Feed;

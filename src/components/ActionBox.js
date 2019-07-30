@@ -358,7 +358,7 @@ export class ActionBox extends Component{
     handleSubmit(event) {
         var _this = this;
         event.preventDefault();
-         axios.post(this.props.src.domain + 'actions/', this.constructFormJSON())
+         _this.props.src.rest.post('actions/', this.constructFormJSON())
              .then(function (response) {
                  return response.data;
 
