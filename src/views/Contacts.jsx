@@ -109,7 +109,7 @@ export class Contacts extends Component {
         if (this.state.isLoaded) {
             return (
                 <React.Fragment>
-                    <div className="page-settings col-xs-12">
+                    <div className="page-settings col-xs-12 noPrint">
                         <ul>
                             {this.state.settings.map((el) => 
                                 <li key={el.name}><Link to={el.url} className={el.url === this.props.history.location.pathname && 'current' }>{el.name}</Link></li>
