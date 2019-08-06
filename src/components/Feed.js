@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {FeedElement} from './FeedElement';
 import { ActionSelection } from './ActionSelection';
 import { Loading } from './Loading';
-import ReactHtmlParser from 'react-html-parser';
+const ReactMarkdown = require('react-markdown');
 
 export class Feed extends Component{
     constructor(props) {
@@ -141,7 +141,7 @@ export class Feed extends Component{
                                         displayPeopleAs={['name']}
                                         onMoreUrl={"/actions/" + f.idRef}
 
-                                    >{ReactHtmlParser(f.work)}</FeedElement>)
+                                    ><ReactMarkdown source={f.work} escapeHtml={false} /></FeedElement>)
                                 })
                                 :
                                 <p>No unselected items.</p>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FeedElement } from '../components/FeedElement';
 import { Loading } from '../components/Loading';
-import ReactHtmlParser from 'react-html-parser';
+const ReactMarkdown = require('react-markdown');
 
 // const getScrollPercent = (h,b) => {
 //     var st = 'scrollTop',
@@ -82,7 +82,7 @@ export class InvoiceInbox extends Component{
                             >
                                 {f.latestDocument ? <p>Latest: {f.latestDocument.idRef} ({f.latestDocument.status.name})</p> : <p>No documents on this job</p>}
                                 <p>{f.noOfDocuments} document{f.noOfDocuments !==1 && 's'} belong{f.noOfDocuments === 1 && 's'} to this job.</p>
-                                <p>{ReactHtmlParser(f.notes)}</p>
+                                <p><ReactMarkdown source={f.notes} escapeHtml={false} /></p>
                             
                             </FeedElement>)
                         }) }

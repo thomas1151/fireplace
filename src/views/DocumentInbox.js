@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FeedElement } from '../components/FeedElement';
 import { Loading } from '../components/Loading';
-import ReactHtmlParser from 'react-html-parser';
+const ReactMarkdown = require('react-markdown');
 
 // const getScrollPercent = (h,b) => {
 //     var st = 'scrollTop',
@@ -80,7 +80,7 @@ export class DocumentInbox extends Component{
                                         people={f.people && f.people}
                                         displayPeopleAs={ ['name']}
                             >
-                                <p>{ReactHtmlParser(f.notes)}</p>
+                                <p>{< ReactMarkdown source={f.notes} escapeHtml={false} />}</p>
                             
                             </FeedElement>)
                         }) }

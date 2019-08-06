@@ -6,9 +6,10 @@ import {
     Link,
 } from 'react-router-dom';
 import titleGenerator from '../../logic/titleGenerator';
-import ReactHtmlParser from 'react-html-parser';
+
 import { JobInfoBar } from '../../components/JobInfoBar';
 import NotFound from '../../components/NotFound';
+const ReactMarkdown = require('react-markdown');
 
 export class SingleAction extends Component {
     constructor(props) {
@@ -59,8 +60,6 @@ export class SingleAction extends Component {
         if (this.state.d && !this.state.docsLoaded) {
             _this.props.src.rest.get('documents/?actions__id=' + _this.state.d.id)
                 .then(function (response) {
-                    console.log("HERERERE!!");
-                    console.log(response);
                     console.log('documents/?actions__id=' + _this.state.d.id);
                     let data = response.data.results;
                     // handle success
@@ -125,7 +124,7 @@ export class SingleAction extends Component {
 
                             <div className="job-details-wrap row">
                                 <div className="col-xs-12 row">
-                                    {ReactHtmlParser(d.work)}
+                                    {< ReactMarkdown source={d.work} escapeHtml={false} />}
                                 </div>
                                 <div className="col-xs row">
                                     <div className="addresses col-xs-12 row">

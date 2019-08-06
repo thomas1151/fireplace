@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { State, Route } from 'react-router';
 import moment from 'moment';
 import { JobInfoBar } from '../../components/JobInfoBar';
-import ReactHtmlParser from 'react-html-parser';
 import documentLinks from '../../logic/documentLinks';
 import titleGenerator from '../../logic/titleGenerator.js';
 import Loading from '../../components/Loading.js';
@@ -11,6 +10,7 @@ import {
     Link,
 } from 'react-router-dom';
 import NotFound from '../../components/NotFound';
+const ReactMarkdown = require('react-markdown');
 
 const toSentenceCase = (el) => {
     return el.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function (key) {
@@ -217,7 +217,7 @@ export class SingleJob extends Component {
 
                                                     </td>
                                                     <td>
-                                                        {ReactHtmlParser(el.work)}
+                                                        <ReactMarkdown source={el.work} escapeHtml={false} />
                                                     </td>
                                                     <td className="right-align">
                                                         {parseFloat(el.price).toFixed(2)}
@@ -267,7 +267,7 @@ export class SingleJob extends Component {
                                 }
                                 <div>
                                     <div className="notes col-xs">
-                                        {ReactHtmlParser(d.notes)}
+                                        <ReactMarkdown source={d.notes} escapeHtml={false} />
                                     </div>
                                 </div>
                             </div>

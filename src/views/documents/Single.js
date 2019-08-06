@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { JobInfoBar } from '../../components/JobInfoBar';
-import ReactHtmlParser from 'react-html-parser';
 import documentLinks from '../../logic/documentLinks';
 import titleGenerator from '../../logic/titleGenerator.js';
 import Loading from '../../components/Loading.js';
 import NotFound from '../../components/NotFound';
-
+const ReactMarkdown = require('react-markdown');
 
 const toSentenceCase = (el) => {
     return el.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function (key) {
@@ -16,7 +15,9 @@ const toSentenceCase = (el) => {
 export class SingleDocument extends Component{
     constructor(props) {
             super(props);
-            this.state = {};
+            this.state = {
+                jobLoaded: false,
+            };
             
     }
     componentDidMount(){
@@ -30,42 +31,48 @@ export class SingleDocument extends Component{
             })
             titleGenerator(d.idRef, this.props.config);
         }else{
-            _this.props.src.rest.get('jobs/?idRef=' + this.props.match.params.id)
+            _this.props.src.rest.get('documents/?idRef=' + this.props.match.params.id)
                 .then(function (response) {
+                    console.log(response);
                     d = response.data;
-                    if(d.length == 1){
-                        _this.setState({ d: d[0] })
+                    if(d.results.length == 1){
+                        _this.setState({ d: d.results[0] })
                     }else{
                         _this.setState({ notFound: true})
                         
                     }
                 }).catch(function (error) {
                     let e = {};
-                    if (error.response.status == 404) {
+                    if (error.response && error.response.status == 404) {
                         e['notFound'] = true;
                     }
                     _this.setState({ ...error, ...e });
                 })
         }
 
-        if(d){
-            _this.props.src.rest.get(d.job.url, {baseUrl:''})
-                .then(function(response){
-                    _this.setState({job:response.data})
-                })
-        }
+    }
+    fetchAdditional() {
+        let _this = this;
+        if (this.state.d && !this.state.jobLoaded) {
+            _this.props.src.rest.get(this.state.d.job.url, { baseUrl: '' })
+                .then(function (response) {
+                    _this.setState({ job: response.data })
+            })
 
+        }
     }
     render(){
         if(!this.state.notFound){
             if(this.state.d){
-                    let d = this.props.getItemByProp('idRef', this.props.match.params.id)
+                    this.fetchAdditional();
+                    // let d = this.props.getItemByProp('idRef', this.props.match.params.id)
+                    let d = this.state.d;
                     titleGenerator(d.idRef, this.props.config);
                     {
                     !this.props.dependent &&
                         documentLinks(this.props.src.domain, this.props.config['profile-details'].name)
                     }
-                    console.log(d);
+                    // console.log(d);
                     d.actions.sort(function (a, b) { return Date.parse(a.startDate) - Date.parse(b.startDate) });
                     
 
@@ -190,7 +197,7 @@ export class SingleDocument extends Component{
                                     </thead>
                                     <tbody>
                                 {d.actions.map( (el)=>{
-                                    console.log(el);
+                                    // console.log(el);
                                     let endDate = false
                                     let startDate = el.startDate ? new Date(el.startDate).toLocaleDateString(): '-';
                                         let date = startDate;
@@ -204,7 +211,7 @@ export class SingleDocument extends Component{
                                                 
                                             </td>
                                             <td>
-                                                { ReactHtmlParser(el.work)}
+                                                {<ReactMarkdown source={el.work} escapeHtml={false} />}
                                             </td>
                                             <td className="right-align">
                                                 {parseFloat(el.price).toFixed(2)}
@@ -253,7 +260,7 @@ export class SingleDocument extends Component{
                                 </table>
                                     <div>
                                         <div className="notes col-xs">
-                                        {ReactHtmlParser(d.notes)}
+                                        {<ReactMarkdown source={d.notes} escapeHtml={false} />}
                                         </div>
                                     </div>
                                 </div>
