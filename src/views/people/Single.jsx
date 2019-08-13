@@ -80,20 +80,18 @@ export class SinglePerson extends Component {
                         {!this.props.dependent &&
                             documentLinks(this.props.src.domain, this.props.config['profile-details'].name)
                         }
-                        {!this.props.asPrint && <JobInfoBar src={this.props.src} item={d} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
+                        <JobInfoBar src={this.props.src} item={d} match={this.props.match} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />
 
                         <div className="document fireplaceDoc toPrint" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
                             <div className="header">
                                 <div class="header-content-wrapper">
                                     <div className="address-wrapper">
-                                        <h2>{d.name}</h2>
-                                        <h3>{d.position} at {d.organisation.name}</h3>
+                                        <div><h2>{d.name}</h2><span>({d.contactable ? 'Contactable' : 'Do not contact'}, {d.peristent ? 'Persistent' : 'Temporary'})</span></div>
+                                        <h3>{d.position} at {d.organisation.name} ({d.id})</h3>
                                         <div className="details">
                                             <div className="left-details row">
                                                 <div className="job-detail job-email col-xs-12 col-sm"><div className="job-label">Amount</div><h4>{ (d.email && d.email.length > 1) ? d.email : "No email supplied."}</h4></div>
                                                 <div className="job-detail job-added col-xs-6"><div className="job-label">Date</div><h3>Added: {new Date(d.date).toLocaleDateString()}</h3></div>
-                                                <div className="job-detail job-id col-xs-6"><div className="job-label">Type</div><h4>{d.peristent ? 'Persistent' : 'This person is not persistent'}</h4></div>
-                                                <div className="job-detail job-type col-xs-12 col-sm"><div className="job-label">Type</div><h3>{d.contactable ? 'Contactable' : 'Do not contact'}</h3></div>
                                                 
                                             </div>
                                         </div>

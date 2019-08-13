@@ -60,7 +60,7 @@ export class SingleOrganisation extends Component {
                         {!this.props.dependent &&
                             documentLinks(this.props.src.domain, this.props.config['profile-details'].name)
                         }
-                        {!this.props.asPrint && <JobInfoBar item={d} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
+                        <JobInfoBar item={d} src={this.props.src} match={this.props.match} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />
 
                         <div className="document fireplaceDoc toPrint" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
                             <div className="header">

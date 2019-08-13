@@ -17,7 +17,7 @@ export class ShortcutsBar extends Component{
             
             
             return(
-                <div className="shortcutsBar isMobile row" >
+                <div className="shortcutsBar isMobile row noPrint" >
                     <ShortcutsMobile location={this.props.location} title="Shortcuts" src={'main'} debug={true} style={{ background: this.props.config['application-style']['dark'] }}/>
                 </div>
             )

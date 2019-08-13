@@ -78,7 +78,7 @@ export class SingleJob extends Component {
 
                 return (
                     <React.Fragment>
-                        {!this.props.asPrint && <JobInfoBar item={d} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
+                        {!this.props.asPrint && <JobInfoBar match={this.props.match} item={d} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
                         <div className="document noa4 toPrint fireplaceDoc" style={{ size: 'A4', "fontFamily": this.props.config['application-font']['family'] }}>
 
                             <div className="header">

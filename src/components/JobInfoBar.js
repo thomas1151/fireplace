@@ -13,7 +13,10 @@ export class JobInfoBar extends Component{
     }
   
     addActions(){
-        let buttons = [ this.backButtonUI(), this.downloadButtonUI(),this.editButtonUI(), this.printButtonUI(), this.deleteButtonUI()]
+        let buttons = [ this.backButtonUI(),this.editButtonUI(), this.printButtonUI(), this.deleteButtonUI()]
+
+        buttons = (this.props.match.url && this.props.match.url.endsWith("view")) ? buttons : [this.downloadButtonUI()].concat(buttons);
+        // buttons = buttons.concat([this.downloadButtonUI()]);
         if(this.state.jobLinkForm){
             buttons.splice(1, 0, this.backButtonUI());
             buttons[-1] = (this.completeButtonUI());
@@ -45,12 +48,14 @@ export class JobInfoBar extends Component{
         this.props.onJobDownload();
     }
     downloadButtonUI(){
+
         return(
                 <Link to={this.props.viewURL} onClick={this.handleDownload} className="button-content-wrap success ">
                         <i className="fas fa-eye"></i><p>View</p> 
                 </Link>
 
         )   
+        
     }
 
     printButtonUI() {

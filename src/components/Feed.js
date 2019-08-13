@@ -5,6 +5,36 @@ import { Loading } from './Loading';
 const ReactMarkdown = require('react-markdown');
 
 export class Feed extends Component{
+
+    handleScroll = (e) => {
+        // let scrollPos = (e.target.scrollHeight - e.target.scrollTop);
+        // let clientHeight = parseInt(e.target.clientHeight + 1 * (e.target.clientHeight));
+        // //;
+        var scrollPercentage = 100 * e.target.scrollTop / (e.target.scrollHeight - e.target.clientHeight);
+        const bottom = scrollPercentage < 80 && scrollPercentage > 75
+        console.log(scrollPercentage);
+        if (bottom) {
+            console.log("Bottom!");
+            if (!this.props.fetchingMore && !this.state.fetchingMore) {
+                if (this.props.fetchMore) {
+                    this.props.fetchMore();
+
+                } else {
+                    console.log("No props fetcHmore");
+
+                    if (this.fetchMore) {
+                        console.log("Let's fetch more");
+                        this.fetchMore();
+                    }
+                }
+                // this.setState({restFetchLoading:true})
+            }
+
+        }
+    }
+
+
+
     constructor(props) {
             super(props);
             this.state ={
@@ -21,8 +51,34 @@ export class Feed extends Component{
             this.handleChangeAllOfProperty = this.handleChangeAllOfProperty.bind(this);            
             this.handleProcessSelected = this.handleProcessSelected.bind(this);
             this.reloadItems = this.reloadItems.bind(this);
+            this.handleScroll = this.handleScroll.bind(this);
+
 
     }
+
+    fetchMore() {
+        console.log("Fetching! HERE!");
+        this.setState({ fetchingMore: true })
+        let _this = this;
+        if (this.state.next != null) {
+            _this.props.src.rest.get(this.state.next, { baseUrl: '' })
+                .then(function (response) {
+                    _this.setState({ next: response.data.next, fetchingMore: false, items: _this.state.items.concat(response.data.results) })
+                }).catch(function (error) {
+                    // handle error
+                    _this.setState({
+                        fetchingMore: false,
+                        error
+                    });
+                    console.log(error);
+                })
+        } else {
+            this.setState({ fetchingMore: false })
+        }
+    }
+
+
+
     reloadItems(){
         if(this.props.onReloadItems){
             this.props.onReloadItems()
@@ -35,7 +91,7 @@ export class Feed extends Component{
                     // handle success
                     self.setState({
                         isLoaded: true,
-                        items: (data).filter((a, b) => self.props.filterFeed ? self.props.filterFeed(a, b) : true).sort((a, b) => new Date(b.created) - new Date(a.created)),
+                        items: (data).filter((a, b) => self.props.filterFeed ? self.props.filterFeed(a, b) : true).sort((a, b) => (a.created ? (new Date(b.created) - new Date(a.created)) : 0)),
                         response
                     });
                     console.log(response);
@@ -120,7 +176,7 @@ export class Feed extends Component{
             let selected = this.getSelected();
             if(!this.state.error){
                 if (this.state.isLoaded || (this.props.items)) {
-                    return (<div className={"action-feed " + (selected.length > 0 ? 'menu-padding' : null)}>
+                    return (<div className={"action-feed " + (selected.length > 0 ? 'menu-padding' : null)} onScroll={this.handleScroll} >
                         {console.log(this.state.items)}
                         {
                             (this.state.items.length > 0 || (this.props.items && this.props.items.length) > 0) ?
@@ -143,16 +199,20 @@ export class Feed extends Component{
 
                                     ><ReactMarkdown source={f.work} escapeHtml={false} /></FeedElement>)
                                 })
+                                
                                 :
                                 <p>No unselected items.</p>
-
-                        }
+                                
+                            }
+                            {(this.state.fetchingMore || this.props.fetchingMore) && <Loading />}
+                        
                         {
                             selected.length > 0 ?
                                 <ActionSelection src={this.props.src} config={this.props.config} isMobile={this.props.isMobile} onAdd={this.handleNewProperty} onSingleRemove={this.handleRemoveProperty} onRemove={this.handleChangeAllOfProperty} items={selected} />
                                 :
                                 null
                         }
+
                     </div>)
                 } else {
                     return (<Loading />);

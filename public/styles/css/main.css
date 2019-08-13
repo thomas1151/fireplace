@@ -54,7 +54,7 @@ body {
 }
 body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: #d6d6d6;
 }
 #root {
@@ -65,7 +65,7 @@ body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
-  height: 100vh;
+  min-height: 100vh;
 }
 .row {
   width: 100%;
@@ -765,6 +765,7 @@ a.button-remove i {
   width: 100%;
 }
 .app-content-wrapper .app-content {
+  min-height: 100vh;
   flex-direction: column;
 }
 .app-content-wrapper .app-format {
@@ -1104,6 +1105,9 @@ a.button-remove i {
 ===============================*/
 .action-feed {
   background: #ccc;
+  flex: 1;
+  overflow: auto;
+  width: 100%;
 }
 .action-feed.menu-padding {
   margin-bottom: 15em;
@@ -1438,13 +1442,18 @@ a.button-remove i {
   display: flex;
 }
 .document.a4 {
+  display: flex;
+  flex-direction: column;
   max-width: 100%;
   width: 21cm;
-  min-height: 29.7cm;
   margin: 1em auto;
 }
 .document.noa4 .footer {
   position: relative;
+}
+.document .sheet {
+  overflow: visible;
+  height: auto !important;
 }
 /* ==========================
         
@@ -1515,6 +1524,7 @@ a.button-remove i {
     padding: 1em 6em;
   }
   .document .body {
+    flex: 1;
     padding: 1em 4em;
   }
   .document .body table {
@@ -1682,12 +1692,30 @@ a.button-remove i {
 }
 @media print {
   /* All your print styles go here */
+  .element::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  .element {
+    -ms-overflow-style: none;
+  }
   body {
     visibility: hidden;
     background: transparent;
   }
   * {
     visibility: hidden;
+  }
+  body,
+  #root,
+  .App,
+  .app-content main {
+    min-height: 100% !important;
+  }
+  #root,
+  .App,
+  .app-content,
+  .app-content main {
+    height: auto !important;
   }
   .noPrint {
     display: none;
@@ -1712,12 +1740,19 @@ a.button-remove i {
   }
   .toPrint.document {
     margin: 0;
-    min-height: 100%;
+    min-height: 297mm;
     height: auto;
   }
   .toPrint.document.noa4 .footer {
-    position: absolute;
+    position: relative;
     bottom: 0;
+  }
+  .toPrint.document table tbody::after {
+    content: '';
+    display: block;
+    page-break-after: always;
+    page-break-inside: avoid;
+    page-break-before: avoid;
   }
 }
 @page {

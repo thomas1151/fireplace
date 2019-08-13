@@ -56,7 +56,7 @@ export class SingleDocument extends Component{
         if (this.state.d && !this.state.jobLoaded) {
             _this.props.src.rest.get(this.state.d.job.url, { baseUrl: '' })
                 .then(function (response) {
-                    _this.setState({ job: response.data })
+                    _this.setState({ job: response.data, jobLoaded: true })
             })
 
         }
@@ -78,8 +78,8 @@ export class SingleDocument extends Component{
 
                     return(
                     <React.Fragment>
-                    {!this.props.asPrint && <JobInfoBar item={d} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname+'/view'}/>}
-                            <div className="document a4 toPrint fireplaceDoc" style={{ size: 'A4', "fontFamily": this.props.config['application-font']['family'] }}>
+                            <JobInfoBar className="noPrint" item={d} match={this.props.match} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname+'/view'}/>
+                            <div className="document a4 toPrint fireplaceDoc" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
         
                                 <div className="header">
                                     <div class="header-content-wrapper">
@@ -227,36 +227,39 @@ export class SingleDocument extends Component{
                                     )
                                 })}
                                 </tbody>
-                                <tfoot className="job-table-footer-section"> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td className="right-align"><strong>{d.totalPrice.toFixed(2)}</strong></td>
-                                    </tr>
-                                    { d.vat ? 
-                                        <React.Fragment>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td className="right-align">VAT at</td>
-                                            <td className="right-align">{d.vat*100}%</td>
-                                            <td className="right-align">{(d.vat * d.totalPrice).toFixed(2)}</td>
-                                        </tr>
+            
+                                </table>
+                                <table>
+                                    <tfoot className="job-table-footer-section">
                                         <tr>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td className="right-align">Total</td>
-                                            <td className="right-align"><strong>{ ( (d.totalPrice * d.vat) + d.totalPrice  ).toFixed(2)  }</strong></td>
+                                            <td></td>
+                                            <td className="right-align"><strong>{d.totalPrice.toFixed(2)}</strong></td>
                                         </tr>
-                                        </React.Fragment>
-                                        :
-                                        null
-                                    }
-        
-                                </tfoot>
+                                        {d.vat ?
+                                            <React.Fragment>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td className="right-align">VAT at</td>
+                                                    <td className="right-align">{d.vat * 100}%</td>
+                                                    <td className="right-align">{(d.vat * d.totalPrice).toFixed(2)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td className="right-align">Total</td>
+                                                    <td className="right-align"><strong>{((d.totalPrice * d.vat) + d.totalPrice).toFixed(2)}</strong></td>
+                                                </tr>
+                                            </React.Fragment>
+                                            :
+                                            null
+                                        }
+
+                                    </tfoot>
                                 </table>
                                     <div>
                                         <div className="notes col-xs">

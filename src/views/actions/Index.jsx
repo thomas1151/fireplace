@@ -8,6 +8,31 @@ import {
 import SingleAction from './Single';
 
 export class ActionIndex extends Component {
+
+    handleScroll = (e) => {
+        // let scrollPos = (e.target.scrollHeight - e.target.scrollTop);
+        // let clientHeight = parseInt(e.target.clientHeight + 1 * (e.target.clientHeight));
+        // //;
+        var scrollPercentage = 100 * e.target.scrollTop / (e.target.scrollHeight - e.target.clientHeight);
+        const bottom = scrollPercentage < 80 && scrollPercentage > 75
+        console.log(scrollPercentage);
+        if (bottom) {
+            console.log("Bottom!");
+            if (!this.props.fetchingMore) {
+                if(this.props.fetchMore){
+                    this.props.fetchMore();
+
+                }else{
+                    if(this.state.fetchMore){
+                        this.state.fetchMore();
+                    }
+                }
+                // this.setState({restFetchLoading:true})
+            }
+
+        }
+    }
+
     constructor(props) {
         super(props);
         this.state ={
@@ -19,6 +44,7 @@ export class ActionIndex extends Component {
         this.handleNewProperty = this.handleNewProperty.bind(this);
         this.handleRemoveProperty = this.handleRemoveProperty.bind(this);
         this.handleChangeAllOfProperty = this.handleChangeAllOfProperty.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
     }
     getItemByProp(prop, value) {
         for (let i = 0; i < this.state.items.length; i++) {
@@ -39,7 +65,8 @@ export class ActionIndex extends Component {
                 self.setState({
                     isLoaded: true,
                     items: (data).filter((a, b) => self.props.filterFeed ? self.props.filterFeed(a, b) : true).sort((a, b) => new Date(b.created) - new Date(a.created)),
-                    response
+                    next: response.data.next,
+                    response,
                 });
                 console.log(response);
             })
@@ -57,24 +84,27 @@ export class ActionIndex extends Component {
 
     }
     fetchMore() {
-        console.log("Fetching!");
-        this.setState({ fetchingMore: true })
-        let _this = this;
-        if (this.state.next != null) {
-            _this.props.src.rest.get(this.state.next, { baseUrl: '' })
-                .then(function (response) {
-                    _this.setState({ next: response.data.next, fetchingMore: false, items: _this.state.items.concat(response.data.results) })
-                }).catch(function (error) {
-                    // handle error
-                    _this.setState({
-                        fetchingMore: false,
-                        error
-                    });
-                    console.log(error);
-                })
-        } else {
-            this.setState({ fetchingMore: false })
+        if(!this.state.fetchingMore){
+            console.log("Fetching from index!");
+            this.setState({ fetchingMore: true })
+            let _this = this;
+            if (this.state.next != null) {
+                _this.props.src.rest.get(this.state.next, { baseUrl: '' })
+                    .then(function (response) {
+                        _this.setState({ next: response.data.next, fetchingMore: false, items: _this.state.items.concat(response.data.results) })
+                    }).catch(function (error) {
+                        // handle error
+                        _this.setState({
+                            fetchingMore: false,
+                            error
+                        });
+                        console.log(error);
+                    })
+            } else {
+                this.setState({ fetchingMore: false })
+            }
         }
+
     }
 
     handleNewProperty(index, property = "selected", value = true) {
@@ -121,7 +151,7 @@ export class ActionIndex extends Component {
                     <React.Fragment>
                         {this.props.children}
                         <ActionBox src={this.props.src} config={this.props.config} isMobile={this.props.isMobile} />
-                        <Feed onNewProperty={this.handleNewProperty} onRemoveProperty={this.onRemoveProperty} onChangeAllOfProperty={this.handleChangeAllOfProperty} onReloadItems={this.onReloadItems} items={this.state.items} src={this.props.src} dataSrc={'actions/'} config={this.props.config} isMobile={this.props.isMobile} />
+                        <Feed  onNewProperty={this.handleNewProperty} fetchMore={this.fetchMore} fetchingMore={this.state.fetchMore} onRemoveProperty={this.onRemoveProperty} onChangeAllOfProperty={this.handleChangeAllOfProperty} onReloadItems={this.onReloadItems} items={this.state.items} src={this.props.src} dataSrc={'actions/'} config={this.props.config} isMobile={this.props.isMobile} />
                     </React.Fragment>
                 }/>
 
