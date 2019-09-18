@@ -10,7 +10,9 @@ import NotFound from '../../components/NotFound';
 export class SingleOrganisation extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            jobsLoaded: false,
+        };
 
     }
     componentDidMount() {
@@ -45,6 +47,16 @@ export class SingleOrganisation extends Component {
 
 
     }
+    // fetchAdditional() {
+    //     let _this = this;
+    //     if (this.state.d && !this.state.jobLoaded) {
+    //         _this.props.src.rest.get(this.state.d.job.url, { baseUrl: '' })
+    //             .then(function (response) {
+    //                 _this.setState({ job: response.data, jobLoaded: true })
+    //             })
+
+    //     }
+    // }
     render() {
         if (!this.state.notFound) {
             if (this.state.d) {

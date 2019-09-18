@@ -35,6 +35,7 @@ export class ActionSelection extends Component{
             documentForm: false,
             addToJobForm: false,
             job: {},
+            notes: '',
             statusTypeSuggestData: [],
             jobSuggestData: [],
             documentSuggestData: [],
@@ -158,6 +159,14 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
                                         <p className="col-xs-3">This is a</p>
                                         <ActionPerson className="col-xs" minQueryLength={0} endpoint={'status-type/?name__icontains='} id={'statusType'} propName={"statusType"} onFetchForParent={this.fetchSuggestions} data={this.state.statusTypeSuggestData} onSelectedForParent={this.handleSelected} onChangeForParent={this.handleChange} debug={false} />
                                     </div>
+                                    <div className="section-title col-xs-12">
+                                        <p>Amend Purchase Order Number</p>
+                                    </div>
+                                    <div className="type col-xs-12 col-sm-6 row">
+                                        <input className="col-xs" onChange={(e) => this.handleChange('orderNumber', e.target.value)} placeholder="P150411" />
+                                    </div>
+
+                                    
                                     <textarea className="col-xs" onChange={(e) => this.handleChange('notes', e.target.value)} placeholder="Prompt payment would be appreciated">
                                     </textarea>
 
@@ -258,6 +267,7 @@ handleChange={this.onJobChange} isMobile={this.props.isMobile} selectedActions={
         d['job'] = this.state.job
         d['people'] = this.state.people;
         d['notes'] = this.state.notes;
+        d['order_number'] = this.state.orderNumber;
         console.log(d);
         return d;
     }

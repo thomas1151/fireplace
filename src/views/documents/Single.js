@@ -94,10 +94,10 @@ export class SingleDocument extends Component{
                                                     <div className="job-detail job-type col-xs-6"><div className="job-label">Type</div><h3>{d.status.name}</h3></div>
                                                     <div className="job-detail job-amount col-xs-6"><div className="job-label">Amount</div><h3>£{d.totalPrice.toFixed(2)}</h3></div>
                                                         <div className="job-detail job-id col-xs-6"><div className="job-label">Type</div><h3>#{d.idRef}</h3></div>
-                                                    { this.state.job ? this.state.job.order_number.length > 1 && 
+                                                    { this.state.job ? (this.state.job.order_number.length > 1 || d.order_number && d.order_number.length > 1) && 
                                                         <React.Fragment>
                                                             <div className="job-detail job-blank col-xs-6"></div>
-                                                            <div className="job-detail job-order_number col-xs-6"><div className="job-label">Order No:</div><h3>#{this.state.job.order_number}</h3></div>
+                                                            <div className="job-detail job-order_number col-xs-6"><div className="job-label">Order No:</div><h3>#{d.order_number && d.order_number.length > 1 ? d.order_number : this.state.job.order_number}</h3></div>
                                                         </React.Fragment>
                                                     :
                                                     <Loading/>
@@ -138,7 +138,7 @@ export class SingleDocument extends Component{
                                                 return(
                                                 <React.Fragment>
                                                     <div><a href={"/people/" + p.person.username} className="line noPrint">{p.person.name}</a></div>
-                                                    <div className="line printOnly">{p.person.name}</div>
+                                                    <div className="line printOnly">{p.person.name} ({p.person.organisation.name})</div>
                                                 </React.Fragment>      
                                                 )
                                             }                              
@@ -157,11 +157,16 @@ export class SingleDocument extends Component{
 
                                             {
                                                 this.state.job ?
-                                                Object.values(this.state.job.invoiceAddr).map( (el,i)=>{
-                                                if (Object.keys(this.state.job.invoiceAddr)[i] != 'url' && Object.keys(this.state.job.invoiceAddr)[i] != 'id') {
-                                                    return(<div className="line">{el}</div>)
-                                                }
-                                                })
+                                                <React.Fragment>
+
+                                                <div className="line">{this.state.job.organisation.name}</div>
+                                                    {Object.values(this.state.job.invoiceAddr).map( (el,i)=>{
+                                                        if (Object.keys(this.state.job.invoiceAddr)[i] != 'url' && Object.keys(this.state.job.invoiceAddr)[i] != 'id') {
+                                                            return(<div className="line">{el}</div>)
+                                                        }
+                                                    })}
+                                                </React.Fragment>
+
                                                 :
                                                 <Loading/>
                                             }

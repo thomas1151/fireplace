@@ -26,6 +26,7 @@ export class SingleJob extends Component {
 
     }
     componentDidMount() {
+        this.setState({ time: new Date().toLocaleString() })
         let d = this.props.items && this.props.getItemByProp('idRef', this.props.match.params.id);
         let _this = this;
 
@@ -79,7 +80,7 @@ export class SingleJob extends Component {
                 return (
                     <React.Fragment>
                         {!this.props.asPrint && <JobInfoBar match={this.props.match} item={d} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
-                        <div className="document noa4 toPrint fireplaceDoc" style={{ size: 'A4', "fontFamily": this.props.config['application-font']['family'] }}>
+                        <div className="document noa4 toPrint fireplaceDoc" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
 
                             <div className="header">
                                 <div class="header-content-wrapper">
@@ -267,6 +268,13 @@ export class SingleJob extends Component {
                                 }
                                 <div>
                                     <div className="notes col-xs">
+                                        {d.latestDocument.notes && d.latestDocument.notes !== d.notes &&
+                                            <React.Fragment>
+                                                <h4>{d.latestDocument.idRef} Notes</h4>
+                                                    <ReactMarkdown source={d.latestDocument.notes} escapeHtml={false} />
+                                            </React.Fragment>
+                                        }
+                                        <h4>Job Notes</h4>
                                         <ReactMarkdown source={d.notes} escapeHtml={false} />
                                     </div>
                                 </div>
@@ -274,23 +282,30 @@ export class SingleJob extends Component {
 
                             <div className="footer">
                                 <div className="footer-content-wrapper">
-
-                                    <div className="footer-section location left-align">
-                                        {/* <h4 className="footerTitle">Address</h4> */}
-                                        {Object.values(this.props.config.organisation.address).map((el, i) => el + (i < Object.keys(this.props.config.organisation.address).length - 1 ? ', ' : ''))}
+                                    <div className="footer-section-group">
+                                        <div className="footer-section location left-align">
+                                            {/* <h4 className="footerTitle">Address</h4> */}
+                                            {Object.values(this.props.config.organisation.address).map((el, i) => el + (i < Object.keys(this.props.config.organisation.address).length - 1 ? ', ' : ''))}
+                                        </div>
+                                        <div className="times right-align">
+                                            <div class="line">Modified: {new Date(Date.parse(d.latestDocument.modified)).toLocaleString()}</div>
+                                            <div class="line">Generated: {this.state.time}</div>
+                                            <div class="line">Created: {new Date(Date.parse(d.date)).toLocaleString()}</div>
+                                        </div>
                                     </div>
                                     <div className="footer-section-group">
                                         <div className="footer-section finances left-align">
                                             <h4 className="footerTitle">Finances</h4>
-                                            {Object.keys(this.props.config.organisation.financial).map((el, i) => <div className="location_line"><span className="footerLabel">{toSentenceCase(el)} </span>: {this.props.config.organisation.financial[el]} </div>)}
+                                            {Object.keys(this.props.config.organisation.financial).map((el) => <div className="location_line"><span className="footerLabel">{toSentenceCase(el)} </span>: {this.props.config.organisation.financial[el]} </div>)}
                                         </div>
                                         {Object.keys(this.props.config.organisation.online).length > 0 &&
-                                            <div className="footer-section social-media right-align row">
+                                            <div className="footer-section social-media right-align">
                                                 <h4 className="footerTitle">Media</h4>
-                                                {Object.keys(this.props.config.organisation.online).map((el, i) => <div className="social_line"><div ><span className="footerLabel">{toSentenceCase(el.slice(0, 3))}</span>: {this.props.config.organisation.online[el]}</div></div>)}
+                                                {Object.keys(this.props.config.organisation.online).map((el) => <div className="social_line"><span className="footerLabel">{toSentenceCase(el.slice(0, 3))}</span>: {this.props.config.organisation.online[el]}</div>)}
                                             </div>
                                         }
                                     </div>
+
                                 </div>
                             </div>
 
