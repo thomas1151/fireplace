@@ -6,12 +6,15 @@ import documentLinks from '../../logic/documentLinks';
 import titleGenerator from '../../logic/titleGenerator';
 import { JobInfoBar } from '../../components/JobInfoBar';
 import NotFound from '../../components/NotFound';
-
+import {
+    Link,
+} from 'react-router-dom';
 export class SingleOrganisation extends Component {
     constructor(props) {
         super(props);
         this.state = {
             jobsLoaded: false,
+            jobs: []
         };
 
     }
@@ -38,7 +41,7 @@ export class SingleOrganisation extends Component {
                 })
                 .catch( function(error){
                     let e = {};
-                    if(error.response.status == 404){
+                    if(error.status == 404){
                         e['notFound'] = true;
                     }
                     _this.setState( { ...error, ...e});
@@ -47,19 +50,21 @@ export class SingleOrganisation extends Component {
 
 
     }
-    // fetchAdditional() {
-    //     let _this = this;
-    //     if (this.state.d && !this.state.jobLoaded) {
-    //         _this.props.src.rest.get(this.state.d.job.url, { baseUrl: '' })
-    //             .then(function (response) {
-    //                 _this.setState({ job: response.data, jobLoaded: true })
-    //             })
+    fetchAdditional() {
+        let _this = this;
+        if (this.state.d && !this.state.jobLoaded) {
+            _this.props.src.rest.get('jobs/?organisation__id='+this.state.d.id)
+                .then(function (response) {
+                    _this.setState({ jobs: response.data.results, jobsLoaded: true })
+                })
 
-    //     }
-    // }
+        }
+    }
     render() {
         if (!this.state.notFound) {
             if (this.state.d) {
+                this.fetchAdditional();
+
                 let d = this.state.d;
                 document.title = d.name + " |  " + this.props.config.organisation.name;
                 console.log(this.state.d);
@@ -112,6 +117,60 @@ export class SingleOrganisation extends Component {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="body">
+                            {this.state.jobsLoaded ?
+                                (this.state.jobs.length > 0 ?
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>Latest Status</th>
+                                            <th>£</th>
+                                            <th>Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.jobs.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).map((j, i) => {
+                                            // let endDate = false
+                                            // let startDate = el.startDate ? new Date(el.startDate).toLocaleDateString() : '-';
+                                            // let date = startDate;
+                                            // if (el.dateEnded) {
+                                            //     let endDate = new Date(el.dateStarted).toLocaleDateString();
+                                            // }
+                                            return (
+                                                <tr key={j.idRef}>
+                                                    <td>
+                                                        <Link to={'/jobs/' + j.idRef + '/view'}>
+                                                            {j.idRef}
+                                                        </Link>
+
+                                                    </td>
+                                                    <td className="right-align">
+                                                        {new Date(Date.parse(j.created ? j.created : j.date)).toLocaleDateString()}
+                                                    </td>
+                                                    <td>
+                                                        {j.latestDocument && (j.latestDocument.status.name)}
+                                                    </td>
+                                                    <td className="right-align">
+                                                        {j.latestDocument && "£" + (j.latestDocument.totalPrice.toFixed(2))}
+                                                    </td>
+                                                    <td className="right-align">
+                                                        {j.paid ? "Paid on " + new Date(Date(j.paid)).toLocaleDateString() : 'Not Paid'}
+                                                    </td>
+
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                             :
+                             <p>There are no jobs to display.</p>
+                             )
+                             :
+                             <Loading/>
+                            }
                             </div>
 
                         </div>

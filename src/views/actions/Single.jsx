@@ -102,7 +102,7 @@ export class SingleAction extends Component {
                         {!this.props.dependent &&
                             documentLinks(this.props.src.domain, this.props.config['profile-details'].name)
                         }
-                        {!this.props.asPrint && <JobInfoBar match={this.props.match} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
+                        {!this.props.asPrint && <JobInfoBar item={d} match={this.props.match} src={this.props.src} history={this.props.history} onJobDownload={this.props.createPDF} viewURL={this.props.location.pathname + '/view'} />}
 
                         <div className="document fireplaceDoc toPrint" style={{ "fontFamily": this.props.config['application-font']['family'] }}>
                             <div className="header">

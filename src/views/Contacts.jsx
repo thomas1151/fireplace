@@ -51,16 +51,22 @@ export class Contacts extends Component {
             isLoaded: false,
         }
         this.getItemByProp = this.getItemByProp.bind(this);
+        this.fetchMore = this.fetchMore.bind(this);
     }
 
     reloadItems() {
         let self = this;
-        self.props.src.rest.get('users/')
+        self.props.src.rest.get('users/?page=1&limit=20')
             .then(function (response) {
                 let data = response.data.results;
+                // let data = response.data.results;
+                let next = response.data.next;
+                
                 // handle success
                 self.setState({
                     isLoaded: true,
+                    fetchingMore: false,
+                    next: next,
                     items: data,
                     response
                 });
@@ -97,7 +103,27 @@ export class Contacts extends Component {
     createPDF() {
 
     }
- 
+    fetchMore() {
+        console.log("Fetching!");
+        this.setState({ fetchingMore: true })
+        let _this = this;
+        if (this.state.next != null) {
+            console.log(this.state.next);
+            _this.props.src.rest.get(this.state.next, { baseUrl: '' })
+                .then(function (response) {
+                    _this.setState({ next: response.data.next, fetchingMore: false, items: _this.state.items.concat(response.data.results) })
+                }).catch(function (error) {
+                    // handle error
+                    _this.setState({
+                        fetchingMore: false,
+                        error
+                    });
+                    console.log(error);
+                })
+        } else {
+            this.setState({ fetchingMore: false })
+        }
+    }
     render() {
         titleGenerator("People", this.props.config)
 
@@ -128,7 +154,7 @@ export class Contacts extends Component {
                                     {...routeProps} asPrint={false} dependent={true} createPDF={this.createPDF} src={this.props.src} config={this.props.config} data={this.state.items} getItemByProp={this.getItemByProp} isMobile={this.props.isMobile} />} />
 
                             <Route exact path="/people" render={routeProps =>
-                                <ContactsInbox settings={this.state.settings} {...routeProps} getItemByProp={this.getItemByProp} src={this.props.src} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}/>
+                                <ContactsInbox fetchingMore = { this.state.fetchingMore } fetchMore = { this.fetchMore } settings={this.state.settings} {...routeProps} getItemByProp={this.getItemByProp} src={this.props.src} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}/>
                             } />
 
                         </React.Fragment>
@@ -145,7 +171,7 @@ export class Contacts extends Component {
                             } />
 
                             <Route exact path="/people/:id" render={routeProps =>
-                                <ContactsInbox settings={this.state.settings} {...routeProps} getItemByProp={this.getItemByProp} src={this.props.src} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
+                                <ContactsInbox fetchingMore = { this.state.fetchingMore } fetchMore = { this.fetchMore } settings={this.state.settings} {...routeProps} getItemByProp={this.getItemByProp} src={this.props.src} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
 
                                     <div className="invoice-inspection col-xs-8">
                                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css" />
@@ -156,7 +182,7 @@ export class Contacts extends Component {
                             } />
                             
                             <Route exact path="/people" render={routeProps =>
-                                <ContactsInbox settings={this.state.settings} {...routeProps} getItemByProp={this.getItemByProp} src={this.props.src} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
+                                <ContactsInbox fetchingMore = { this.state.fetchingMore } fetchMore = { this.fetchMore } settings={this.state.settings} {...routeProps} getItemByProp={this.getItemByProp} src={this.props.src} config={this.props.config} items={this.state.items} isMobile={this.props.isMobile}>
 
                                     <div className="invoice-inspection col-xs-8">
                                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css" />

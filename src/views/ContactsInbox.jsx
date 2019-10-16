@@ -12,6 +12,23 @@ const subtitle = (f) => {
 
 
 export class ContactsInbox extends Component {
+    handleScroll = (e) => {
+        // let scrollPos = (e.target.scrollHeight - e.target.scrollTop);
+        // let clientHeight = parseInt(e.target.clientHeight + 1 * (e.target.clientHeight));
+        // //;
+        var scrollPercentage = 100 * e.target.scrollTop / (e.target.scrollHeight - e.target.clientHeight);
+        const bottom = scrollPercentage < 80 && scrollPercentage > 75
+        // console.log(scrollPercentage);
+        if (bottom) {
+            console.log("Bottom!");
+            if (!this.props.fetchingMore) {
+                this.props.fetchMore();
+                // this.setState({restFetchLoading:true})
+            }
+
+        }
+    }
+
     constructor(props) {
         super(props);
         let useProps = true;
@@ -45,7 +62,7 @@ export class ContactsInbox extends Component {
 
 
                 <div className="app-wrapper row">
-                    <div className="invoice-feed action-feed col-xs">
+                    <div className="invoice-feed action-feed col-xs" onScroll={this.handleScroll}>
                         {this.state.loaded ? 
                          (this.state.useProps ? this.props.items : this.state.items ).sort( (a,b) => a.lname.toLowerCase().localeCompare(b.lname.toLowerCase()) ).map((f) => {
 
@@ -70,10 +87,10 @@ export class ContactsInbox extends Component {
                         <Loading/>
                     }
 
+                    {this.props.fetchingMore && <Loading />}
 
                     </div>
                     {this.props.children}
-
                 </div>
             </React.Fragment>
         )

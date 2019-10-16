@@ -206,7 +206,8 @@ export class SingleDocument extends Component{
                                     let endDate = false
                                     let startDate = el.startDate ? new Date(el.startDate).toLocaleDateString(): '-';
                                         let date = startDate;
-                                    if(el.dateEnded){
+                                    if (el.endDate){
+                                        endDate = new Date(el.endDate).toLocaleDateString();
                                     }
                                     return(
                                         <tr>

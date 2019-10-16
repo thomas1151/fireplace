@@ -39,6 +39,7 @@ export class SingleJob extends Component {
             _this.props.src.rest.get('jobs/?idRef=' + this.props.match.params.id)
                 .then(function (response) {
                     d = response.data.results;
+                    console.log(d);
                     if (d.length == 1) {
                         _this.setState({ d: d[0] })
                     } else {
@@ -46,8 +47,9 @@ export class SingleJob extends Component {
 
                     }
                 }).catch(function (error) {
+                    console.log(error)
                     let e = {};
-                    if (error.response.status == 404) {
+                    if (error.status == 404) {
                         e['notFound'] = true;
                     }
                     _this.setState({ ...error, ...e });
@@ -207,8 +209,11 @@ export class SingleJob extends Component {
                                             let endDate = false
                                             let startDate = el.startDate ? new Date(el.startDate).toLocaleDateString() : '-';
                                             let date = startDate;
+                                            // let endDate = null;
+                                            console.log(el);
                                             if (el.dateEnded) {
-                                                let endDate = new Date(el.dateStarted).toLocaleDateString();
+                                                console.log(el.endDate);
+                                                endDate = new Date(el.endDate).toLocaleDateString();
                                             }
                                             return (
                                                 <tr>
@@ -268,7 +273,7 @@ export class SingleJob extends Component {
                                 }
                                 <div>
                                     <div className="notes col-xs">
-                                        {d.latestDocument.notes && d.latestDocument.notes !== d.notes &&
+                                        {d.latestDocument && d.latestDocument.notes && d.latestDocument.notes !== d.notes &&
                                             <React.Fragment>
                                                 <h4>{d.latestDocument.idRef} Notes</h4>
                                                     <ReactMarkdown source={d.latestDocument.notes} escapeHtml={false} />
@@ -288,7 +293,7 @@ export class SingleJob extends Component {
                                             {Object.values(this.props.config.organisation.address).map((el, i) => el + (i < Object.keys(this.props.config.organisation.address).length - 1 ? ', ' : ''))}
                                         </div>
                                         <div className="times right-align">
-                                            <div class="line">Modified: {new Date(Date.parse(d.latestDocument.modified)).toLocaleString()}</div>
+                                            <div class="line">Modified: {new Date(Date.parse(d.date)).toLocaleString()}</div>
                                             <div class="line">Generated: {this.state.time}</div>
                                             <div class="line">Created: {new Date(Date.parse(d.date)).toLocaleString()}</div>
                                         </div>

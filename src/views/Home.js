@@ -30,7 +30,7 @@ export class Home extends Component{
             <React.Fragment>
                 {this.props.children}
                 <Route src={this.props.src} path='/' render={routeProps => <ActionBox src={this.props.src} config={this.props.config} isMobile={this.props.isMobile}/>} />
-                <Feed src={this.props.src} dataSrc={'actions/?document__isnull=True'} filterFeed={homeActions} config={this.props.config}  isMobile={this.props.isMobile}/>
+                <Feed src={this.props.src} dataSrc={'actions/?documents__isnull=True'} filterFeed={homeActions} config={this.props.config}  isMobile={this.props.isMobile}/>
             </React.Fragment>
         )
     }

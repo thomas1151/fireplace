@@ -509,6 +509,8 @@ button.button-remove, a.button-remove{
     
 }
 .shortcutsBar{
+
+
     max-height: 100%;
     overflow-y: hidden;
     overflow-x: auto;
@@ -519,7 +521,12 @@ button.button-remove, a.button-remove{
         color: @light;
         text-align: center;
     }
+    &.isMobile{
+        position: absolute;
+        bottom: 0;
+        left: 0;
 
+    }
 
 }
 .section-title{
@@ -842,6 +849,9 @@ button.button-remove, a.button-remove{
         .app-content{
             min-height: 100vh;
             flex-direction: column;
+            & > main{
+                padding-bottom: 3.5em;
+            }   
         }
         .app-format{
             flex-wrap: inherit;
@@ -1794,6 +1804,7 @@ margin-left: -198px;
             flex-direction: column;
             main{
                 height: 100%;
+                padding-bottom: initial;
             }
         }
     }

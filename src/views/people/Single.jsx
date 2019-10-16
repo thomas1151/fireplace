@@ -26,11 +26,13 @@ export class SinglePerson extends Component {
             })
             titleGenerator(d.idRef, this.props.config);
         } else {
+            // console.log("No person found");
             _this.props.src.rest.get('users/?username=' + this.props.match.params.id)
                 .then(function (response) {
                     d = response.data;
-                    if (d.length === 1) {
-                        _this.setState({ d: d[0] })
+                    // console.log(d);
+                    if (d.results.length === 1) {
+                        _this.setState({ d: d.results[0] })
                     } else {
                         _this.setState({ notFound: true })
 
@@ -38,8 +40,12 @@ export class SinglePerson extends Component {
                 })
         }
 
-        if (d) {
-            _this.props.src.rest.get('jobs/?people__username=' + d.username)
+    }
+
+    fetchAdditional(){
+        let _this = this;
+        if (this.state.d && !this.state.jobLoaded) {
+            _this.props.src.rest.get('jobs/?people__username=' + this.state.d.username)
                 .then(function (response) {
                     let data = response.data.results;
                     // handle success
@@ -61,7 +67,6 @@ export class SinglePerson extends Component {
                 .then(function () {
                     // always executed
                 });
-
         }
 
 
@@ -69,6 +74,8 @@ export class SinglePerson extends Component {
     render() {
         if (!this.state.notFound) {
             if (this.state.d) {
+                this.fetchAdditional();
+
                 let d = this.state.d;
                 document.title = d.name + " |  " + this.props.config.organisation.name;
                 console.log(this.state.d);

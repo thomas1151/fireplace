@@ -11,13 +11,16 @@ export class Index extends Component {
 
     componentDidMount(){
         let self = this;
-        self.props.src.rest.get('users/')
+        self.props.src.rest.get('users/?page=1&limit=20')
             .then(function (response) {
                 let data = response.data.results;
+                let next = response.data.next;
+
                 // handle success
                 self.setState({
                     isLoaded: true,
                     items: data,
+                    fetchingMore: false,
                     response
                 });
                 console.log(response);
