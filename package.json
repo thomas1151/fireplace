@@ -20,7 +20,7 @@
     "react-native-modal-datetime-picker": "^6.0.0",
     "react-qr-code": "^0.1.2",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "react-select": "^2.0.0",
     "react-template": "^0.4.0",
     "react-toastify": "^4.2.0",
